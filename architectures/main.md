@@ -78,13 +78,14 @@ npm create @storybakery/docs -- docs-site
 ## 단일 CLI (bakerywave)
 - `bakerywave`를 공식 CLI 이름으로 사용한다.
 - npm 패키지는 `@storybakery/bakerywave`이며, 실행 파일 이름은 `bakerywave`다.
+- Docusaurus 표준 커맨드는 가능한 한 그대로 노출한다.
+- 표준 커맨드는 다음을 포함한다: `start`, `build`, `serve`, `clear`, `swizzle`, `write-translations`, `write-heading-ids`, `deploy`.
+- 별칭은 `dev -> start`, `preview -> serve`로 제공한다.
+- Docusaurus 옵션은 `--` 패스스루로 전달한다. 예: `bakerywave start -- --host 0.0.0.0 --port 4000`.
+- StoryBakery 고유 기능은 서브커맨드로 분리한다.
 - `bakerywave init`은 `npm create @storybakery/docs`와 동일한 스캐폴딩을 수행한다.
-- `bakerywave dev`/`bakerywave start`는 Docusaurus 개발 서버를 실행한다.
-- `bakerywave build`는 정적 빌드를 수행한다.
-- `bakerywave reference build --lang <lang>`는 reference JSON 생성과 (옵션) MDX 생성을 수행한다.
-- `bakerywave reference watch`는 증분 빌드/캐시를 사용하는 watch 모드다.
-- `bakerywave doctor`는 링크/태그/진단 결과를 점검한다.
-
+- `bakerywave reference build`는 docgen(JSON)과 JSON → MDX 생성을 수행한다.
+- `bakerywave reference watch`는 reference 소스를 감시하고 재생성한다.
 ## 릴리즈/배포 (채널)
 - npm 배포: `@storybakery/create-docs`, `@storybakery/bakerywave`, preset/theme/plugin/docgen 패키지를 배포한다.
 - rokit 배포: `bakerywave` 바이너리를 배포해 rokit로 설치할 수 있게 한다.
@@ -170,19 +171,22 @@ export default {
 ## Reference 문서 운영 (표준)
 - reference 문서는 언어별 추출기가 생성한 JSON을 기준으로 만든다. Luau는 luau-docgen을 기본 제공한다.
 - 표준 산출물 경로는 `website/.generated/reference/<lang>.json`이며, Luau는 `website/.generated/reference/luau.json`을 사용한다.
-- 기본 렌더링은 JSON 직접 로드 방식으로 한다.
-- 옵션으로 JSON 직접 로드를 끄고 JSON → MDX 생성 방식으로 전환한다.
-- JSON 직접 로드 모드에서는 reference 플러그인이 JSON을 읽어 reference 섹션을 구성한다.
-- MDX 생성 모드에서는 Docusaurus가 `docs/reference/`(언어별 하위 디렉터리 포함)의 문서를 reference 섹션으로 제공한다.
+- 표준 렌더링은 JSON → MDX 생성 방식으로 한다.
+- JSON → MDX 변환은 `@storybakery/docusaurus-plugin-reference`(preset 포함) 또는 `bakerywave reference build`가 담당한다.
+- 플러그인 소스 위치는 `packages/docusaurus-plugin-reference/`로 고정한다.
+- `bakerywave reference build`의 기본 docgen 루트는 `website/`의 상위 디렉터리이며 기본 `srcDir`은 `src`다(표준 레이아웃 기준).
+- MDX 생성 결과는 `website/docs/reference/<lang>/`에 기록한다.
+- 옵션으로 JSON 직접 로드를 켜서 reference 플러그인이 JSON을 직접 읽도록 전환할 수 있다.
 - 산출물은 `website/.generated/`에 보관하고 Git 추적하지 않는다.
 
 ## Reference 산출물 소유권/정리 규칙
 - Source of Truth(SoT): reference의 원천 데이터는 언어별 추출기가 생성한 JSON이다. Luau 표준 경로는 `website/.generated/reference/luau.json`이다.
 - 생성 전용 디렉터리 예약: `website/docs/reference/`는 reference 생성 산출물을 위한 생성 전용 디렉터리로 예약한다(언어별 하위 디렉터리 포함).
+- manifest 경로: `website/.generated/reference/manifest.json`을 기준으로 정리한다.
 - `website/docs/reference/` 및 `website/.generated/`는 생성 산출물이므로 Git에서 추적하지 않는다.
 - 고아 파일 정리: 생성 과정은 반드시 정리(clean)를 수행한다.
-- 권장: 생성 결과 목록(manifest)을 기준으로 생성 대상이 아닌 파일을 제거한다.
-- 권장: 생성기는 JSON 입력 해시/버전 정보를 진단 로그 또는 메타 파일로 남긴다.
+- 정리 규칙: 생성 결과 목록(manifest)을 기준으로 생성 대상이 아닌 파일을 제거한다.
+- 생성기는 JSON 입력 해시/버전 정보를 진단 로그 또는 메타 파일로 남긴다.
 
 ## 링크/슬러그/진단 규칙
 ### 링크(Short link) 해석
@@ -205,7 +209,7 @@ export default {
 ```
 프로젝트 문서 소스
   - 언어별 docgen(JSON) -> website/.generated/reference/<lang>.json (Luau는 luau-docgen)
-  - JSON -> reference 플러그인 직접 로드(기본) / MDX 생성(옵션) -> website/docs/reference/<lang>
+  - JSON -> MDX 생성(표준) / reference 플러그인 직접 로드(옵션) -> website/docs/reference/<lang>
   - 수동 문서 -> website/docs
   - 커스텀 페이지 -> website/src/pages
             |

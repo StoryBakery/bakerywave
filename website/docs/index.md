@@ -27,8 +27,16 @@ website/
 ```
 
 ## Reference 표준 흐름
-- reference 문서: `website/docs/reference/`
-- 빌드 순서: `reference 문서 준비 -> Docusaurus 빌드`
+- reference 원천 JSON: `website/.generated/reference/<lang>.json`
+- 표준 렌더링: JSON → MDX 생성
+- reference 문서: `website/docs/reference/<lang>/`
+- 빌드 순서: `JSON 생성 -> JSON → MDX -> Docusaurus 빌드`
+
+## bakerywave 가이드
+- [bakerywave 시작하기](./bakerywave)
+- [bakerywave 설정](./bakerywave-config)
+- [Luau 태그](./luau-tags)
+- [Luau 타입 문법](./luau-types)
 
 ## 커스텀 레벨 요약
 - Level 0: preset 옵션 수정

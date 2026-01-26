@@ -1,45 +1,49 @@
 const fs = require("fs");
 const path = require("path");
 
-const rootDir = path.resolve(__dirname, "..");
+const siteDir = path.resolve(__dirname, "..");
+const referenceDir = path.join(siteDir, "docs", "reference", "luau");
+const manifestPath = path.join(siteDir, ".generated", "reference", "manifest.json");
+
 const expectedFiles = [
-  path.join(rootDir, "docs", "reference", "index.mdx"),
-  path.join(rootDir, "docs", "reference", "example.mdx"),
+  path.join(referenceDir, "index.mdx"),
+  path.join(referenceDir, "Example.mdx"),
+  manifestPath,
 ];
 
 let hasError = false;
 
-expectedFiles.forEach((filePath) => {
+for (const filePath of expectedFiles) {
   if (!fs.existsSync(filePath)) {
     console.error(`[test] missing generated file: ${filePath}`);
     hasError = true;
-    return;
+  }
+}
+
+if (!hasError) {
+  const indexContent = fs.readFileSync(path.join(referenceDir, "index.mdx"), "utf8");
+  if (!indexContent.includes("# Reference")) {
+    console.error("[test] reference index missing title.");
+    hasError = true;
   }
 
-  const content = fs.readFileSync(filePath, "utf8");
-  if (!content.includes("# Reference") && filePath.endsWith("index.mdx")) {
-    console.error(`[test] reference index missing title: ${filePath}`);
+  const exampleContent = fs.readFileSync(path.join(referenceDir, "Example.mdx"), "utf8");
+  if (!exampleContent.includes("# Example")) {
+    console.error("[test] Example reference missing title.");
     hasError = true;
   }
-  if (
-    !content.includes("# Example") &&
-    !content.includes(">Example</h1>") &&
-    filePath.endsWith("example.mdx")
-  ) {
-    console.error(`[test] example doc missing title: ${filePath}`);
+  if (!exampleContent.includes("## Functions")) {
+    console.error("[test] Example reference missing Functions section.");
     hasError = true;
   }
-  if (filePath.endsWith("example.mdx")) {
-    if (!content.includes("## Events")) {
-      console.error(`[test] example doc missing Events section: ${filePath}`);
-      hasError = true;
-    }
-    if (!content.includes("View Source")) {
-      console.error(`[test] example doc missing source links: ${filePath}`);
-      hasError = true;
-    }
+
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  const outputs = manifest.outputs && manifest.outputs.luau;
+  if (!Array.isArray(outputs) || !outputs.includes("Example.mdx")) {
+    console.error("[test] manifest missing Example.mdx entry.");
+    hasError = true;
   }
-});
+}
 
 if (hasError) {
   process.exit(1);

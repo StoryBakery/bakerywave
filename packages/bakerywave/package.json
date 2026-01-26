@@ -1,0 +1,21 @@
+{
+  "name": "@storybakery/bakerywave",
+  "version": "0.1.0",
+  "description": "StoryBakery unified documentation CLI",
+  "bin": {
+    "bakerywave": "bin/bakerywave.js"
+  },
+  "main": "src/index.js",
+  "files": [
+    "bin",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@storybakery/docusaurus-plugin-reference": "^0.1.0",
+    "@storybakery/luau-docgen": "^0.1.0",
+    "toml": "^3.0.0"
+  }
+}

@@ -8,5 +8,5 @@
 예시:
 
 ```
-luau-docgen --root tests/luau-docgen/fixtures/basic --out tests/luau-docgen/expected/basic.json
+luau-docgen --root tests/luau-docgen/fixtures/basic --src src --out tests/luau-docgen/expected/basic.json
 ```

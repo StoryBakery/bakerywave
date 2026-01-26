@@ -88,10 +88,14 @@ function findNativeBinary() {
 
   const baseDir = path.resolve(__dirname, "..", "native");
   const candidates = [
-    path.join(baseDir, "build", "luau-docgen"),
-    path.join(baseDir, "build", "luau-docgen.exe"),
     path.join(baseDir, "bin", "luau-docgen"),
     path.join(baseDir, "bin", "luau-docgen.exe"),
+    path.join(baseDir, "target", "release", "luau-docgen"),
+    path.join(baseDir, "target", "release", "luau-docgen.exe"),
+    path.join(baseDir, "target", "debug", "luau-docgen"),
+    path.join(baseDir, "target", "debug", "luau-docgen.exe"),
+    path.join(baseDir, "build", "luau-docgen"),
+    path.join(baseDir, "build", "luau-docgen.exe"),
   ];
 
   for (const candidate of candidates) {
@@ -100,26 +104,88 @@ function findNativeBinary() {
     }
   }
 
+  const targetDir = path.join(baseDir, "target");
+  if (fs.existsSync(targetDir)) {
+    const targetDirs = fs
+      .readdirSync(targetDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+
+    for (const dirName of targetDirs) {
+      if (dirName === "release" || dirName === "debug") {
+        continue;
+      }
+
+      const releaseDir = path.join(targetDir, dirName, "release");
+      const debugDir = path.join(targetDir, dirName, "debug");
+      const targetCandidates = [
+        path.join(releaseDir, "luau-docgen"),
+        path.join(releaseDir, "luau-docgen.exe"),
+        path.join(debugDir, "luau-docgen"),
+        path.join(debugDir, "luau-docgen.exe"),
+      ];
+
+      for (const candidate of targetCandidates) {
+        if (fs.existsSync(candidate)) {
+          return candidate;
+        }
+      }
+    }
+  }
+
+  if (fs.existsSync(baseDir)) {
+    const buildDirs = fs
+      .readdirSync(baseDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name.startsWith("build"))
+      .map((entry) => entry.name)
+      .sort();
+
+    for (const dirName of buildDirs) {
+      const buildPath = path.join(baseDir, dirName);
+      const buildCandidates = [
+        path.join(buildPath, "luau-docgen"),
+        path.join(buildPath, "luau-docgen.exe"),
+      ];
+
+      for (const candidate of buildCandidates) {
+        if (fs.existsSync(candidate)) {
+          return candidate;
+        }
+      }
+    }
+  }
+
   return null;
 }
 
 if (!args.legacy) {
   const nativeBinary = findNativeBinary();
-  if (!nativeBinary) {
-    console.error("[luau-docgen] Native binary not found. Build it or use --legacy.");
+  if (nativeBinary) {
+    const nativeArgs = process.argv.slice(2);
+    if (!nativeArgs.includes("--generator-version")) {
+      nativeArgs.push("--generator-version", pkg.version);
+    }
+
+    const result = spawnSync(nativeBinary, nativeArgs, { stdio: "inherit" });
+    if (result.error) {
+      console.error(`[luau-docgen] failed to run native binary: ${result.error.message}`);
+      process.exit(1);
+    }
+    if (result.status !== null) {
+      if (result.status !== 0) {
+        console.error(`[luau-docgen] native exited with code ${result.status}`);
+        if (process.platform === "win32" && (result.status === -1073741701 || result.status === 3221225595)) {
+          console.error("[luau-docgen] Windows runtime load failed (0xC000007B). Make sure the MinGW/MSYS2 runtime DLLs match the binary.");
+          console.error("[luau-docgen] Try: set LUAU_DOCGEN_RUNTIME_DIR to the correct runtime bin dir and run: npm --prefix packages/luau-docgen run native:bin");
+        }
+      }
+      process.exit(result.status);
+    }
     process.exit(1);
   }
 
-  const nativeArgs = process.argv.slice(2);
-  if (!nativeArgs.includes("--generator-version")) {
-    nativeArgs.push("--generator-version", pkg.version);
-  }
-
-  const result = spawnSync(nativeBinary, nativeArgs, { stdio: "inherit" });
-  if (result.status !== null) {
-    process.exit(result.status);
-  }
-  process.exit(1);
+  console.error("[luau-docgen] Native binary not found. Falling back to legacy parser.");
 }
 
 const rootDir = path.resolve(args.rootDir);

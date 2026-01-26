@@ -4,14 +4,15 @@
   "description": "StoryBakery Docusaurus preset",
   "main": "index.js",
   "files": [
-    "index.js",
-    "plugins"
+    "index.js"
   ],
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@storybakery/docs-theme": "^0.1.0"
+    "@storybakery/docs-theme": "^0.1.0",
+    "@storybakery/docusaurus-plugin-reference": "^0.1.0",
+    "toml": "^3.0.0"
   },
   "peerDependencies": {
     "@docusaurus/core": "^3.0.0",

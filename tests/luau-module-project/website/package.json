@@ -4,19 +4,23 @@
   "private": true,
   "scripts": {
     "verify:reference": "node scripts/verify-reference.js",
-    "build": "docusaurus build",
-    "start": "docusaurus start",
+    "build": "npm run reference:build && docusaurus build",
+    "start": "npm run reference:build && bakerywave start",
     "serve": "docusaurus serve",
     "test": "npm run build && npm run verify:reference",
-    "dev": "docusaurus start"
+    "dev": "bakerywave dev --site-dir .",
+    "reference:build": "bakerywave reference build --site-dir ."
   },
   "dependencies": {
     "@docusaurus/core": "^3.0.0",
     "@docusaurus/plugin-content-docs": "^3.0.0",
     "@docusaurus/plugin-content-pages": "^3.0.0",
     "@docusaurus/theme-classic": "^3.0.0",
+    "@storybakery/bakerywave": "file:../../../packages/bakerywave",
     "@storybakery/docs-preset": "file:../../../packages/docs-preset",
     "@storybakery/docs-theme": "file:../../../packages/docs-theme",
+    "@storybakery/docusaurus-plugin-reference": "file:../../../packages/docusaurus-plugin-reference",
+    "@storybakery/luau-docgen": "file:../../../packages/luau-docgen",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

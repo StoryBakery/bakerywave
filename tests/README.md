@@ -8,4 +8,5 @@
 - 테스트 실행: `tests/luau-module-project/website`에서 `npm run test`
 - 로컬 개발: `tests/luau-module-project/website`에서 `npm run dev`
 - GitHub release published 시 CI가 테스트를 실행한다.
-- reference 문서는 `tests/luau-module-project/website/docs/reference/`에 포함된다.
+- reference 문서는 `tests/luau-module-project/website/docs/reference/`에 생성되며 Git 추적하지 않는다.
+- reference 경로/정책은 `tests/luau-module-project/bakerywave.toml`에서 관리한다.

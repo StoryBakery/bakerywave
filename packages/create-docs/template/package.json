@@ -3,17 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "docusaurus start",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "serve": "docusaurus serve"
+    "dev": "npm run reference:build && bakerywave start",
+    "start": "npm run reference:build && bakerywave start",
+    "build": "npm run reference:build && bakerywave build",
+    "serve": "bakerywave serve",
+    "reference:build": "bakerywave reference build --site-dir ."
   },
   "dependencies": {
     "@docusaurus/core": "^3.0.0",
     "@docusaurus/plugin-content-docs": "^3.0.0",
     "@docusaurus/plugin-content-pages": "^3.0.0",
     "@docusaurus/theme-classic": "^3.0.0",
+    "@storybakery/bakerywave": "^0.1.0",
     "@storybakery/docs-preset": "^0.1.0",
+    "@storybakery/docusaurus-plugin-reference": "^0.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

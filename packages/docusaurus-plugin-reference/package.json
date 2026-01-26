@@ -1,0 +1,17 @@
+{
+  "name": "@storybakery/docusaurus-plugin-reference",
+  "version": "0.1.0",
+  "description": "StoryBakery reference JSON to MDX plugin",
+  "main": "index.js",
+  "files": [
+    "generate.js",
+    "index.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@docusaurus/core": "^3.0.0",
+    "react": ">=18.0.0"
+  }
+}

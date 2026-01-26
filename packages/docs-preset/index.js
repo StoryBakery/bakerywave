@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const toml = require("toml");
 
 function resolveSidebarPath(siteDir, providedPath) {
   if (providedPath === false) {
@@ -39,6 +40,74 @@ function arraysEqual(left, right) {
     }
   }
   return true;
+}
+
+function getDefaultReferenceOptions(siteDir) {
+  if (path.basename(siteDir) !== "website") {
+    return {};
+  }
+
+  return {
+    rootDir: "..",
+    srcDir: "src",
+  };
+}
+
+function resolveProjectRoot(siteDir) {
+  if (path.basename(siteDir) === "website") {
+    return path.resolve(siteDir, "..");
+  }
+  return siteDir;
+}
+
+function findBakerywaveTomlPath(siteDir) {
+  const projectRoot = resolveProjectRoot(siteDir);
+  const candidates = [
+    path.join(siteDir, "bakerywave.toml"),
+    path.join(projectRoot, "bakerywave.toml"),
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  return null;
+}
+
+function resolveTomlPathOptions(tomlPath, options) {
+  const resolved = { ...options };
+  const baseDir = path.dirname(tomlPath);
+  const pathKeys = ["rootDir", "input", "outDir", "manifestPath"];
+
+  for (const key of pathKeys) {
+    const value = resolved[key];
+    if (!value || path.isAbsolute(value)) {
+      continue;
+    }
+    resolved[key] = path.resolve(baseDir, value);
+  }
+
+  return resolved;
+}
+
+function loadBakerywaveReferenceOptions(siteDir) {
+  const tomlPath = findBakerywaveTomlPath(siteDir);
+  if (!tomlPath) {
+    return {};
+  }
+
+  try {
+    const raw = fs.readFileSync(tomlPath, "utf8");
+    const parsed = toml.parse(raw);
+    const reference = parsed.reference && typeof parsed.reference === "object" ? parsed.reference : {};
+    return resolveTomlPathOptions(tomlPath, reference);
+  } catch (error) {
+    console.error(`[storybakery] bakerywave.toml 파싱 실패: ${tomlPath}`);
+    console.error(error.message);
+    return {};
+  }
 }
 
 function storybakeryI18nEnforcer(context, options) {
@@ -109,6 +178,16 @@ module.exports = function storybakeryDocsPreset(context, opts = {}) {
 
   plugins.push(["@docusaurus/plugin-content-docs", docsOptions]);
   plugins.push(["@docusaurus/plugin-content-pages", pagesOptions]);
+
+  const referenceDefaults = getDefaultReferenceOptions(siteDir);
+  const referenceFromToml = loadBakerywaveReferenceOptions(siteDir);
+  const referenceOptions =
+    opts.reference === false
+      ? null
+      : { ...referenceDefaults, ...referenceFromToml, ...(opts.reference || {}) };
+  if (referenceOptions) {
+    plugins.push(["@storybakery/docusaurus-plugin-reference", referenceOptions]);
+  }
 
   if (opts.i18n && (opts.i18n.locales || opts.i18n.defaultLocale)) {
     plugins.push([storybakeryI18nEnforcer, { expected: opts.i18n }]);

@@ -1,21 +1,32 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdint>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
+
+#include "luau_docgen.h"
 
 #include <Luau/Ast.h>
 #include <Luau/Config.h>
+#include <Luau/Frontend.h>
+#include <Luau/LuauConfig.h>
 #include <Luau/Lexer.h>
 #include <Luau/Location.h>
 #include <Luau/ParseResult.h>
 #include <Luau/Parser.h>
+#include <Luau/Scope.h>
+#include <Luau/ToString.h>
+#include <Luau/Type.h>
+#include <Luau/TypePack.h>
 
 namespace fs = std::filesystem;
 
@@ -826,8 +837,8 @@ struct BindingCollector : Luau::AstVisitor
 
 static std::vector<Binding> collectBindings(const Source& source)
 {
-    Luau::AstNameTable names;
     Luau::Allocator allocator;
+    Luau::AstNameTable names(allocator);
     Luau::ParseOptions options;
     Luau::ParseResult result = Luau::Parser::parse(
         source.content.c_str(),
@@ -877,12 +888,667 @@ static int findColumn(const std::vector<std::string>& lines, int lineNumber)
     return pos == std::string::npos ? 1 : static_cast<int>(pos) + 1;
 }
 
+struct ModuleContext
+{
+    fs::path filePath;
+    fs::path baseDir;
+    std::string moduleName;
+    std::string rootRelativePath;
+    std::string baseRelativePath;
+    Source source;
+    std::vector<DocBlock> blocks;
+    std::vector<Binding> bindings;
+};
+
+struct ModuleAnalysis
+{
+    std::string moduleName;
+    Luau::ModulePtr module;
+    Luau::ScopePtr scope;
+};
+
+static bool pathStartsWith(const fs::path& path, const fs::path& prefix)
+{
+    if (prefix.empty())
+        return false;
+
+    std::string pathText = normalizePath(path);
+    std::string prefixText = normalizePath(prefix);
+
+    if (pathText == prefixText)
+        return true;
+
+    if (pathText.size() <= prefixText.size())
+        return false;
+
+    if (pathText.compare(0, prefixText.size(), prefixText) != 0)
+        return false;
+
+    return pathText[prefixText.size()] == '/';
+}
+
+static fs::path selectBaseDir(const fs::path& filePath, const GeneratorOptions& options)
+{
+    if (!options.srcDir.empty() && pathStartsWith(filePath, options.srcDir))
+        return options.srcDir;
+
+    if (!options.typesDir.empty() && pathStartsWith(filePath, options.typesDir))
+        return options.typesDir;
+
+    return options.rootDir;
+}
+
+static std::string stripExtension(const fs::path& path)
+{
+    fs::path withoutExt = path;
+    withoutExt.replace_extension();
+    return normalizePath(withoutExt);
+}
+
+static ModuleContext buildModuleContext(const fs::path& filePath, const GeneratorOptions& options)
+{
+    ModuleContext context;
+    context.filePath = filePath;
+    context.source = loadSource(filePath);
+    context.blocks = extractDocBlocks(context.source.lines);
+    context.bindings = collectBindings(context.source);
+
+    context.baseDir = selectBaseDir(filePath, options);
+    context.rootRelativePath = normalizePath(fs::relative(filePath, options.rootDir));
+    context.baseRelativePath = normalizePath(fs::relative(filePath, context.baseDir));
+    context.moduleName = stripExtension(fs::relative(filePath, context.baseDir));
+
+    return context;
+}
+
+static std::optional<std::string> readFileText(const fs::path& filePath)
+{
+    std::ifstream file(filePath, std::ios::binary);
+    if (!file.is_open())
+        return std::nullopt;
+
+    std::ostringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+
+static std::string safeRelativePath(const fs::path& path, const fs::path& rootDir)
+{
+    try
+    {
+        return normalizePath(fs::relative(path, rootDir));
+    }
+    catch (...)
+    {
+        return normalizePath(path);
+    }
+}
+
+struct DocgenConfigResolver : Luau::ConfigResolver
+{
+    Luau::Config defaultConfig;
+    fs::path rootDir;
+
+    std::unordered_map<std::string, fs::path> modulePaths;
+
+    mutable std::unordered_map<std::string, Luau::Config> configCache;
+    mutable std::vector<Diagnostic> diagnostics;
+
+    DocgenConfigResolver(const fs::path& rootDir, const std::unordered_map<std::string, fs::path>& modulePaths)
+        : rootDir(rootDir)
+        , modulePaths(modulePaths)
+    {
+    }
+
+    const Luau::Config& getConfig(const Luau::ModuleName& name, const Luau::TypeCheckLimits&) const override
+    {
+        auto it = modulePaths.find(name);
+        if (it == modulePaths.end())
+            return defaultConfig;
+
+        fs::path dir = it->second.parent_path();
+        return readConfigRecursive(dir);
+    }
+
+    const Luau::Config& readConfigRecursive(const fs::path& dir) const
+    {
+        std::string key = normalizePath(dir);
+        auto cached = configCache.find(key);
+        if (cached != configCache.end())
+            return cached->second;
+
+        Luau::Config result = defaultConfig;
+
+        fs::path parent = dir.parent_path();
+        if (!parent.empty() && parent != dir)
+            result = readConfigRecursive(parent);
+
+        fs::path luaurcPath = dir / Luau::kConfigName;
+        fs::path luauConfigPath = dir / Luau::kLuauConfigName;
+
+        bool hasLuaurc = fs::is_regular_file(luaurcPath);
+        bool hasLuauConfig = fs::is_regular_file(luauConfigPath);
+
+        if (hasLuaurc && hasLuauConfig)
+        {
+            diagnostics.push_back({
+                "warning",
+                safeRelativePath(luaurcPath, rootDir),
+                1,
+                "Both .luaurc and .config.luau exist; .luaurc is used.",
+            });
+        }
+
+        if (hasLuaurc)
+        {
+            if (auto contents = readFileText(luaurcPath))
+            {
+                Luau::ConfigOptions::AliasOptions aliasOptions;
+                aliasOptions.configLocation = luaurcPath.string();
+                aliasOptions.overwriteAliases = true;
+
+                Luau::ConfigOptions options;
+                options.aliasOptions = aliasOptions;
+
+                if (auto error = Luau::parseConfig(*contents, result, options))
+                {
+                    diagnostics.push_back({
+                        "warning",
+                        safeRelativePath(luaurcPath, rootDir),
+                        1,
+                        *error,
+                    });
+                }
+            }
+        }
+        else if (hasLuauConfig)
+        {
+            if (auto contents = readFileText(luauConfigPath))
+            {
+                Luau::ConfigOptions::AliasOptions aliasOptions;
+                aliasOptions.configLocation = luauConfigPath.string();
+                aliasOptions.overwriteAliases = true;
+
+                Luau::InterruptCallbacks callbacks;
+                if (auto error = Luau::extractLuauConfig(*contents, result, aliasOptions, std::move(callbacks)))
+                {
+                    diagnostics.push_back({
+                        "warning",
+                        safeRelativePath(luauConfigPath, rootDir),
+                        1,
+                        *error,
+                    });
+                }
+            }
+        }
+
+        auto inserted = configCache.emplace(key, std::move(result));
+        return inserted.first->second;
+    }
+
+    std::vector<Diagnostic> consumeDiagnostics() const
+    {
+        std::vector<Diagnostic> result = diagnostics;
+        diagnostics.clear();
+        return result;
+    }
+};
+
+static std::string normalizeRequirePath(std::string value)
+{
+    std::replace(value.begin(), value.end(), '\\', '/');
+
+    bool hasSlash = value.find('/') != std::string::npos;
+    bool hasLeadingDot = !value.empty() && value[0] == '.';
+
+    if (!hasSlash && !hasLeadingDot && value.find('.') != std::string::npos)
+        std::replace(value.begin(), value.end(), '.', '/');
+
+    return value;
+}
+
+static std::string stripRequireExtension(const std::string& value)
+{
+    if (value.size() > 5 && value.rfind(".luau") == value.size() - 5)
+        return value.substr(0, value.size() - 5);
+
+    if (value.size() > 4 && value.rfind(".lua") == value.size() - 4)
+        return value.substr(0, value.size() - 4);
+
+    return value;
+}
+
+struct DocgenFileResolver : Luau::FileResolver
+{
+    std::unordered_map<std::string, const ModuleContext*> modulesByName;
+
+    explicit DocgenFileResolver(const std::vector<ModuleContext>& contexts)
+    {
+        for (const ModuleContext& context : contexts)
+            modulesByName.emplace(context.moduleName, &context);
+    }
+
+    std::optional<Luau::SourceCode> readSource(const Luau::ModuleName& name) override
+    {
+        auto it = modulesByName.find(name);
+        if (it == modulesByName.end())
+            return std::nullopt;
+
+        Luau::SourceCode code;
+        code.source = it->second->source.content;
+        code.type = Luau::SourceCode::Module;
+        return code;
+    }
+
+    std::optional<Luau::ModuleInfo> resolveModule(
+        const Luau::ModuleInfo* context,
+        Luau::AstExpr* expr,
+        const Luau::TypeCheckLimits&
+    ) override
+    {
+        if (!context || !expr)
+            return std::nullopt;
+
+        auto str = expr->as<Luau::AstExprConstantString>();
+        if (!str)
+            return std::nullopt;
+
+        std::string requirePath(str->value.data, str->value.size);
+        requirePath = normalizeRequirePath(requirePath);
+        requirePath = stripRequireExtension(requirePath);
+
+        auto ctxIt = modulesByName.find(context->name);
+        if (ctxIt == modulesByName.end())
+            return std::nullopt;
+
+        fs::path currentDir = fs::path(ctxIt->second->moduleName).parent_path();
+
+        auto tryResolve = [&](const fs::path& candidate) -> std::optional<Luau::ModuleInfo> {
+            std::string moduleName = normalizePath(candidate.lexically_normal());
+            if (modulesByName.find(moduleName) != modulesByName.end())
+                return Luau::ModuleInfo{moduleName, false};
+
+            std::string initName = moduleName + "/init";
+            if (modulesByName.find(initName) != modulesByName.end())
+                return Luau::ModuleInfo{initName, false};
+
+            return std::nullopt;
+        };
+
+        if (!requirePath.empty())
+        {
+            if (auto resolved = tryResolve(currentDir / requirePath))
+                return resolved;
+
+            if (auto resolved = tryResolve(fs::path(requirePath)))
+                return resolved;
+        }
+
+        return std::nullopt;
+    }
+};
+
+static std::unordered_map<std::string, ModuleAnalysis> runFrontendAnalysis(
+    Luau::Frontend& frontend,
+    const std::vector<ModuleContext>& contexts
+)
+{
+    std::unordered_map<std::string, ModuleAnalysis> analyses;
+    analyses.reserve(contexts.size());
+
+    for (const ModuleContext& context : contexts)
+    {
+        frontend.check(context.moduleName);
+
+        Luau::ModulePtr module = frontend.moduleResolver.getModule(context.moduleName);
+        if (!module || !module->hasModuleScope())
+            continue;
+
+        analyses.emplace(context.moduleName, ModuleAnalysis{
+            context.moduleName,
+            module,
+            module->getModuleScope(),
+        });
+    }
+
+    return analyses;
+}
+
+static std::vector<std::string> splitDotPath(const std::string& value)
+{
+    std::vector<std::string> parts;
+    std::stringstream stream(value);
+    std::string part;
+    while (std::getline(stream, part, '.'))
+    {
+        if (!part.empty())
+            parts.push_back(part);
+    }
+    return parts;
+}
+
+static std::optional<Luau::TypeId> lookupBindingType(const Luau::ScopePtr& scope, const std::string& name)
+{
+    if (!scope)
+        return std::nullopt;
+
+    std::optional<Luau::Binding> binding = scope->linearSearchForBinding(name, true);
+    if (!binding)
+        return std::nullopt;
+
+    return binding->typeId;
+}
+
+static std::optional<Luau::TypeId> resolveMemberTypeRecursive(
+    Luau::TypeId typeId,
+    const std::string& memberName,
+    std::unordered_set<const void*>& visited
+)
+{
+    if (!typeId)
+        return std::nullopt;
+
+    typeId = Luau::follow(typeId);
+    const void* key = static_cast<const void*>(typeId);
+    if (visited.find(key) != visited.end())
+        return std::nullopt;
+    visited.insert(key);
+
+    if (const Luau::TableType* tableType = Luau::get<Luau::TableType>(typeId))
+    {
+        auto it = tableType->props.find(memberName);
+        if (it != tableType->props.end())
+        {
+            if (it->second.readTy)
+                return Luau::follow(*it->second.readTy);
+            if (it->second.writeTy)
+                return Luau::follow(*it->second.writeTy);
+        }
+    }
+
+    if (const Luau::MetatableType* metatableType = Luau::get<Luau::MetatableType>(typeId))
+    {
+        if (auto resolved = resolveMemberTypeRecursive(metatableType->table, memberName, visited))
+            return resolved;
+        if (auto resolved = resolveMemberTypeRecursive(metatableType->metatable, memberName, visited))
+            return resolved;
+    }
+
+    if (const Luau::ExternType* externType = Luau::get<Luau::ExternType>(typeId))
+    {
+        auto it = externType->props.find(memberName);
+        if (it != externType->props.end())
+        {
+            if (it->second.readTy)
+                return Luau::follow(*it->second.readTy);
+            if (it->second.writeTy)
+                return Luau::follow(*it->second.writeTy);
+        }
+
+        if (externType->parent)
+        {
+            if (auto resolved = resolveMemberTypeRecursive(*externType->parent, memberName, visited))
+                return resolved;
+        }
+    }
+
+    if (const Luau::UnionType* unionType = Luau::get<Luau::UnionType>(typeId))
+    {
+        for (Luau::TypeId option : unionType->options)
+        {
+            if (auto resolved = resolveMemberTypeRecursive(option, memberName, visited))
+                return resolved;
+        }
+    }
+
+    if (const Luau::IntersectionType* intersectionType = Luau::get<Luau::IntersectionType>(typeId))
+    {
+        for (Luau::TypeId part : intersectionType->parts)
+        {
+            if (auto resolved = resolveMemberTypeRecursive(part, memberName, visited))
+                return resolved;
+        }
+    }
+
+    return std::nullopt;
+}
+
+static std::optional<Luau::TypeId> resolveMemberType(Luau::TypeId typeId, const std::string& memberName)
+{
+    std::unordered_set<const void*> visited;
+    return resolveMemberTypeRecursive(typeId, memberName, visited);
+}
+
+static std::optional<Luau::TypeId> resolveWithinType(const Luau::ScopePtr& scope, const std::string& within)
+{
+    std::vector<std::string> parts = splitDotPath(within);
+    if (parts.empty())
+        return std::nullopt;
+
+    std::optional<Luau::TypeId> current = lookupBindingType(scope, parts.front());
+    if (!current)
+        return std::nullopt;
+
+    for (size_t i = 1; i < parts.size(); ++i)
+    {
+        current = resolveMemberType(*current, parts[i]);
+        if (!current)
+            return std::nullopt;
+    }
+
+    return current;
+}
+
+static std::optional<Luau::TypeId> resolveSymbolType(const ModuleAnalysis* analysis, const std::string& within, const std::string& name)
+{
+    if (!analysis || !analysis->scope)
+        return std::nullopt;
+
+    if (within.empty())
+        return lookupBindingType(analysis->scope, name);
+
+    std::optional<Luau::TypeId> withinType = resolveWithinType(analysis->scope, within);
+    if (!withinType)
+        return std::nullopt;
+
+    return resolveMemberType(*withinType, name);
+}
+
+static std::string toDisplayString(Luau::TypeId typeId, bool hideSelf)
+{
+    if (!typeId)
+        return "";
+
+    Luau::ToStringOptions options;
+    options.hideFunctionSelfArgument = hideSelf;
+    return Luau::toString(Luau::follow(typeId), options);
+}
+
+struct FunctionAnalysis
+{
+    std::string display;
+    std::vector<std::string> paramTypes;
+    std::vector<std::string> paramNames;
+    std::unordered_map<std::string, std::string> paramTypesByName;
+    std::vector<std::string> returnTypes;
+};
+
+static void collectFunctionTypes(
+    Luau::TypeId typeId,
+    std::unordered_set<const void*>& visited,
+    std::vector<Luau::TypeId>& outTypes
+)
+{
+    if (!typeId)
+        return;
+
+    typeId = Luau::follow(typeId);
+    const void* key = static_cast<const void*>(typeId);
+    if (visited.find(key) != visited.end())
+        return;
+    visited.insert(key);
+
+    if (Luau::get<Luau::FunctionType>(typeId))
+    {
+        outTypes.push_back(typeId);
+        return;
+    }
+
+    if (const Luau::UnionType* unionType = Luau::get<Luau::UnionType>(typeId))
+    {
+        for (Luau::TypeId option : unionType->options)
+            collectFunctionTypes(option, visited, outTypes);
+        return;
+    }
+
+    if (const Luau::IntersectionType* intersectionType = Luau::get<Luau::IntersectionType>(typeId))
+    {
+        for (Luau::TypeId part : intersectionType->parts)
+            collectFunctionTypes(part, visited, outTypes);
+    }
+}
+
+static FunctionAnalysis analyzeFunctionType(Luau::TypeId typeId, bool isMethod)
+{
+    FunctionAnalysis result;
+
+    if (!typeId)
+        return result;
+
+    std::vector<Luau::TypeId> functionTypes;
+    std::unordered_set<const void*> visited;
+    collectFunctionTypes(typeId, visited, functionTypes);
+
+    if (functionTypes.empty())
+    {
+        result.display = toDisplayString(typeId, isMethod);
+        return result;
+    }
+
+    Luau::TypeId primaryType = functionTypes.front();
+    const Luau::FunctionType* functionType = Luau::get<Luau::FunctionType>(primaryType);
+    if (!functionType)
+        return result;
+
+    auto [argTypes, argTail] = Luau::flatten(functionType->argTypes);
+    auto [retTypes, retTail] = Luau::flatten(functionType->retTypes);
+    (void)argTail;
+    (void)retTail;
+
+    size_t argOffset = 0;
+    if (isMethod && functionType->hasSelf && !argTypes.empty())
+        argOffset = 1;
+
+    std::vector<std::string> argNames;
+    argNames.reserve(functionType->argNames.size());
+    for (const std::optional<Luau::FunctionArgument>& arg : functionType->argNames)
+    {
+        if (arg)
+            argNames.push_back(arg->name);
+        else
+            argNames.push_back("");
+    }
+
+    for (size_t i = argOffset; i < argTypes.size(); ++i)
+    {
+        std::string typeText = toDisplayString(argTypes[i], false);
+        result.paramTypes.push_back(typeText);
+
+        size_t nameIndex = i;
+        std::string paramName = nameIndex < argNames.size() ? argNames[nameIndex] : "";
+        result.paramNames.push_back(paramName);
+
+        if (!paramName.empty())
+            result.paramTypesByName[paramName] = typeText;
+    }
+
+    for (Luau::TypeId retType : retTypes)
+        result.returnTypes.push_back(toDisplayString(retType, false));
+
+    result.display = toDisplayString(primaryType, isMethod);
+    return result;
+}
+
+static void mergeParamTypesFromAnalysis(std::vector<ParamInfo>& params, const FunctionAnalysis& analysis)
+{
+    for (size_t i = 0; i < params.size(); ++i)
+    {
+        if (!params[i].type.empty())
+            continue;
+
+        auto byName = analysis.paramTypesByName.find(params[i].name);
+        if (byName != analysis.paramTypesByName.end())
+        {
+            params[i].type = byName->second;
+            continue;
+        }
+
+        if (i < analysis.paramTypes.size() && !analysis.paramTypes[i].empty())
+            params[i].type = analysis.paramTypes[i];
+    }
+}
+
+static std::vector<ParamInfo> mergeBindingParamsWithAnalysis(const Binding& binding, const FunctionAnalysis& analysis)
+{
+    std::vector<ParamInfo> params = binding.params;
+    mergeParamTypesFromAnalysis(params, analysis);
+    return params;
+}
+
+static void mergeReturnTypesFromAnalysis(std::vector<ReturnInfo>& returns, const FunctionAnalysis& analysis)
+{
+    for (size_t i = 0; i < returns.size() && i < analysis.returnTypes.size(); ++i)
+    {
+        if (returns[i].type.empty())
+            returns[i].type = analysis.returnTypes[i];
+    }
+}
+
+static std::vector<ReturnInfo> buildReturnsFromAnalysis(const FunctionAnalysis& analysis)
+{
+    std::vector<ReturnInfo> returns;
+    for (const std::string& typeText : analysis.returnTypes)
+        returns.push_back({typeText, {}});
+    return returns;
+}
+
+static void finalizeFunctionDisplay(SymbolTypes& types)
+{
+    std::ostringstream display;
+    display << "(";
+    for (size_t i = 0; i < types.params.size(); ++i)
+    {
+        const ParamInfo& param = types.params[i];
+        if (i > 0)
+            display << ", ";
+        if (!param.type.empty())
+            display << param.name << ": " << param.type;
+        else
+            display << param.name;
+    }
+    display << ")";
+
+    if (!types.returns.empty())
+    {
+        display << " -> ";
+        for (size_t i = 0; i < types.returns.size(); ++i)
+        {
+            if (i > 0)
+                display << ", ";
+            display << (types.returns[i].type.empty() ? "any" : types.returns[i].type);
+        }
+    }
+
+    types.display = display.str();
+}
+
 static Symbol buildSymbol(
     const ParsedDoc& doc,
     const DocBlock& block,
     const Binding* binding,
     const Source& source,
     const std::string& relativePath,
+    const ModuleAnalysis* analysis,
     std::vector<Diagnostic>& diagnostics
 )
 {
@@ -984,9 +1650,16 @@ static Symbol buildSymbol(
     if (!doc.state.inheritDoc.empty())
         symbol.tags.push_back({"inheritDoc", doc.state.inheritDoc, false, false, ""});
 
+    std::optional<Luau::TypeId> officialType = resolveSymbolType(analysis, within, symbol.name);
+
     if (symbol.kind == "function")
     {
+        FunctionAnalysis functionAnalysis;
+        if (officialType)
+            functionAnalysis = analyzeFunctionType(*officialType, isMethod);
+
         symbol.types.yields = doc.state.yields;
+
         if (!doc.params.empty())
         {
             for (const ParamInfo& param : doc.params)
@@ -1002,15 +1675,38 @@ static Symbol buildSymbol(
                 }
                 symbol.types.params.push_back(merged);
             }
+            mergeParamTypesFromAnalysis(symbol.types.params, functionAnalysis);
         }
         else if (binding)
         {
-            symbol.types.params = binding->params;
+            symbol.types.params = mergeBindingParamsWithAnalysis(*binding, functionAnalysis);
+        }
+        else if (officialType && !functionAnalysis.paramTypes.empty())
+        {
+            for (size_t i = 0; i < functionAnalysis.paramTypes.size(); ++i)
+            {
+                if (i >= functionAnalysis.paramNames.size())
+                    break;
+
+                const std::string& paramName = functionAnalysis.paramNames[i];
+                if (paramName.empty())
+                    continue;
+
+                ParamInfo param;
+                param.name = paramName;
+                param.type = functionAnalysis.paramTypes[i];
+                symbol.types.params.push_back(param);
+            }
         }
 
         if (!doc.returns.empty())
         {
             symbol.types.returns = doc.returns;
+            mergeReturnTypesFromAnalysis(symbol.types.returns, functionAnalysis);
+        }
+        else if (officialType && !functionAnalysis.returnTypes.empty())
+        {
+            symbol.types.returns = buildReturnsFromAnalysis(functionAnalysis);
         }
         else if (binding && !binding->returnType.empty())
         {
@@ -1019,36 +1715,18 @@ static Symbol buildSymbol(
 
         symbol.types.errors = doc.errors;
 
-        std::ostringstream display;
-        display << "(";
-        for (size_t i = 0; i < symbol.types.params.size(); ++i)
-        {
-            const ParamInfo& param = symbol.types.params[i];
-            if (i > 0)
-                display << ", ";
-            if (!param.type.empty())
-                display << param.name << ": " << param.type;
-            else
-                display << param.name;
-        }
-        display << ")";
-
-        if (!symbol.types.returns.empty())
-        {
-            display << " -> ";
-            for (size_t i = 0; i < symbol.types.returns.size(); ++i)
-            {
-                if (i > 0)
-                    display << ", ";
-                display << (symbol.types.returns[i].type.empty() ? "any" : symbol.types.returns[i].type);
-            }
-        }
-
-        symbol.types.display = display.str();
+        if (!functionAnalysis.display.empty())
+            symbol.types.display = functionAnalysis.display;
+        else
+            finalizeFunctionDisplay(symbol.types);
     }
     else if (symbol.kind == "property")
     {
         std::string resolvedType = typeTag && !typeTag->type.empty() ? typeTag->type : "";
+
+        if (resolvedType.empty() && officialType)
+            resolvedType = toDisplayString(*officialType, false);
+
         symbol.types.propertyType = resolvedType;
         symbol.types.readonly = doc.state.readonly;
         symbol.types.display = resolvedType;
@@ -1059,8 +1737,11 @@ static Symbol buildSymbol(
     }
     else if (symbol.kind == "type")
     {
-        if (typeTag)
+        if (typeTag && !typeTag->type.empty())
             symbol.types.typeAlias = typeTag->type;
+        else if (officialType)
+            symbol.types.typeAlias = toDisplayString(*officialType, false);
+
         symbol.types.display = symbol.types.typeAlias;
     }
     else if (symbol.kind == "class")
@@ -1072,19 +1753,18 @@ static Symbol buildSymbol(
 }
 
 static std::vector<Symbol> buildSymbols(
-    const Source& source,
-    const std::vector<DocBlock>& blocks,
-    const std::vector<Binding>& bindings,
-    const std::string& relativePath,
+    const ModuleContext& context,
+    const ModuleAnalysis* analysis,
     std::vector<Diagnostic>& diagnostics
 )
 {
     std::vector<Symbol> symbols;
-    for (const DocBlock& block : blocks)
+
+    for (const DocBlock& block : context.blocks)
     {
         ParsedDoc doc = parseDocBlock(block.contentLines);
-        const Binding* binding = findBindingAfterLine(bindings, block.endLine);
-        Symbol symbol = buildSymbol(doc, block, binding, source, relativePath, diagnostics);
+        const Binding* binding = findBindingAfterLine(context.bindings, block.endLine);
+        Symbol symbol = buildSymbol(doc, block, binding, context.source, context.rootRelativePath, analysis, diagnostics);
         if (symbol.kind.empty())
             continue;
 
@@ -1101,9 +1781,9 @@ static std::vector<Symbol> buildSymbols(
                 fieldSymbol.kind = "field";
                 fieldSymbol.name = field.name;
                 fieldSymbol.qualifiedName = symbol.name + "." + field.name;
-                fieldSymbol.file = relativePath;
+                fieldSymbol.file = context.rootRelativePath;
                 fieldSymbol.line = block.startLine;
-                fieldSymbol.column = findColumn(source.lines, block.startLine);
+                fieldSymbol.column = findColumn(context.source.lines, block.startLine);
                 fieldSymbol.summary = field.description;
                 fieldSymbol.descriptionMarkdown = field.description;
                 fieldSymbol.visibility = symbol.visibility;
@@ -1141,7 +1821,7 @@ static std::vector<Symbol> buildSymbols(
             {
                 diagnostics.push_back({
                     "warning",
-                    relativePath,
+                    context.rootRelativePath,
                     block.startLine,
                     "@param does not match function parameters.",
                 });
@@ -1151,6 +1831,7 @@ static std::vector<Symbol> buildSymbols(
 
     return symbols;
 }
+
 
 static void applyInheritDocs(std::vector<Symbol>& symbols)
 {
@@ -1815,44 +2496,28 @@ static void writeJsonOutput(
 }
 
 static Module generateModule(
-    const fs::path& filePath,
+    const ModuleContext& context,
     const GeneratorOptions& options,
     const std::unordered_map<std::string, std::string>& moduleOverrides,
+    const ModuleAnalysis* analysis,
     std::vector<Diagnostic>& diagnostics
 )
 {
-    Source source = loadSource(filePath);
-    std::vector<DocBlock> blocks = extractDocBlocks(source.lines);
-    std::vector<Binding> bindings = collectBindings(source);
+    (void)options;
 
-    std::string relativePath = normalizePath(fs::relative(filePath, options.rootDir));
-    std::vector<Symbol> symbols = buildSymbols(source, blocks, bindings, relativePath, diagnostics);
+    std::vector<Symbol> symbols = buildSymbols(context, analysis, diagnostics);
     applyInheritDocs(symbols);
 
-    std::string rootRelativePath = normalizePath(fs::relative(filePath, options.rootDir));
-    auto overrideIt = moduleOverrides.find(rootRelativePath);
-
-    fs::path baseDir = options.rootDir;
-    if (!options.srcDir.empty() && normalizePath(filePath).rfind(normalizePath(options.srcDir), 0) == 0)
-        baseDir = options.srcDir;
-    else if (!options.typesDir.empty() && normalizePath(filePath).rfind(normalizePath(options.typesDir), 0) == 0)
-        baseDir = options.typesDir;
-
-    std::string baseRelativePath = normalizePath(fs::relative(filePath, baseDir));
-    std::string moduleId = baseRelativePath;
-    size_t dot = moduleId.find_last_of('.');
-    if (dot != std::string::npos)
-        moduleId = moduleId.substr(0, dot);
-
+    std::string moduleId = context.moduleName;
+    auto overrideIt = moduleOverrides.find(context.rootRelativePath);
     if (overrideIt != moduleOverrides.end())
         moduleId = overrideIt->second;
 
     Module module;
     module.id = moduleId;
-    module.path = rootRelativePath;
-    module.sourceHash = sha1(source.rawContent);
+    module.path = context.rootRelativePath;
+    module.sourceHash = sha1(context.source.rawContent);
     module.symbols = std::move(symbols);
-
     return module;
 }
 
@@ -1869,65 +2534,8 @@ static void printDiagnostics(const std::vector<Diagnostic>& diagnostics)
     }
 }
 
-static void printHelp()
+static int runDocgen(const GeneratorOptions& options, const fs::path& outPath, bool failOnWarning)
 {
-    std::cout << "luau-docgen\n";
-    std::cout << "\nUsage:\n";
-    std::cout << "  luau-docgen --out <path> [--root <dir>] [--src <dir>] [--types <dir>]\n";
-    std::cout << "\nOptions:\n";
-    std::cout << "  --root <dir>             Root directory (default: cwd)\n";
-    std::cout << "  --src <dir>              Source directory (default: <root>/src)\n";
-    std::cout << "  --types <dir>            Optional types directory\n";
-    std::cout << "  --out <path>             Output JSON path (default: reference.json)\n";
-    std::cout << "  --generator-version <v>  Generator version string\n";
-    std::cout << "  --fail-on-warning        Exit with non-zero when warnings exist\n";
-}
-
-int main(int argc, char** argv)
-{
-    GeneratorOptions options;
-    options.rootDir = fs::current_path();
-    options.generatorVersion = "0.0.0";
-    fs::path outPath = options.rootDir / "reference.json";
-    bool failOnWarning = false;
-
-    for (int i = 1; i < argc; ++i)
-    {
-        std::string arg = argv[i];
-        if (arg == "--root" && i + 1 < argc)
-        {
-            options.rootDir = fs::path(argv[++i]);
-        }
-        else if (arg == "--src" && i + 1 < argc)
-        {
-            options.srcDir = options.rootDir / argv[++i];
-        }
-        else if (arg == "--types" && i + 1 < argc)
-        {
-            options.typesDir = options.rootDir / argv[++i];
-        }
-        else if (arg == "--out" && i + 1 < argc)
-        {
-            outPath = options.rootDir / argv[++i];
-        }
-        else if (arg == "--generator-version" && i + 1 < argc)
-        {
-            options.generatorVersion = argv[++i];
-        }
-        else if (arg == "--fail-on-warning")
-        {
-            failOnWarning = true;
-        }
-        else if (arg == "-h" || arg == "--help")
-        {
-            printHelp();
-            return 0;
-        }
-    }
-
-    if (options.srcDir.empty())
-        options.srcDir = options.rootDir / "src";
-
     std::unordered_map<std::string, std::string> overrides = loadModuleOverrides(options.rootDir);
 
     std::vector<fs::path> files = collectFiles(options.srcDir);
@@ -1937,12 +2545,53 @@ int main(int argc, char** argv)
         files.insert(files.end(), typeFiles.begin(), typeFiles.end());
     }
 
-    std::vector<Module> modules;
     std::vector<Diagnostic> diagnostics;
+    std::vector<ModuleContext> contexts;
+    contexts.reserve(files.size());
 
     for (const fs::path& filePath : files)
+        contexts.push_back(buildModuleContext(filePath, options));
+
+    std::unordered_map<std::string, fs::path> modulePaths;
+    modulePaths.reserve(contexts.size());
+
+    for (const ModuleContext& context : contexts)
     {
-        modules.push_back(generateModule(filePath, options, overrides, diagnostics));
+        auto inserted = modulePaths.emplace(context.moduleName, context.filePath);
+        if (!inserted.second)
+        {
+            diagnostics.push_back({
+                "warning",
+                context.rootRelativePath,
+                1,
+                "Duplicate module name detected; official type analysis may be incomplete.",
+            });
+        }
+    }
+
+    DocgenFileResolver fileResolver(contexts);
+    DocgenConfigResolver configResolver(options.rootDir, modulePaths);
+
+    Luau::FrontendOptions frontendOptions;
+    frontendOptions.retainFullTypeGraphs = true;
+
+    Luau::Frontend frontend(&fileResolver, &configResolver, frontendOptions);
+    std::unordered_map<std::string, ModuleAnalysis> analyses = runFrontendAnalysis(frontend, contexts);
+
+    std::vector<Diagnostic> configDiagnostics = configResolver.consumeDiagnostics();
+    diagnostics.insert(diagnostics.end(), configDiagnostics.begin(), configDiagnostics.end());
+
+    std::vector<Module> modules;
+    modules.reserve(contexts.size());
+
+    for (const ModuleContext& context : contexts)
+    {
+        const ModuleAnalysis* analysis = nullptr;
+        auto it = analyses.find(context.moduleName);
+        if (it != analyses.end())
+            analysis = &it->second;
+
+        modules.push_back(generateModule(context, options, overrides, analysis, diagnostics));
     }
 
     fs::create_directories(outPath.parent_path());
@@ -1956,4 +2605,49 @@ int main(int argc, char** argv)
         return 1;
 
     return 0;
+}
+
+extern "C" int luau_docgen_run(const LuauDocgenOptions* options)
+{
+    if (!options)
+        return 1;
+
+    GeneratorOptions resolved;
+    fs::path rootDir = fs::current_path();
+
+    if (options->root_dir && std::strlen(options->root_dir) > 0)
+        rootDir = fs::path(options->root_dir);
+
+    resolved.rootDir = rootDir;
+    resolved.generatorVersion = "0.0.0";
+
+    if (options->generator_version && std::strlen(options->generator_version) > 0)
+        resolved.generatorVersion = options->generator_version;
+
+    if (options->src_dir && std::strlen(options->src_dir) > 0)
+    {
+        fs::path srcDir = fs::path(options->src_dir);
+        resolved.srcDir = srcDir.is_absolute() ? srcDir : rootDir / srcDir;
+    }
+    else
+    {
+        resolved.srcDir = rootDir / "src";
+    }
+
+    if (options->types_dir && std::strlen(options->types_dir) > 0)
+    {
+        fs::path typesDir = fs::path(options->types_dir);
+        resolved.typesDir = typesDir.is_absolute() ? typesDir : rootDir / typesDir;
+    }
+
+    fs::path outPath = rootDir / "reference.json";
+    if (options->out_path && std::strlen(options->out_path) > 0)
+    {
+        fs::path output = fs::path(options->out_path);
+        outPath = output.is_absolute() ? output : rootDir / output;
+    }
+
+    bool failOnWarning = options->fail_on_warning != 0;
+
+    return runDocgen(resolved, outPath, failOnWarning);
 }

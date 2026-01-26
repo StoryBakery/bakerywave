@@ -19,6 +19,14 @@ module.exports = {
           routeBasePath: "/",
           sidebarPath: path.resolve(__dirname, "sidebars.js"),
         },
+        reference: {
+          lang: "luau",
+          input: "./.generated/reference/luau.json",
+          outDir: "./docs/reference/luau",
+          manifestPath: "./.generated/reference/manifest.json",
+          renderMode: "mdx",
+          clean: true,
+        },
         theme: {
           customCss: path.resolve(__dirname, "src/css/custom.css"),
         },

@@ -1,0 +1,102 @@
+---
+title: bakerywave 시작하기
+sidebar_label: bakerywave
+sidebar_position: 2
+---
+
+# bakerywave 시작하기
+
+bakerywave는 Docusaurus CLI를 최대한 그대로 노출하면서, reference 생성 파이프라인을 함께 제공하는 StoryBakery 전용 CLI입니다.
+
+## 설치
+
+Node.js가 필요합니다.
+
+### 새 프로젝트
+
+1. 프로젝트 디렉터리에서 `npm create @storybakery/docs`를 실행한다.
+2. 생성된 `website/`에서 `npm install`을 실행한다.
+
+### 기존 프로젝트
+
+다음 패키지를 추가합니다.
+
+```bash
+npm install --save @storybakery/bakerywave
+```
+
+CLI 실행은 아래 중 하나를 사용합니다.
+
+```bash
+npx bakerywave start
+npm exec bakerywave -- start
+```
+
+## 기본 사용
+
+Docusaurus 기본 커맨드는 bakerywave에서 그대로 사용할 수 있습니다.
+
+```bash
+bakerywave start
+bakerywave build
+bakerywave serve
+```
+
+별칭은 아래처럼 제공합니다.
+
+```bash
+bakerywave preview
+```
+
+Docusaurus 옵션은 `--` 뒤로 전달합니다.
+
+```bash
+bakerywave start -- --host 0.0.0.0 --port 4000
+```
+
+## dev 모드
+
+`bakerywave dev`는 reference watch와 Docusaurus start를 함께 실행합니다.
+
+```bash
+bakerywave dev
+```
+
+`dev`에서도 Docusaurus 옵션은 `--`로 전달합니다.
+
+```bash
+bakerywave dev -- --port 4000
+```
+
+## reference 생성
+
+reference 생성은 `reference` 서브커맨드로 수행합니다.
+
+```bash
+bakerywave reference build --site-dir .
+```
+
+기본 흐름은 아래 순서입니다.
+
+- luau-docgen이 JSON을 생성합니다.
+- reference 플러그인이 JSON을 MDX로 변환합니다.
+- 생성된 문서는 `website/docs/reference/<lang>/`에 기록됩니다.
+
+## 변경 감지(Watch)
+
+`reference watch`는 소스 변경을 감지해 reference를 다시 생성합니다.
+
+```bash
+bakerywave reference watch
+```
+
+watch는 `src/`와 `types/` 변경을 감지합니다.
+
+## 설정 우선순위
+
+reference 관련 설정은 아래 순서로 병합됩니다.
+
+1. CLI 옵션
+2. `bakerywave.toml`의 `[reference]`
+3. `@storybakery/docs-preset`의 `reference` 옵션
+4. 기본값

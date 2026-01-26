@@ -17,5 +17,12 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "scripts": {
+    "native:build": "cargo build --manifest-path native/Cargo.toml --release",
+    "native:build:debug": "cargo build --manifest-path native/Cargo.toml",
+    "native:clean": "cargo clean --manifest-path native/Cargo.toml",
+    "native:bin": "node scripts/copy-native.js",
+    "native:build:bin": "npm run native:build && npm run native:bin"
   }
 }
