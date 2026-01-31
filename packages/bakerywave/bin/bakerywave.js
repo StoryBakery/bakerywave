@@ -2,20 +2,19 @@
 const fs = require("fs");
 const path = require("path");
 const { spawn, spawnSync } = require("child_process");
-const { createRequire } = require("module");
 const toml = requireToml();
 
 function requireToml() {
-    try {
-        return require("toml");
-    } catch (error) {
+    const bases = [process.cwd(), __dirname, path.join(__dirname, "..")];
+    for (const base of bases) {
         try {
-            const cwdRequire = createRequire(path.join(process.cwd(), "package.json"));
-            return cwdRequire("toml");
-        } catch (innerError) {
-            throw error;
+            const resolved = require.resolve("toml", { paths: [base] });
+            return require(resolved);
+        } catch (error) {
+            // continue
         }
     }
+    return require("toml");
 }
 
 
@@ -77,8 +76,52 @@ function hasConfigFile(dirPath) {
         "docusaurus.config.cjs",
         "docusaurus.config.mjs",
         "docusaurus.config.ts",
+        "docusaurus.config.mts",
+        "docusaurus.config.cts",
     ];
     return candidates.some((name) => fs.existsSync(path.join(dirPath, name)));
+}
+
+function findSingleDocusaurusSiteDir(baseCwd) {
+    const ignoreNames = new Set(["node_modules", ".git", ".docusaurus", "build", "dist", ".generated", ".turbo"]);
+    const queue = [{ dir: baseCwd, depth: 0 }];
+    const maxDepth = 4;
+    const matches = [];
+
+    while (queue.length > 0) {
+        const item = queue.shift();
+        if (!item) {
+            break;
+        }
+        const { dir, depth } = item;
+        if (hasConfigFile(dir)) {
+            matches.push(dir);
+            continue;
+        }
+        if (depth >= maxDepth) {
+            continue;
+        }
+        let entries;
+        try {
+            entries = fs.readdirSync(dir, { withFileTypes: true });
+        } catch (error) {
+            continue;
+        }
+        for (const entry of entries) {
+            if (!entry.isDirectory()) {
+                continue;
+            }
+            if (ignoreNames.has(entry.name)) {
+                continue;
+            }
+            queue.push({ dir: path.join(dir, entry.name), depth: depth + 1 });
+        }
+    }
+
+    if (matches.length === 1) {
+        return matches[0];
+    }
+    return null;
 }
 
 function parseGlobalArgs(argv) {
@@ -147,7 +190,16 @@ function parseDevArgs(argv) {
 
 
 function resolveSiteDir(baseCwd, siteDir) {
-    return path.resolve(baseCwd, siteDir || ".");
+    const resolved = path.resolve(baseCwd, siteDir || ".");
+    if (hasConfigFile(resolved)) {
+        return resolved;
+    }
+    const detected = findSingleDocusaurusSiteDir(baseCwd);
+    if (detected) {
+        console.log(`[bakerywave] resolved site dir: `);
+        return detected;
+    }
+    return resolved;
 }
 
 function resolveCommand(command) {
