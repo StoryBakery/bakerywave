@@ -826,17 +826,25 @@ function buildRestartTargets(baseCwd, siteDirAbs, configPath) {
 
 
 function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
+    const loadedReferenceOptions = loadReferenceOptions(baseCwd, siteDirAbs, configPath);
+    const referenceOptions = resolveReferenceOptions(loadedReferenceOptions, {});
     const watchArgs = buildReferenceWatchArgs(siteDirAbs, configPath);
-    const watchProcess = spawn(process.execPath, [__filename, ...watchArgs], {
-        stdio: "inherit",
-        cwd: baseCwd,
-        env: process.env,
-    });
+    let watchProcess = null;
+    if (referenceOptions.enabled === false) {
+        console.log("[bakerywave] reference disabled. skipping watch.");
+    } else {
+        watchProcess = spawn(process.execPath, [__filename, ...watchArgs], {
+            stdio: "inherit",
+            cwd: baseCwd,
+            env: process.env,
+        });
+    }
 
     const restartEnabled = !(devOptions && devOptions.restart === false);
     const restartTargets = restartEnabled ? buildRestartTargets(baseCwd, siteDirAbs, configPath) : [];
     let startProcess = spawnDocusaurus("start", docusaurusArgs, siteDirAbs);
-    const children = [watchProcess, startProcess];
+    const children = watchProcess ? [watchProcess, startProcess] : [startProcess];
+    const startIndex = watchProcess ? 1 : 0;
     const restartWatchers = restartTargets.length > 0 ? createWatchers(restartTargets, () => scheduleRestart()) : [];
     let exiting = false;
     let restartTimer = null;
@@ -857,7 +865,7 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
                 startProcess.kill();
             }
             startProcess = spawnDocusaurus("start", docusaurusArgs, siteDirAbs);
-            children[1] = startProcess;
+            children[startIndex] = startProcess;
             startProcess.on("exit", (code) => {
                 if (exiting) {
                     return;
