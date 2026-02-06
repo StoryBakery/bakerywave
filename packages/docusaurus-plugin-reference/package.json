@@ -5,7 +5,8 @@
   "main": "index.js",
   "files": [
     "generate.js",
-    "index.js"
+    "index.js",
+    "luau/custom-doc-config-runner.luau"
   ],
   "publishConfig": {
     "access": "public"

@@ -11,6 +11,8 @@ let templateDir = defaultTemplateDir;
 let install = true;
 let force = false;
 let packageManager = "npm";
+let localDeps = false;
+let workspaceRoot = cwd;
 
 function printHelp() {
   console.log("Usage: create-docs [dir] [options]");
@@ -22,6 +24,8 @@ function printHelp() {
   console.log("  --skip-install           Alias for --no-install");
   console.log("  --package-manager <pm>   npm | pnpm | yarn | bun (default: npm)");
   console.log("  --force                  Allow non-empty directory");
+  console.log("  --local                  Use local workspace packages (file: deps)");
+  console.log("  --workspace-root <dir>   Workspace root for --local (default: cwd)");
   console.log("  -h, --help               Show help");
 }
 
@@ -38,6 +42,15 @@ for (let i = 0; i < args.length; i += 1) {
   }
   if (arg === "--template" && args[i + 1]) {
     templateDir = path.resolve(cwd, args[i + 1]);
+    i += 1;
+    continue;
+  }
+  if (arg === "--local") {
+    localDeps = true;
+    continue;
+  }
+  if (arg === "--workspace-root" && args[i + 1]) {
+    workspaceRoot = path.resolve(cwd, args[i + 1]);
     i += 1;
     continue;
   }
@@ -89,6 +102,75 @@ function isDirectoryEmpty(dirPath) {
   return entries.length === 0;
 }
 
+function loadWorkspacePackageMap(rootDir) {
+  const packagesDir = path.join(rootDir, "packages");
+  if (!fs.existsSync(packagesDir)) {
+    return new Map();
+  }
+  const entries = fs.readdirSync(packagesDir, { withFileTypes: true });
+  const map = new Map();
+  for (const entry of entries) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+    const pkgPath = path.join(packagesDir, entry.name, "package.json");
+    if (!fs.existsSync(pkgPath)) {
+      continue;
+    }
+    try {
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+      if (pkg && pkg.name) {
+        map.set(pkg.name, path.join(packagesDir, entry.name));
+      }
+    } catch (error) {
+      // ignore invalid package.json
+    }
+  }
+  return map;
+}
+
+function toPosixPath(value) {
+  return value.replace(/\\/g, "/");
+}
+
+function applyLocalDependencies(destPath, rootDir) {
+  const pkgJsonPath = path.join(destPath, "package.json");
+  if (!fs.existsSync(pkgJsonPath)) {
+    return;
+  }
+  const packageMap = loadWorkspacePackageMap(rootDir);
+  if (packageMap.size === 0) {
+    console.warn("[storybakery] --local enabled but no workspace packages found.");
+    return;
+  }
+  let pkg;
+  try {
+    pkg = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
+  } catch (error) {
+    console.warn("[storybakery] unable to read package.json for local deps.");
+    return;
+  }
+  const rewriteDeps = (deps) => {
+    if (!deps) {
+      return;
+    }
+    for (const name of Object.keys(deps)) {
+      const localPath = packageMap.get(name);
+      if (!localPath) {
+        continue;
+      }
+      let relative = path.relative(destPath, localPath);
+      if (!relative) {
+        relative = ".";
+      }
+      deps[name] = "file:" + toPosixPath(relative);
+    }
+  };
+  rewriteDeps(pkg.dependencies);
+  rewriteDeps(pkg.devDependencies);
+  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkg, null, 2) + "\n");
+}
+
 if (!fs.existsSync(templateDir)) {
   console.error("[storybakery] template directory missing.");
   process.exit(1);
@@ -100,6 +182,10 @@ if (!force && !isDirectoryEmpty(destDir)) {
 }
 
 copyDir(templateDir, destDir);
+
+if (localDeps) {
+  applyLocalDependencies(destDir, workspaceRoot);
+}
 
 if (install) {
   const installResult = spawnSync(packageManager, ["install"], {

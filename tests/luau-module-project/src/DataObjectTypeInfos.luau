@@ -2,7 +2,7 @@
 	@class DataObjectTypeInfos
 	@extends TypeInfos
 	
-	[TypeInfos]( 기반으로 추가적인 클래스 타입과 인스턴스를 정의합니다.
+	[TypeInfos] 기반으로 추가적인 클래스 타입과 인스턴스를 정의합니다.
 	[ObjectClass]의 [PropertyInfo] 정의와, [ExtendedInstance] 와 [DataObject] 에서 사용합니다.
 	
 	[TypeInfos] 의 타입이나 정보 속성들을 거의 공유하지만,
@@ -237,8 +237,10 @@ local function createDataObjectTypeInfo(name: string, params: DataObjectTypeInfo
 end
 
 --[=[
-	The instance is saved using the object ID.
-	0 is nil
+	@prop Instance
+	@group TypeInfos
+	
+	인스턴스는 비어있으면 id 0 으로 처리합니다
 ]=]
 local DEFUALT_INSTANCE_DATA_TYPE_PARAMS = {
 	Default = nil,

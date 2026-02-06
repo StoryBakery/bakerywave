@@ -1,6 +1,9 @@
-# TableUtil
+---
+title: TableUtil
+id: TableUtil
+---
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L23"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">TableUtil</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L1"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
 
 
 루아 테이블을 다룰 때 자주 사용하는 유틸리티 함수를 묶어 제공합니다.
@@ -8,226 +11,435 @@
 
 ## Summary
 
-### Functions
-- [binarySearch](#binarySearch)
-- [bisectLeft](#bisectLeft)
-- [bisectRight](#bisectRight)
-- [count](#count)
-- [deepClone](#deepClone)
-- [deepCount](#deepCount)
-- [deepFreeze](#deepFreeze)
-- [every](#every)
-- [fill](#fill)
-- [filter](#filter)
-- [findIndex](#findIndex)
-- [findValue](#findValue)
-- [includes](#includes)
-- [isArray](#isArray)
-- [isDict](#isDict)
-- [isEmpty](#isEmpty)
-- [keys](#keys)
-- [map](#map)
-- [merge](#merge)
-- [mergeArray](#mergeArray)
-- [mergeDict](#mergeDict)
-- [randomIpair](#randomIpair)
-- [randomPair](#randomPair)
-- [removeDupes](#removeDupes)
-- [reverse](#reverse)
-- [reversed](#reversed)
-- [shallowEqual](#shallowEqual)
-- [slice](#slice)
-- [sorted](#sorted)
-- [values](#values)
+#### Functions
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#binarySearch">binarySearch</a> (array: &#123;any&#125;, target: any, comparator: ((any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean)?) -&gt; number?</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#bisectLeft">bisectLeft</a> (array: &#123;any&#125;, target: any, comparator: ((any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean)?) -&gt; number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#bisectRight">bisectRight</a> (array: &#123;any&#125;, target: any, comparator: ((any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean)?) -&gt; number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#count">count</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#deepClone">deepClone</a> (tbl: T) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">T</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#deepCount">deepCount</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#deepFreeze">deepFreeze</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">(tbl: &#123;[any]: any&#125;)</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#every">every</a> (tbl: &#123;[any]: any&#125;, testFn: (any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean) -&gt; boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#fill">fill</a> (tbl: &#123;any&#125;, value: any, start: number?, End: number?) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#filter">filter</a> (tbl: &#123;[any]: any&#125;, filterFn: (any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean) -&gt; &#123;[any]: any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#findIndex">findIndex</a> (tbl: &#123;[any]: any&#125;, testFn: (any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean) -&gt; any?</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#findValue">findValue</a> (tbl: &#123;[any]: any&#125;, testFn: (any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean) -&gt; any?</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#includes">includes</a> (tbl: &#123;any&#125;, value: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#isArray">isArray</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#isDict">isDict</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#isEmpty">isEmpty</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#keys">keys</a> (tbl: &#123;[any]: any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#map">map</a> (tbl: &#123;[any]: any&#125;, mapFn: (any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">any) -&gt; &#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#merge">merge</a> (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;[any]: any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#mergeArray">mergeArray</a> (...: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#mergeDict">mergeDict</a> (...: &#123;[any]: any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;[any]: any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#randomIpair">randomIpair</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number, any</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#randomPair">randomPair</a> (tbl: &#123;[any]: any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">any, any</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#removeDupes">removeDupes</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#reverse">reverse</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">(tbl: &#123;any&#125;)</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#reversed">reversed</a> (tbl: &#123;any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#shallowEqual">shallowEqual</a> (tbl1: &#123;[any]: any&#125;, tbl2: &#123;[any]: any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#slice">slice</a> (tbl: &#123;any&#125;, start: number?, stop: number?, step: number?) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#sorted">sorted</a> (tbl: &#123;any&#125;, fn: ((any, any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean)?) -&gt; &#123;any&#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#values">values</a> (tbl: &#123;[any]: any&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;any&#125;</span></span></div>
+</div>
 
 ## Functions {#Functions}
 
 ### binarySearch {#binarySearch}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L532"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L523"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-<item>({item}, item, ((item, item) -> boolean)?) -> number?
+(array: {any}, target: any, comparator: ((any, any)->boolean)?) -> number?
 ```
 
 정렬된 배열에서 대상 값을 이진 탐색합니다.
 
-### bisectLeft {#bisectLeft}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L558"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>array</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">정렬된 배열.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>target</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">찾을 값.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>comparator</code> <span class="sb-ref-param-type">((any, any)-&gt;boolean)?</span></div><div class="sb-ref-param-desc">정렬 비교 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number?</span></div><div class="sb-ref-param-desc">찾은 위치 인덱스.</div></div>
+</div>
+
+### bisectLeft {#bisectLeft}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L549"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-<item>({item}, item, ((item, item) -> boolean)?) -> number
+(array: {any}, target: any, comparator: ((any, any)->boolean)?) -> number
 ```
 
 정렬된 배열에서 대상이 들어갈 가장 왼쪽 위치를 반환합니다.
 
-### bisectRight {#bisectRight}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L582"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>array</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">정렬된 배열.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>target</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">삽입 값.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>comparator</code> <span class="sb-ref-param-type">((any, any)-&gt;boolean)?</span></div><div class="sb-ref-param-desc">정렬 비교 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">삽입 지점 인덱스.</div></div>
+</div>
+
+### bisectRight {#bisectRight}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L573"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-<item>({item}, item, ((item, item) -> boolean)?) -> number
+(array: {any}, target: any, comparator: ((any, any)->boolean)?) -> number
 ```
 
 정렬된 배열에서 대상이 들어갈 가장 오른쪽 위치를 반환합니다.
 
-### count {#count}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L34"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>array</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">정렬된 배열.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>target</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">삽입 값.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>comparator</code> <span class="sb-ref-param-type">((any, any)-&gt;boolean)?</span></div><div class="sb-ref-param-desc">정렬 비교 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">삽입 지점 인덱스.</div></div>
+</div>
+
+### count {#count}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L34"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> number
+(tbl: {any}) -> number
 ```
 
 테이블에 들어 있는 요소 수를 반환합니다.
 
-### deepClone {#deepClone}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L121"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">요소를 셀 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">요소 개수.</div></div>
+</div>
+
+### deepClone {#deepClone}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L121"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-<T>(T) -> T
+(tbl: T) -> T
 ```
 
 모든 하위 테이블까지 재귀적으로 복제합니다.
 
-### deepCount {#deepCount}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L49"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">T</span></div><div class="sb-ref-param-desc">복제할 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">T</span></div><div class="sb-ref-param-desc">깊은 복사본.</div></div>
+</div>
+
+### deepCount {#deepCount}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L49"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> number
+(tbl: {any}) -> number
 ```
 
 중첩 테이블을 모두 탐색해 요소 수를 계산합니다.
 
-### deepFreeze {#deepFreeze}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L476"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">요소를 셀 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">모든 하위 요소를 포함한 개수.</div></div>
+</div>
+
+### deepFreeze {#deepFreeze}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L476"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(tbl: {[any]: any})
 ```
 
 테이블과 모든 하위 테이블을 재귀적으로 freeze 합니다.
 
-### every {#every}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L340"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">동결할 테이블.</div></div>
+</div>
+
+### every {#every}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L340"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl: {[any]: any}, testFn: (any, any)->boolean) -> boolean
 ```
 
 모든 값이 조건을 통과하는지 검사합니다.
 
-### fill {#fill}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L426"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">점검할 테이블.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>testFn</code> <span class="sb-ref-param-type">(any, any)-&gt;boolean</span></div><div class="sb-ref-param-desc">검사 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">모두 통과하면 true.</div></div>
+</div>
+
+### fill {#fill}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L426"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any, any, any) -> (...any)
+(tbl: {any}, value: any, start: number?, End: number?) -> {any}
 ```
 
 배열형 테이블의 구간을 동일한 값으로 채웁니다.
 
-### filter {#filter}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L306"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">대상 배열.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>value</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">채울 값.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>start</code> <span class="sb-ref-param-type">number?</span></div><div class="sb-ref-param-desc">시작 위치.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>End</code> <span class="sb-ref-param-type">number?</span></div><div class="sb-ref-param-desc">끝 위치.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">수정된 배열.</div></div>
+</div>
+
+### filter {#filter}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L306"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl: {[any]: any}, filterFn: (any, any)->boolean) -> {[any]: any}
 ```
 
 조건에 맞는 항목만 모아 새 테이블을 만들습니다.
 
-### findIndex {#findIndex}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L289"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">대상 테이블.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>filterFn</code> <span class="sb-ref-param-type">(any, any)-&gt;boolean</span></div><div class="sb-ref-param-desc">필터 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">필터링된 테이블.</div></div>
+</div>
+
+### findIndex {#findIndex}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L289"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl: {[any]: any}, testFn: (any, any)->boolean) -> any?
 ```
 
 조건에 맞는 첫 번째 키를 반환합니다.
 
-### findValue {#findValue}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L272"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">검색할 테이블.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>testFn</code> <span class="sb-ref-param-type">(any, any)-&gt;boolean</span></div><div class="sb-ref-param-desc">필터 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">any?</span></div><div class="sb-ref-param-desc">조건을 만족하는 키.</div></div>
+</div>
+
+### findValue {#findValue}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L272"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl: {[any]: any}, testFn: (any, any)->boolean) -> any?
 ```
 
 조건에 맞는 첫 번째 값을 반환합니다.
 
-### includes {#includes}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L65"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">검색할 테이블.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>testFn</code> <span class="sb-ref-param-type">(any, any)-&gt;boolean</span></div><div class="sb-ref-param-desc">필터 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">any?</span></div><div class="sb-ref-param-desc">조건을 만족하는 값.</div></div>
+</div>
+
+### includes {#includes}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L65"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> boolean
+(tbl: {any}, value: any) -> boolean
 ```
 
 테이블에 값이 포함되어 있는지 확인합니다.
 
-### isArray {#isArray}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L92"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">검색할 테이블.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>value</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">찾을 값.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">값이 존재하면 true.</div></div>
+</div>
+
+### isArray {#isArray}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L92"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> boolean
+(tbl: {any}) -> boolean
 ```
 
 키가 1..n 형태인지 검사합니다.
 
-### isDict {#isDict}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L110"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">검사할 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">배열 형태면 true.</div></div>
+</div>
+
+### isDict {#isDict}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L110"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> boolean
+(tbl: {any}) -> boolean
 ```
 
 배열이 아닌 사전 형태인지 검사합니다.
 
-### isEmpty {#isEmpty}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L81"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">검사할 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">사전 형태면 true.</div></div>
+</div>
+
+### isEmpty {#isEmpty}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L81"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> boolean
+(tbl: {any}) -> boolean
 ```
 
 테이블에 값이 전혀 없는지 확인합니다.
 
-### keys {#keys}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L177"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">검사할 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">비어 있으면 true.</div></div>
+</div>
+
+### keys {#keys}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L177"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(tbl: {[any]: any}) -> {any}
 ```
 
 테이블의 키를 배열로 반환합니다.
 
-### map {#map}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L324"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">키를 추출할 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">키 배열.</div></div>
+</div>
+
+### map {#map}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L324"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl: {[any]: any}, mapFn: (any, any)->any) -> {any}
 ```
 
 모든 값을 변환한 새 배열을 반환합니다.
 
-### merge {#merge}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L362"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">대상 테이블.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>mapFn</code> <span class="sb-ref-param-type">(any, any)-&gt;any</span></div><div class="sb-ref-param-desc">변환 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">변환된 값 배열.</div></div>
+</div>
+
+### merge {#merge}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L362"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(...{ [any]: any }?) -> { [any]: any }
+(...: any) -> {[any]: any}
 ```
 
 여러 테이블을 앞쪽부터 차례로 병합합니다.
@@ -236,112 +448,246 @@
 키가 숫자면 배열로 취급하여 순서대로 삽입합니다.
 키가 문자열이면 딕셔너리로 취급하여 뒤쪽 값으로 덮어씁니다.
 
-### mergeArray {#mergeArray}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L385"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">병합할 테이블들.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">병합된 테이블.</div></div>
+</div>
+
+### mergeArray {#mergeArray}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L385"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(...any) -> (...any)
+(...: {any}) -> {any}
 ```
 
 배열을 순서대로 이어 붙인 새 배열을 만듭니다.
 
-### mergeDict {#mergeDict}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L404"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">이어 붙일 배열들.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">병합된 배열.</div></div>
+</div>
+
+### mergeDict {#mergeDict}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L404"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(...any) -> (...any)
+(...: {[any]: any}) -> {[any]: any}
 ```
 
 사전형 테이블을 뒤쪽 값으로 덮어쓰며 병합합니다.
 
-### randomIpair {#randomIpair}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L208"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">병합할 딕셔너리.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">병합된 딕셔너리.</div></div>
+</div>
+
+### randomIpair {#randomIpair}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L208"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(tbl: {any}) -> number, any
 ```
 
 배열형 테이블에서 임의의 인덱스와 값을 돌려줍니다.
 
-### randomPair {#randomPair}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L221"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">대상 배열.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">선택된 인덱스.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">선택된 값.</div></div>
+</div>
+
+### randomPair {#randomPair}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L221"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(tbl: {[any]: any}) -> any, any
 ```
 
 사전형 테이블에서 임의의 키와 값을 돌려줍니다.
 
-### removeDupes {#removeDupes}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L451"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">대상 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">선택된 키.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">선택된 값.</div></div>
+</div>
+
+### removeDupes {#removeDupes}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L451"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(tbl: {any}) -> {any}
 ```
 
 배열에서 중복 값을 제거하고 순서를 유지합니다.
 
-### reverse {#reverse}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L137"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">대상 배열.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">중복이 제거된 배열.</div></div>
+</div>
+
+### reverse {#reverse}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L137"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-<Item>({Item}) -> (...any)
+(tbl: {any})
 ```
 
 배열형 테이블을 원본에서 역순으로 뒤집습니다.
 
-### reversed {#reversed}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L156"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">역순으로 바꿀 배열.</div></div>
+</div>
+
+### reversed {#reversed}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L156"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-<Item>({Item}) -> {Item}
+(tbl: {any}) -> {any}
 ```
 
 원본을 유지한 채 역순 배열을 반환합니다.
 
-### shallowEqual {#shallowEqual}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L500"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">복제 대상 배열.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">역순 배열 복사본.</div></div>
+</div>
+
+### shallowEqual {#shallowEqual}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L500"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl1: {[any]: any}, tbl2: {[any]: any}) -> boolean
 ```
 
 두 테이블의 얕은 동등성을 비교합니다.
 
-### slice {#slice}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L256"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl1</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">비교 대상.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl2</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">비교 대상.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">모든 키와 값이 같으면 true.</div></div>
+</div>
+
+### slice {#slice}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L256"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any, any, any) -> (...any)
+(tbl: {any}, start: number?, stop: number?, step: number?) -> {any}
 ```
 
 배열에서 지정한 구간을 잘라 새 배열로 돌려줍니다.
 
-### sorted {#sorted}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L240"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">대상 배열.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>start</code> <span class="sb-ref-param-type">number?</span></div><div class="sb-ref-param-desc">시작 인덱스.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>stop</code> <span class="sb-ref-param-type">number?</span></div><div class="sb-ref-param-desc">끝 인덱스.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>step</code> <span class="sb-ref-param-type">number?</span></div><div class="sb-ref-param-desc">걸음.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">잘라낸 배열.</div></div>
+</div>
+
+### sorted {#sorted}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L240"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(tbl: {any}, fn: ((any, any)->boolean)?) -> {any}
 ```
 
 정렬 결과를 새 배열로 반환합니다.
 
-### values {#values}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/TableUtil.luau#L192"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">정렬할 배열.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>fn</code> <span class="sb-ref-param-type">((any, any)-&gt;boolean)?</span></div><div class="sb-ref-param-desc">비교 함수.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">정렬된 배열.</div></div>
+</div>
+
+### values {#values}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/TableUtil.luau#L192"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(tbl: {[any]: any}) -> {any}
 ```
 
 테이블의 값을 배열로 반환합니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tbl</code> <span class="sb-ref-param-type">&#123;[any]: any&#125;</span></div><div class="sb-ref-param-desc">값을 추출할 테이블.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">&#123;any&#125;</span></div><div class="sb-ref-param-desc">값 배열.</div></div>
+</div>

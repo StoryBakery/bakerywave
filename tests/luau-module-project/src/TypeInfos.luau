@@ -98,7 +98,7 @@ export type TypeInfo = setmetatable<{
 	]=]
 	TypeId: number,
 
-	--[=[?
+	--[=[
 		Roblox 엔진 타입에 대응하는 경우 사용하는 엔진 타입 식별자입니다.
 	]=]
 	RobloxTypeId: number?,

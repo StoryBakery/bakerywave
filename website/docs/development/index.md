@@ -87,13 +87,12 @@ bakerywave dev -- --port 4000
 ```
 
 ### 자동 재시작(플러그인/설정 변경)
-`bakerywave dev`는 기본적으로 **플러그인/프리셋/테마/CLI/설정 변경을 감지하면 Docusaurus를 자동 재시작**합니다.
+`bakerywave dev`는 기본적으로 **플러그인/프리셋/테마/설정 변경을 감지하면 Docusaurus를 자동 재시작**합니다.
 
 - 감지 대상(기본값):
   - `packages/docs-preset`
   - `packages/docs-theme`
   - `packages/docusaurus-plugin-reference`
-  - `packages/bakerywave`
   - `packages/luau-docgen`
   - `docusaurus.config.*`
   - `bakerywave.toml`
@@ -101,6 +100,11 @@ bakerywave dev -- --port 4000
 자동 재시작을 끄려면:
 ```
 bakerywave dev --no-restart
+```
+
+CLI 코드 변경까지 감지하려면:
+```
+bakerywave dev --dev-watch-cli
 ```
 
 ## watch / 자동 갱신 (reference)

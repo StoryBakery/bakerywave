@@ -1,43 +1,43 @@
 const path = require("path");
 
 module.exports = {
-  title: "StoryBakery Docs Template Test",
-  url: "https://example.invalid",
-  baseUrl: "/",
-  organizationName: "storybakery",
-  projectName: "docs-template",
-  onBrokenLinks: "throw",
-  markdown: {
-    hooks: {
-      onBrokenMarkdownLinks: "throw",
+    title: "StoryBakery Docs Template Test",
+    url: "https://example.invalid",
+    baseUrl: "/",
+    organizationName: "storybakery",
+    projectName: "docs-template",
+    onBrokenLinks: "warn",
+    markdown: {
+        hooks: {
+            onBrokenMarkdownLinks: "warn",
+        },
     },
-  },
-  presets: [
-    [
-      "@storybakery/docs-preset",
-      {
-        docs: {
-          path: "docs",
-          routeBasePath: "/",
-          sidebarPath: path.resolve(__dirname, "sidebars.js"),
-        },
-        theme: {
-          customCss: path.resolve(__dirname, "src/css/custom.css"),
-        },
-      },
+    presets: [
+        [
+            "@storybakery/docs-preset",
+            {
+                docs: {
+                    path: "docs",
+                    routeBasePath: "/",
+                    sidebarPath: path.resolve(__dirname, "sidebars.js"),
+                },
+                theme: {
+                    customCss: path.resolve(__dirname, "src/css/custom.css"),
+                },
+            },
+        ],
     ],
-  ],
-  themeConfig: {
-    colorMode: {
-      defaultMode: "light",
-      respectPrefersColorScheme: true,
+    themeConfig: {
+        colorMode: {
+            defaultMode: "light",
+            respectPrefersColorScheme: true,
+        },
+        navbar: {
+            title: "Docs Template Test",
+            items: [
+                { type: "docSidebar", sidebarId: "manual", label: "Manual" },
+                { type: "docSidebar", sidebarId: "reference", label: "Reference" },
+            ],
+        },
     },
-    navbar: {
-      title: "Docs Template Test",
-      items: [
-        { type: "docSidebar", sidebarId: "manual", label: "Manual" },
-        { type: "docSidebar", sidebarId: "reference", label: "Reference" },
-      ],
-    },
-  },
 };

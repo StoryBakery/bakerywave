@@ -1,0 +1,109 @@
+/* LocaleDropdown 스타일 */
+.sb-locale-dropdown {
+    position: relative;
+}
+
+.sb-locale-button {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--ifm-navbar-link-color);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.sb-locale-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .sb-locale-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.sb-locale-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+}
+
+.sb-locale-current {
+    font-weight: 500;
+}
+
+.sb-locale-chevron {
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
+    transition: transform 0.2s ease;
+}
+
+.sb-locale-chevron-open {
+    transform: rotate(180deg);
+}
+
+.sb-locale-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 140px;
+    padding: 0.35rem;
+    margin: 0;
+    list-style: none;
+    background: var(--ifm-background-surface-color);
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+    animation: sb-locale-fade-in 0.15s ease;
+}
+
+@keyframes sb-locale-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sb-locale-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    color: var(--ifm-font-color-base);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: background 0.15s ease;
+}
+
+.sb-locale-item:hover {
+    background: var(--ifm-color-emphasis-100);
+    text-decoration: none;
+    color: var(--ifm-font-color-base);
+}
+
+.sb-locale-item-active {
+    font-weight: 600;
+    color: var(--ifm-color-primary);
+}
+
+.sb-locale-check {
+    width: 16px;
+    height: 16px;
+    color: var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .sb-locale-menu {
+    border-color: var(--ifm-color-emphasis-300);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}

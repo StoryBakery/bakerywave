@@ -10,6 +10,7 @@ manifestPath = "website/.generated/reference/manifest.json"
 renderMode = "mdx"
 clean = true
 codeTabSize = 4
+customDocConfig = "website/luau-docgen-scripts"
 
 [i18n]
 defaultLocale = "en"
@@ -18,3 +19,46 @@ referenceLocales = ["ko"]
 
 [i18n.reference]
 copy = true
+
+# ============================================================
+# 사이트 전역 설정
+# ============================================================
+[site]
+title = "Luau Module Project"
+tagline = "A sample Luau module with documentation"
+github = "https://github.com/storybakery/bakerywave"
+license = "MIT"
+copyright = "© 2026 StoryBakery"
+
+[site.footer]
+enabled = true
+showLicense = true
+showCopyright = true
+showGithub = true
+showPoweredBy = true
+
+[site.search]
+enabled = true
+placeholder = "검색..."
+shortcut = "Ctrl K"
+minChars = 2
+
+[site.search.hints]
+minChars = "2글자 이상 입력하세요"
+noResults = "검색 결과가 없습니다"
+
+[site.search.filters]
+all = "전체"
+manual = "Manual"
+reference = "Reference"
+
+[site.locale]
+enabled = true
+
+[site.locale.labels]
+en = "English"
+ko = "한국어"
+
+[site.navbar]
+showSearch = true
+showLocaleDropdown = true

@@ -20,6 +20,7 @@ bakerywave <command> [siteDir] [-- ...docusaurus-args]
 - `--config <path>`: Docusaurus 설정 파일 경로
   - reference 옵션/ i18n 옵션 로딩 시 **해당 경로를 우선 사용**
 - `--no-restart`: dev 모드 자동 재시작 비활성화
+- `--dev-watch-cli`: **bakerywave 코드 변경 감지**(개발용)
 
 ## 2) Docusaurus 표준 명령
 
@@ -87,7 +88,7 @@ bakerywave dev --site-dir <dir>
   - `packages/docs-preset`
   - `packages/docs-theme`
   - `packages/docusaurus-plugin-reference`
-  - `packages/bakerywave`
+  - `packages/bakerywave` (옵션: `--dev-watch-cli`일 때만)
   - `packages/luau-docgen`
   - `docusaurus.config.*`
   - `bakerywave.toml`

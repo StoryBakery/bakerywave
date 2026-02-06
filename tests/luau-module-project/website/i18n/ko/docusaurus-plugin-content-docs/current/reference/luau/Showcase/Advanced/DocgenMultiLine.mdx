@@ -1,0 +1,225 @@
+---
+title: DocgenMultiLine
+id: DocgenMultiLine
+---
+
+# DocgenMultiLine
+
+
+여러 줄 설명 테스트 클래스입니다.\z
+				문장 줄바꿈, 기본 그룹, 태그, 다양한 멤버 포맷을 한 번에 검증합니다.
+
+
+## Summary
+
+#### 세부
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#DetailOptions">DetailOptions</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#DetailLevel">DetailLevel</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">DocgenMultiLine.DetailLevel: number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#DetailChanged">DetailChanged</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">DocgenMultiLine.DetailChanged(level: number)</span></span></div>
+</div>
+
+#### 기타
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#DumpMode">DumpMode</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;Flat&quot; | &quot;Pretty&quot;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#DumpLines">DumpLines</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Showcase/Advanced/DocgenMultiLine">DocgenMultiLine</a>:DumpLines(): string</span></span></div>
+</div>
+
+#### DefaultGroup
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#ReportConfig">ReportConfig</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#ReportKey">ReportKey</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">string &amp; &#123; __brand: &quot;ReportKey&quot; &#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#ReportState">ReportState</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;Idle&quot; | &quot;Running&quot; | &quot;Done&quot;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Counter">Counter</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">DocgenMultiLine.Counter: number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Summary">Summary</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">DocgenMultiLine.Summary: string</span><span class="sb-ref-badge sb-ref-badge-readonly">ReadOnly</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#BuildReport">BuildReport</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Showcase/Advanced/DocgenMultiLine">DocgenMultiLine</a>:BuildReport(source: string, limit: number, param3: boolean): (boolean, string)</span><span class="sb-ref-badge sb-ref-badge-yields">Yields</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#CreateFromRaw">CreateFromRaw</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">DocgenMultiLine.CreateFromRaw(payload: &#123; [string]: any &#125;): <a href="Showcase/Advanced/DocgenMultiLine">DocgenMultiLine</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#ReportReady">ReportReady</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">DocgenMultiLine.ReportReady(ok: boolean, path: string): number</span></span></div>
+</div>
+
+## 세부 {#Types}
+
+### DetailOptions {#DetailOptions}
+
+```lua
+{
+    compact: boolean,
+}
+```
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">compact</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+</div>
+
+### DetailLevel {#DetailLevel}
+
+```lua
+DocgenMultiLine.DetailLevel: number
+```
+
+세부 출력 레벨
+
+### DetailChanged {#DetailChanged}
+
+```lua
+DocgenMultiLine.DetailChanged(level: number)
+```
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>level</code> <span class="sb-ref-param-type">number</span></div></div>
+</div>
+
+## 기타 {#Types}
+
+### DumpMode {#DumpMode}
+
+```lua
+"Flat" | "Pretty"
+```
+
+### DumpLines {#DumpLines}
+
+```lua
+DocgenMultiLine:DumpLines(): string
+```
+
+개행 포함 문자열을 반환합니다.
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">string</span></div></div>
+</div>
+
+## DefaultGroup {#Types}
+
+### ReportConfig {#ReportConfig}
+
+```lua
+{
+    title: string,
+    verbose: boolean,
+}
+```
+
+fields 대신 props 키로도 인터페이스 필드를 전달합니다.
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">title</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">string</span> <span class="sb-ref-interface-desc">- 제목</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">verbose</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span> <span class="sb-ref-interface-desc">- 상세 출력 여부</span></span></div>
+</div>
+
+### ReportKey {#ReportKey}
+
+```lua
+string & { __brand: "ReportKey" }
+```
+
+브랜드 타입 테스트입니다.
+
+### ReportState {#ReportState}
+
+```lua
+"Idle" | "Running" | "Done"
+```
+
+리포트 상태 타입입니다.
+
+### Counter {#Counter}
+
+```lua
+DocgenMultiLine.Counter: number
+```
+
+대문자 키(Name/TypeAnnotation) 파싱 확인용
+
+### Summary {#Summary}
+
+```lua
+DocgenMultiLine.Summary: string
+```
+
+						여러 줄 속성 설명입니다.\z
+						두 번째 줄도 정상적으로 보이는지 확인합니다.\z
+					
+
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-readonly">ReadOnly</span></div>
+
+### BuildReport {#BuildReport}
+
+```lua
+DocgenMultiLine:BuildReport(source: string, limit: number, param3: boolean): (boolean, string)
+```
+
+						입력값을 기반으로 보고서를 생성합니다.\z
+						여러 줄 설명과 파라미터/반환/에러를 함께 테스트합니다.\z
+					
+
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-yields">Yields</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>source</code> <span class="sb-ref-param-type">string</span></div><div class="sb-ref-param-desc">입력 경로입니다.\z 								상대/절대 경로 모두 허용됩니다.\z</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>limit</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">최대 처리 수</div><div class="sb-ref-param-meta"><span>Default Value</span><code>100</code></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>param3</code> <span class="sb-ref-param-type">boolean</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">생성 성공 여부</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">string</span></div><div class="sb-ref-param-desc">생성된 보고서 파일 경로입니다.\z 								실패 시 빈 문자열을 반환합니다.\z</div></div>
+</div>
+
+#### Errors
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>error</code> <span class="sb-ref-param-type">string</span></div><div class="sb-ref-param-desc">입력 유효성 검증 실패</div></div>
+</div>
+
+### CreateFromRaw {#CreateFromRaw}
+
+```lua
+DocgenMultiLine.CreateFromRaw(payload: { [string]: any }): DocgenMultiLine
+```
+
+정적 생성 메서드 테스트입니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>payload</code> <span class="sb-ref-param-type">&#123; [string]: any &#125;</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Showcase/Advanced/DocgenMultiLine">DocgenMultiLine</a></span></div></div>
+</div>
+
+### ReportReady {#ReportReady}
+
+```lua
+DocgenMultiLine.ReportReady(ok: boolean, path: string): number
+```
+
+보고서 생성 완료 이벤트입니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>ok</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">성공 여부</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>path</code> <span class="sb-ref-param-type">string</span></div><div class="sb-ref-param-desc">파일 경로</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">소요 시간(ms)</div></div>
+</div>

@@ -1,6 +1,9 @@
-# Promise
+---
+title: Promise
+id: Promise
+---
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L220"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">Promise</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L212"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
 
 
 A Promise is an object that represents a value that will exist in the future, but doesn't right now.
@@ -9,95 +12,81 @@ or if an error has occurred (known as *rejecting*).
 
 ## Summary
 
-### Interfaces
-- [Status](#Status)
+#### Types
 
-### Constructors
-- [new](#new)
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Status">Status</a></span></div>
+</div>
 
-### Properties
-- [Status](#PromiseStatus)
+#### Properties
 
-### Functions
-- [all](#all)
-- [allSettled](#allSettled)
-- [any](#any)
-- [defer](#defer)
-- [delay](#delay)
-- [each](#each)
-- [fold](#fold)
-- [fromEvent](#fromEvent)
-- [is](#is)
-- [onUnhandledRejection](#onUnhandledRejection)
-- [promisify](#promisify)
-- [race](#race)
-- [reject](#reject)
-- [resolve](#resolve)
-- [retry](#retry)
-- [retryWithDelay](#retryWithDelay)
-- [some](#some)
-- [try](#try)
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#PromiseStatus">Status</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">Status</span></span></div>
+</div>
 
-## Interfaces {#Interfaces}
+#### Methods
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#andThen">andThen</a> (successHandler: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any, failureHandler: (...: any) -&gt; ...any) -&gt; <a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#andThenCall">andThenCall</a> (callback: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">any, ...: any) -&gt; <a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#andThenReturn">andThenReturn</a> (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#await">await</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean, ...any</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#awaitStatus">awaitStatus</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type">Status, ...any</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#cancel">cancel</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#catch">catch</a> (failureHandler: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any) -&gt; <a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#expect">expect</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#finally">finally</a> (finallyHandler: (status: Status) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any) -&gt; <a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#finallyCall">finallyCall</a> (callback: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">any, ...: any) -&gt; <a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#finallyReturn">finallyReturn</a> (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#getStatus">getStatus</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type">Status</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#now">now</a> (rejectionValue?: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#tap">tap</a> (tapHandler: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any) -&gt; <a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#timeout">timeout</a> (seconds: number, rejectionValue: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a></span></span></div>
+</div>
+
+#### Functions
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#all">all</a> (promises: &#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;&#123;T&#125;&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#allSettled">allSettled</a> (promises: &#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;&#123;Status&#125;&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#any">any</a> (promises: &#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#defer">defer</a> (executor: (resolve: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">(), reject: (...: any) -&gt; (), onCancel: (abortHandler?: () -&gt; ()) -&gt; boolean) -&gt; ()) -&gt; <a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#delay">delay</a> (seconds: number) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;number&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#each">each</a> (list: &#123;T | <a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;, predicate: (value: T, index: number) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">U | <a href="Classes/Promise">Promise</a>&lt;U&gt;) -&gt; <a href="Classes/Promise">Promise</a>&lt;&#123;U&#125;&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#fold">fold</a> (list: &#123;T | <a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;, reducer: (accumulator: U, value: T, index: number) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">U | <a href="Classes/Promise">Promise</a>&lt;U&gt;, initialValue: U)</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#fromEvent">fromEvent</a> (event: Event, predicate: (...: P) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean) -&gt; <a href="Classes/Promise">Promise</a>&lt;P&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#is">is</a> (object: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#onUnhandledRejection">onUnhandledRejection</a> (callback: (promise: <a href="Classes/Promise">Promise</a>, ...: any)) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">() -&gt; ()</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#promisify">promisify</a> (callback: (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any) -&gt; (...: any) -&gt; <a href="Classes/Promise">Promise</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#race">race</a> (promises: &#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#reject">reject</a> (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#resolve">resolve</a> (...: any) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#retry">retry</a> (callback: (...: P) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;, times: number, ...: P) -&gt; <a href="Classes/Promise">Promise</a>&lt;T&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#retryWithDelay">retryWithDelay</a> (callback: (...: P) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;, times: number, seconds: number, ...: P) -&gt; <a href="Classes/Promise">Promise</a>&lt;T&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#some">some</a> (promises: &#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;, count: number) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Classes/Promise">Promise</a>&lt;&#123;T&#125;&gt;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#try">try</a> (callback: (...: T...) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">...any, ...: T...) -&gt; <a href="Classes/Promise">Promise</a></span></span></div>
+</div>
+
+## Types {#Types}
 
 ### Status {#Status}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L220"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L195"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 An enum value used to represent the Promise's status.
 
-Tags:
-- tag: enum
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-tag">enum</span></div>
 
-## Constructors {#Constructors}
-
-### new {#new}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L351"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
-
-```lua
-(any) -> (...any)
-```
-
-Construct a new Promise that will be resolved or rejected with the given callbacks.
-
-If you `resolve` with a Promise, it will be chained onto.
-
-You can safely yield within the executor function and it will not block the creating thread.
-
-```lua
-local myFunction()
-	return Promise.new(function(resolve, reject, onCancel)
-		wait(1)
-		resolve("Hello world!")
-	end)
-end
-
-myFunction():andThen(print)
-```
-
-You do not need to use `pcall` within a Promise. Errors that occur during execution will be caught and turned into a rejection automatically. If `error()` is called with a table, that table will be the rejection value. Otherwise, string errors will be converted into `Promise.Error(Promise.Error.Kind.ExecutionError)` objects for tracking debug information.
-
-You may register an optional cancellation hook by using the `onCancel` argument:
-
-* This should be used to abort any ongoing operations leading up to the promise being settled.
-* Call the `onCancel` function with a function callback as its only argument to set a hook which will in turn be called when/if the promise is cancelled.
-* `onCancel` returns `true` if the Promise was already cancelled when you called `onCancel`.
-* Calling `onCancel` with no argument will not override a previously set cancellation hook, but it will still return `true` if the Promise is currently cancelled.
-* You can set the cancellation hook at any time before resolving.
-* When a promise is cancelled, calls to `resolve` or `reject` will be ignored, regardless of if you set a cancellation hook or not.
-
-:::caution
-If the Promise is cancelled, the `executor` thread is closed with `coroutine.close` after the cancellation hook is called.
-
-You must perform any cleanup code in the cancellation hook: any time your executor yields, it **may never resume**.
-:::
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">Started</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;Started&quot;</span> <span class="sb-ref-interface-desc">- The Promise is executing, and not settled yet.</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">Resolved</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;Resolved&quot;</span> <span class="sb-ref-interface-desc">- The Promise finished successfully.</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">Rejected</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;Rejected&quot;</span> <span class="sb-ref-interface-desc">- The Promise was rejected.</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">Cancelled</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;Cancelled&quot;</span> <span class="sb-ref-interface-desc">- The Promise was cancelled before it finished.</span></span></div>
+</div>
 
 ## Properties {#Properties}
 
 ### Status {#PromiseStatus}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L220"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L205"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
 Status
@@ -105,17 +94,511 @@ Status
 
 A table containing all members of the `Status` enum, e.g., `Promise.Status.Resolved`.
 
-Tags:
-- tag: enums
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-tag">enums</span></div>
+
+## Methods {#Methods}
+
+### andThen {#andThen}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1195"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(successHandler: (...: any) -> ...any, failureHandler: (...: any) -> ...any) -> Promise<...any>
+```
+
+Chains onto an existing Promise and returns a new Promise.
+
+:::warning
+Within the failure handler, you should never assume that the rejection value is a string. Some rejections within the Promise library are represented by [[Error]] objects. If you want to treat it as a string for debugging, you should call `tostring` on it first.
+:::
+
+You can return a Promise from the success or failure handler and it will be chained onto.
+
+Calling `andThen` on a cancelled Promise returns a cancelled Promise.
+
+:::tip
+If the Promise returned by `andThen` is cancelled, `successHandler` and `failureHandler` will not run.
+
+To run code no matter what, use [Promise:finally].
+:::
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>successHandler</code> <span class="sb-ref-param-type">(...: any) -&gt; ...any</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>failureHandler</code> <span class="sb-ref-param-type">(...: any) -&gt; ...any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></div></div>
+</div>
+
+### andThenCall {#andThenCall}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1278"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(callback: (...: any) -> any, ...: any) -> Promise
+```
+
+Attaches an `andThen` handler to this Promise that calls the given callback with the predefined arguments. The resolved value is discarded.
+
+```lua
+promise:andThenCall(someFunction, "some", "arguments")
+```
+
+This is sugar for
+
+```lua
+promise:andThen(function()
+	return someFunction("some", "arguments")
+	end)
+```
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(...: any) -&gt; any</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">Additional arguments which will be passed to `callback`</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### andThenReturn {#andThenReturn}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1308"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(...: any) -> Promise
+```
+
+Attaches an `andThen` handler to this Promise that discards the resolved value and returns the given value from it.
+
+```lua
+promise:andThenReturn("some", "values")
+```
+
+This is sugar for
+
+```lua
+promise:andThen(function()
+	return "some", "values"
+end)
+```
+
+:::caution
+Promises are eager, so if you pass a Promise to `andThenReturn`, it will begin executing before `andThenReturn` is reached in the chain. Likewise, if you pass a Promise created from [[Promise.reject]] into `andThenReturn`, it's possible that this will trigger the unhandled rejection warning. If you need to return a Promise, it's usually best practice to use [[Promise.andThen]].
+:::
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">Values to return from the function</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### await {#await}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1581"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> boolean, ...any
+```
+
+Yields the current thread until the given Promise completes. Returns true if the Promise resolved, followed by the values that the promise resolved or rejected with.
+
+:::caution
+If the Promise gets cancelled, this function will return `false`, which is indistinguishable from a rejection. If you need to differentiate, you should use [[Promise.awaitStatus]] instead.
+:::
+
+```lua
+local worked, value = getTheValue():await()
+
+if worked then
+	print("got", value)
+else
+	warn("it failed")
+end
+```
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">`true` if the Promise successfully resolved</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">...any</span></div><div class="sb-ref-param-desc">The values the Promise resolved or rejected with.</div></div>
+</div>
+
+### awaitStatus {#awaitStatus}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1528"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> Status, ...any
+```
+
+Yields the current thread until the given Promise completes. Returns the Promise's status, followed by the values that the promise resolved or rejected with.
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">Status</span></div><div class="sb-ref-param-desc">The Status representing the fate of the Promise</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">...any</span></div><div class="sb-ref-param-desc">The values the Promise resolved or rejected with.</div></div>
+</div>
+
+### cancel {#cancel}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1326"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+()
+```
+
+Cancels this promise, preventing the promise from resolving or rejecting. Does not do anything if the promise is already settled.
+
+Cancellations will propagate upwards and downwards through chained promises.
+
+Promises will only be cancelled if all of their consumers are also cancelled. This is to say that if you call `andThen` twice on the same promise, and you cancel only one of the child promises, it will not cancel the parent promise until the other child promise is also cancelled.
+
+```lua
+promise:cancel()
+```
+
+### catch {#catch}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1222"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(failureHandler: (...: any) -> ...any) -> Promise<...any>
+```
+
+Shorthand for `Promise:andThen(nil, failureHandler)`.
+
+Returns a Promise that resolves if the `failureHandler` worked without encountering an additional error.
+
+:::warning
+Within the failure handler, you should never assume that the rejection value is a string. Some rejections within the Promise library are represented by [[Error]] objects. If you want to treat it as a string for debugging, you should call `tostring` on it first.
+:::
+
+Calling `catch` on a cancelled Promise returns a cancelled Promise.
+
+:::tip
+If the Promise returned by `catch` is cancelled,  `failureHandler` will not run.
+
+To run code no matter what, use [Promise:finally].
+:::
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>failureHandler</code> <span class="sb-ref-param-type">(...: any) -&gt; ...any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></div></div>
+</div>
+
+### expect {#expect}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1618"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> ...any
+```
+
+Yields the current thread until the given Promise completes. Returns the values that the promise resolved with.
+
+```lua
+local worked = pcall(function()
+	print("got", getTheValue():expect())
+end)
+
+if not worked then
+	warn("it failed")
+end
+```
+
+This is essentially sugar for:
+
+```lua
+select(2, assert(promise:await()))
+```
+
+**Errors** if the Promise rejects or gets cancelled.
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">...any</span></div><div class="sb-ref-param-desc">The values the Promise resolved with.</div></div>
+</div>
+
+#### Errors
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>error</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">Errors with the rejection value if this Promise rejects or gets cancelled.</div></div>
+</div>
+
+### finally {#finally}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1474"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(finallyHandler: (status: Status) -> ...any) -> Promise<...any>
+```
+
+Set a handler that will be called regardless of the promise's fate. The handler is called when the promise is
+resolved, rejected, *or* cancelled.
+
+Returns a new Promise that:
+- resolves with the same values that this Promise resolves with.
+- rejects with the same values that this Promise rejects with.
+- is cancelled if this Promise is cancelled.
+
+If the value you return from the handler is a Promise:
+- We wait for the Promise to resolve, but we ultimately discard the resolved value.
+- If the returned Promise rejects, the Promise returned from `finally` will reject with the rejected value from the
+*returned* promise.
+- If the `finally` Promise is cancelled, and you returned a Promise from the handler, we cancel that Promise too.
+
+Otherwise, the return value from the `finally` handler is entirely discarded.
+
+:::note Cancellation
+As of Promise v4, `Promise:finally` does not count as a consumer of the parent Promise for cancellation purposes.
+This means that if all of a Promise's consumers are cancelled and the only remaining callbacks are finally handlers,
+the Promise is cancelled and the finally callbacks run then and there.
+
+Cancellation still propagates through the `finally` Promise though: if you cancel the `finally` Promise, it can cancel
+its parent Promise if it had no other consumers. Likewise, if the parent Promise is cancelled, the `finally` Promise
+will also be cancelled.
+:::
+
+```lua
+local thing = createSomething()
+
+doSomethingWith(thing)
+:andThen(function()
+	print("It worked!")
+	-- do something..
+end)
+:catch(function()
+	warn("Oh no it failed!")
+end)
+:finally(function()
+	-- either way, destroy thing
+
+	thing:Destroy()
+end)
+```
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>finallyHandler</code> <span class="sb-ref-param-type">(status: Status) -&gt; ...any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></div></div>
+</div>
+
+### finallyCall {#finallyCall}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1488"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(callback: (...: any) -> any, ...: any) -> Promise
+```
+
+Same as `andThenCall`, except for `finally`.
+
+Attaches a `finally` handler to this Promise that calls the given callback with the predefined arguments.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(...: any) -&gt; any</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">Additional arguments which will be passed to `callback`</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### finallyReturn {#finallyReturn}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1514"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(...: any) -> Promise
+```
+
+Attaches a `finally` handler to this Promise that discards the resolved value and returns the given value from it.
+
+```lua
+promise:finallyReturn("some", "values")
+```
+
+This is sugar for
+
+```lua
+promise:finally(function()
+	return "some", "values"
+end)
+```
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">Values to return from the function</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### getStatus {#getStatus}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1116"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> Status
+```
+
+Returns the current Promise status.
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">Status</span></div></div>
+</div>
+
+### now {#now}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1804"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(rejectionValue?: any) -> Promise
+```
+
+Chains a Promise from this one that is resolved if this Promise is already resolved, and rejected if it is not resolved at the time of calling `:now()`. This can be used to ensure your `andThen` handler occurs on the same frame as the root Promise execution.
+
+```lua
+doSomething()
+	:now()
+	:andThen(function(value)
+		print("Got", value, "synchronously.")
+	end)
+```
+
+If this Promise is still running, Rejected, or Cancelled, the Promise returned from `:now()` will reject with the `rejectionValue` if passed, otherwise with a `Promise.Error(Promise.Error.Kind.NotResolvedInTime)`. This can be checked with [[Error.isKind]].
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>rejectionValue?</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">The value to reject with if the Promise isn&#039;t resolved</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### tap {#tap}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1243"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(tapHandler: (...: any) -> ...any) -> Promise<...any>
+```
+
+Similar to [Promise.andThen](#andThen), except the return value is the same as the value passed to the handler. In other words, you can insert a `:tap` into a Promise chain without affecting the value that downstream Promises receive.
+
+```lua
+getTheValue()
+	:tap(print)
+	:andThen(function(theValue)
+		print("Got", theValue, "even though print returns nil!")
+	end)
+```
+
+If you return a Promise from the tap handler callback, its value will be discarded but `tap` will still wait until it resolves before passing the original value through.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>tapHandler</code> <span class="sb-ref-param-type">(...: any) -&gt; ...any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></div></div>
+</div>
+
+### timeout {#timeout}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1092"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(seconds: number, rejectionValue: any) -> Promise
+```
+
+Returns a new Promise that resolves if the chained Promise resolves within `seconds` seconds, or rejects if execution time exceeds `seconds`. The chained Promise will be cancelled if the timeout is reached.
+
+Rejects with `rejectionValue` if it is non-nil. If a `rejectionValue` is not given, it will reject with a `Promise.Error(Promise.Error.Kind.TimedOut)`. This can be checked with [[Error.isKind]].
+
+```lua
+getSomething():timeout(5):andThen(function(something)
+	-- got something and it only took at max 5 seconds
+end):catch(function(e)
+	-- Either getting something failed or the time was exceeded.
+
+	if Promise.Error.isKind(e, Promise.Error.Kind.TimedOut) then
+		warn("Operation timed out!")
+	else
+		warn("Operation encountered an error!")
+	end
+end)
+```
+
+Sugar for:
+
+```lua
+Promise.race({
+	Promise.delay(seconds):andThen(function()
+		return Promise.reject(
+			rejectionValue == nil
+			and Promise.Error.new({ kind = Promise.Error.Kind.TimedOut })
+			or rejectionValue
+		)
+	end),
+	promise
+})
+```
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>seconds</code> <span class="sb-ref-param-type">number</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>rejectionValue</code> <span class="sb-ref-param-type">any</span></div><div class="sb-ref-param-desc">The value to reject with if the timeout is reached</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
 
 ## Functions {#Functions}
 
 ### all {#all}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L591"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L591"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(promises: {Promise<T>}) -> Promise<{T}>
 ```
 
 Accepts an array of Promises and returns a new promise that:
@@ -138,12 +621,23 @@ local promises = {
 return Promise.all(promises)
 ```
 
-### allSettled {#allSettled}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L699"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>promises</code> <span class="sb-ref-param-type">&#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;&#123;T&#125;&gt;</span></div></div>
+</div>
+
+### allSettled {#allSettled}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L699"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(promises: {Promise<T>}) -> Promise<{Status}>
 ```
 
 Accepts an array of Promises and returns a new Promise that resolves with an array of in-place Statuses when all input Promises have settled. This is equivalent to mapping `promise:finally` over the array of Promises.
@@ -158,12 +652,23 @@ local promises = {
 return Promise.allSettled(promises)
 ```
 
-### any {#any}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L677"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>promises</code> <span class="sb-ref-param-type">&#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;&#123;Status&#125;&gt;</span></div></div>
+</div>
+
+### any {#any}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L677"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(promises: {Promise<T>}) -> Promise<T>
 ```
 
 Accepts an array of Promises and returns a Promise that is resolved as soon as *any* of the input Promises resolves. It will reject only if *all* input Promises reject. As soon as one Promises resolves, all other pending Promises are cancelled if they have no other consumers.
@@ -180,12 +685,23 @@ local promises = {
 return Promise.any(promises) -- Resolves with first value to resolve (only rejects if all 3 rejected)
 ```
 
-### defer {#defer}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L377"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>promises</code> <span class="sb-ref-param-type">&#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;</span></div></div>
+</div>
+
+### defer {#defer}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L377"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(executor: (resolve: (...: any) -> (), reject: (...: any) -> (), onCancel: (abortHandler?: () -> ()) -> boolean) -> ()) -> Promise
 ```
 
 The same as [Promise.new](/reference/luau/Promise#new), except execution begins after the next `Heartbeat` event.
@@ -202,12 +718,23 @@ local function waitForChild(instance, childName, timeout)
 end
 ```
 
-### delay {#delay}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L1044"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>executor</code> <span class="sb-ref-param-type">(resolve: (...: any) -&gt; (), reject: (...: any) -&gt; (), onCancel: (abortHandler?: () -&gt; ()) -&gt; boolean) -&gt; ()</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### delay {#delay}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1044"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(seconds: number) -> Promise<number>
 ```
 
 Returns a Promise that resolves after `seconds` seconds have passed. The Promise resolves with the actual amount of time that was waited.
@@ -222,12 +749,23 @@ Passing NaN, +Infinity, -Infinity, 0, or any other number less than the duration
 Promise.delay(5):andThenCall(print, "This prints after 5 seconds")
 ```
 
-### each {#each}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L872"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>seconds</code> <span class="sb-ref-param-type">number</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;number&gt;</span></div></div>
+</div>
+
+### each {#each}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L872"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(list: {T | Promise<T>}, predicate: (value: T, index: number) -> U | Promise<U>) -> Promise<{U}>
 ```
 
 Iterates serially over the given an array of values, calling the predicate callback on each value before continuing.
@@ -280,15 +818,26 @@ If this Promise returned from `Promise.each` rejects or is cancelled for any rea
 - Any Promises within the array of values will now be cancelled if they have no other consumers.
 - The Promise returned from the currently active predicate will be cancelled if it hasn't resolved yet.
 
-Tags:
-- since: 3.0.0
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-since">Since 3.0.0</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>list</code> <span class="sb-ref-param-type">&#123;T | <a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>predicate</code> <span class="sb-ref-param-type">(value: T, index: number) -&gt; U | <a href="Classes/Promise">Promise</a>&lt;U&gt;</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;&#123;U&#125;&gt;</span></div></div>
+</div>
 
 ### fold {#fold}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L620"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L620"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any, any) -> (...any)
+(list: {T | Promise<T>}, reducer: (accumulator: U, value: T, index: number) -> U | Promise<U>, initialValue: U)
 ```
 
 Folds an array of values or promises into a single value. The array is traversed sequentially.
@@ -310,15 +859,21 @@ Promise.fold(basket, function(cost, fruit)
 end, 0)
 ```
 
-Tags:
-- since: v3.1.0
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-since">Since v3.1.0</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>list</code> <span class="sb-ref-param-type">&#123;T | <a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>reducer</code> <span class="sb-ref-param-type">(accumulator: U, value: T, index: number) -&gt; U | <a href="Classes/Promise">Promise</a>&lt;U&gt;</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>initialValue</code> <span class="sb-ref-param-type">U</span></div></div>
+</div>
 
 ### fromEvent {#fromEvent}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L1919"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1919"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(event: Event, predicate: (...: P) -> boolean) -> Promise<P>
 ```
 
 Converts an event into a Promise which resolves the next time the event fires.
@@ -339,25 +894,47 @@ return Promise.fromEvent(somePart.Touched, function(part)
 end)
 ```
 
-Tags:
-- since: 3.0.0
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-since">Since 3.0.0</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>event</code> <span class="sb-ref-param-type">Event</span></div><div class="sb-ref-param-desc">Any object with a `Connect` method. This includes all Roblox events.</div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>predicate</code> <span class="sb-ref-param-type">(...: P) -&gt; boolean</span></div><div class="sb-ref-param-desc">A function which determines if the Promise should resolve with the given value, or wait for the next event to check again.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;P&gt;</span></div></div>
+</div>
 
 ### is {#is}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L971"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L971"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(object: any) -> boolean
 ```
 
 Checks whether the given object is a Promise via duck typing. This only checks if the object is a table and has an `andThen` method.
 
-### onUnhandledRejection {#onUnhandledRejection}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L1971"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>object</code> <span class="sb-ref-param-type">any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">`true` if the given `object` is a Promise.</div></div>
+</div>
+
+### onUnhandledRejection {#onUnhandledRejection}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1971"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(callback: (promise: Promise, ...: any)) -> () -> ()
 ```
 
 Registers a callback that runs when an unhandled rejection happens. An unhandled rejection happens when a Promise
@@ -365,15 +942,25 @@ is rejected, and the rejection is not observed with `:catch`.
 
 The callback is called with the actual promise that rejected, followed by the rejection values.
 
-Tags:
-- since: v3.2.0
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-since">Since v3.2.0</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(promise: <a href="Classes/Promise">Promise</a>, ...: any)</span></div><div class="sb-ref-param-desc">A callback that runs when an unhandled rejection happens.</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">() -&gt; ()</span></div><div class="sb-ref-param-desc">Function that unregisters the `callback` when called</div></div>
+</div>
 
 ### promisify {#promisify}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L1020"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1020"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(callback: (...: any) -> ...any) -> (...: any) -> Promise
 ```
 
 Wraps a function that yields into one that returns a Promise.
@@ -396,12 +983,23 @@ local isPlayerInGroup = Promise.promisify(function(player, groupId)
 end)
 ```
 
-### race {#race}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L777"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(...: any) -&gt; ...any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">(...: any) -&gt; <a href="Classes/Promise">Promise</a></span></div></div>
+</div>
+
+### race {#race}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L777"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any) -> (...any)
+(promises: {Promise<T>}) -> Promise<T>
 ```
 
 Accepts an array of Promises and returns a new promise that is resolved or rejected as soon as any Promise in the array resolves or rejects.
@@ -424,12 +1022,23 @@ local promises = {
 return Promise.race(promises) -- Only returns 1st value to resolve or reject
 ```
 
-### reject {#reject}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L435"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>promises</code> <span class="sb-ref-param-type">&#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;</span></div></div>
+</div>
+
+### reject {#reject}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L435"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(...any) -> (...any)
+(...: any) -> Promise<...any>
 ```
 
 Creates an immediately rejected Promise with the given value.
@@ -438,12 +1047,23 @@ Creates an immediately rejected Promise with the given value.
 Something needs to consume this rejection (i.e. `:catch()` it), otherwise it will emit an unhandled Promise rejection warning on the next frame. Thus, you should not create and store rejected Promises for later use. Only create them on-demand as needed.
 :::
 
-### resolve {#resolve}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L418"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></div></div>
+</div>
+
+### resolve {#resolve}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L418"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(...any) -> (...any)
+(...: any) -> Promise<...any>
 ```
 
 Creates an immediately resolved Promise with the given value.
@@ -464,12 +1084,23 @@ function getSomething(name)
 end
 ```
 
-### retry {#retry}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L1849"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">any</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;...any&gt;</span></div></div>
+</div>
+
+### retry {#retry}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1849"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any, ...any) -> (...any)
+(callback: (...: P) -> Promise<T>, times: number, ...: P) -> Promise<T>
 ```
 
 Repeatedly calls a Promise-returning function up to `times` number of times, until the returned Promise resolves.
@@ -495,15 +1126,27 @@ local MAX_RETRIES = 10
 local value = Promise.retry(canFail, MAX_RETRIES, "foo", "bar", "baz") -- args to send to canFail
 ```
 
-Tags:
-- since: 3.0.0
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-since">Since 3.0.0</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(...: P) -&gt; <a href="Classes/Promise">Promise</a>&lt;T&gt;</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>times</code> <span class="sb-ref-param-type">number</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">P</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;</span></div></div>
+</div>
 
 ### retryWithDelay {#retryWithDelay}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L1877"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L1877"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any, any, ...any) -> (...any)
+(callback: (...: P) -> Promise<T>, times: number, seconds: number, ...: P) -> Promise<T>
 ```
 
 Repeatedly calls a Promise-returning function up to `times` number of times, waiting `seconds` seconds between each
@@ -511,15 +1154,28 @@ retry, until the returned Promise resolves.
 
 If the amount of retries is exceeded, the function will return the latest rejected Promise.
 
-Tags:
-- since: v3.2.0
+<div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-since">Since v3.2.0</span></div>
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(...: P) -&gt; <a href="Classes/Promise">Promise</a>&lt;T&gt;</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>times</code> <span class="sb-ref-param-type">number</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>seconds</code> <span class="sb-ref-param-type">number</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">P</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;T&gt;</span></div></div>
+</div>
 
 ### some {#some}
-
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L653"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L653"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, any) -> (...any)
+(promises: {Promise<T>}, count: number) -> Promise<{T}>
 ```
 
 Accepts an array of Promises and returns a Promise that is resolved as soon as `count` Promises are resolved from the input array. The resolved array values are in the order that the Promises resolved in. When this Promise resolves, all other pending Promises are cancelled if they have no other consumers.
@@ -536,12 +1192,24 @@ local promises = {
 return Promise.some(promises, 2) -- Only resolves with first 2 promises to resolve
 ```
 
-### try {#try}
+#### Parameters
 
-<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/blob/main/src/Promise.luau#L477"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M8.7 16.6 4.1 12l4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4zm6.6 0L19.9 12l-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4zM10 19l4-14h2l-4 14z"/></svg></a></div>
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>promises</code> <span class="sb-ref-param-type">&#123;<a href="Classes/Promise">Promise</a>&lt;T&gt;&#125;</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>count</code> <span class="sb-ref-param-type">number</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a>&lt;&#123;T&#125;&gt;</span></div></div>
+</div>
+
+### try {#try}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Promise.luau#L477"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
 
 ```lua
-(any, ...any) -> (...any)
+(callback: (...: T...) -> ...any, ...: T...) -> Promise
 ```
 
 Begins a Promise chain, calling a function and returning a Promise resolving with its return value. If the function errors, the returned Promise will be rejected with the error. You can safely yield within the Promise.try callback.
@@ -561,3 +1229,16 @@ end)
 		warn("Something went wrong")
 	end)
 ```
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>callback</code> <span class="sb-ref-param-type">(...: T...) -&gt; ...any</span></div></div>
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>...</code> <span class="sb-ref-param-type">T...</span></div><div class="sb-ref-param-desc">Additional arguments passed to `callback`</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Classes/Promise">Promise</a></span></div></div>
+</div>

@@ -1,0 +1,45 @@
+---
+title: DocgenTypes
+id: DocgenTypes
+---
+
+# DocgenTypes
+
+
+문서 주석으로 표현하기 어려운 타입 이름을 docgen 스크립트에서 제공합니다.
+
+## Summary
+
+#### Types
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#3D-Vector-Normalized">3D Vector (Normalized)</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123; x: number, y: number, z: number, magnitude: 1 &#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#HTTP-Status">HTTP Status</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&quot;OK&quot; | &quot;NotFound&quot; | &quot;ServerError&quot;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Render-Options">Render Options</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123; resolution: Vector2, quality: &quot;Low&quot; | &quot;High&quot; &#125;</span></span></div>
+</div>
+
+## Types {#Types}
+
+### 3D Vector (Normalized) {#3D-Vector-Normalized}
+
+```lua
+{ x: number, y: number, z: number, magnitude: 1 }
+```
+
+공백/괄호가 포함된 이름 예시입니다.
+
+### HTTP Status {#HTTP-Status}
+
+```lua
+"OK" | "NotFound" | "ServerError"
+```
+
+문서 주석으로 정의하기 어려운 공백 포함 타입 이름 예시입니다.
+
+### Render Options {#Render-Options}
+
+```lua
+{ resolution: Vector2, quality: "Low" | "High" }
+```
+
+렌더링 파라미터를 묶은 설정 타입입니다.

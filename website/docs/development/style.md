@@ -73,7 +73,9 @@ sidebar_label: Style Guide
 - `` `Global.RobloxGlobals.Property` ``
 - `` `Library.Name.Function()` ``
 
-> 현재 구현 기준으로 **Class 계열은 내부 레퍼런스 페이지로 연결**됩니다. 나머지는 기본적으로 코드 표기이며, 향후 외부 링크/내부 링크로 확장 가능합니다.
+> 현재 구현 기준으로 **내부 레퍼런스 링크는 `Classes.`/`Docs.` 접두어**를 사용합니다.  
+> 예: `` `Docs.Features.DocFeatureClass:Double()` ``  
+> `Class.`, `Datatype.`, `Enum.`, `Global.`, `Library.`는 Roblox 공식 문서로 연결됩니다.
 
 #### 링크 텍스트 대체 (Link substitution)
 
@@ -112,4 +114,3 @@ This feature is beta and can change in future releases.
 - `info`
 - `success`
 - `warning`
-

@@ -1,40 +1,43 @@
 --[=[
-	@class Example
-	
-	Example class used for reference tests.
+    @class SimpleExample
+    @category Showcase/Examples
+    @tag example
+
+    bakerywave 문서 생성을 보여주기 위한 가장 기본적인 예시 클래스입니다.
+    복잡한 기능을 살펴보기 전에 이 클래스를 통해 기본적인 레이아웃을 확인하세요.
+
+    **의도하는 문서 모습:**
+    - 제목 밑에 `example` 태그가 나타납니다.
+    - `Showcase/Examples` 카테고리에 분류됩니다.
 ]=]
-local Example = {}
-Example.__index = Example
-Example.version = "0.1.0"
+local SimpleExample = {}
+SimpleExample.__index = SimpleExample
 
 --[=[
-	@prop Changed Signal
-	@within Example
-	
-	Fires when the instance changes.
-	예시예시!! 
+    @prop Name string
+    객체의 이름입니다.
 ]=]
-Example.Changed = nil
+SimpleExample.Name = "Example"
 
 --[=[
-	@constructor
-	
-	Creates a new Example instance.
+    @constructor new
+    @param name string -- 초기 이름 설정
+    @return SimpleExample -- 새로운 인스턴스
 
-	@param name string
-	@return Example
+    새로운 SimpleExample 인스턴스를 생성합니다.
 ]=]
-function Example.new(name: string): Example
-	return setmetatable({ name = name, enabled = false }, Example)
+function SimpleExample.new(name: string)
+	return setmetatable({
+		Name = name or "Example",
+	}, SimpleExample)
 end
 
 --[=[
-	Enables the instance.
-
-	@param flag boolean
+    @param message string -- 출력할 메시지
+    콘솔에 메시지를 출력하는 간단한 메서드입니다.
 ]=]
-function Example:enable(flag: boolean)
-	self.enabled = flag ~= false
+function SimpleExample:SayHello(message: string)
+	print(self.Name .. ": " .. message)
 end
 
-return Example
+return SimpleExample

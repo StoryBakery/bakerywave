@@ -1,7 +1,220 @@
 /* sb-ref-tab-size-start */
-.theme-code-block, pre code {
-  tab-size: 4;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
+.theme-code-block,
+pre code {
+    tab-size: 4;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
 }
+
 /* sb-ref-tab-size-end */
+
+/* ============================
+   Roblox-style Reference Docs
+   ============================ */
+
+/* SVG Icons */
+.sb-ref-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* Reference List Layout (Boxed Table Look) */
+.sb-ref-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0.75rem 0;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    /* Slightly darker border */
+    border-radius: 6px;
+    /* Rounded corners */
+    overflow: hidden;
+    /* Clip inner borders */
+    background-color: var(--ifm-background-surface-color);
+    /* Ensure background */
+}
+
+.sb-ref-row {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    /* Comfortable padding */
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+    /* Grid lines */
+    transition: background-color 0.15s;
+    line-height: 1.5;
+    min-height: 40px;
+}
+
+.sb-ref-row:last-child {
+    border-bottom: none;
+    /* No border for last item */
+}
+
+.sb-ref-row:hover {
+    background-color: var(--ifm-color-emphasis-100);
+}
+
+.sb-ref-row-deprecated {
+    opacity: 0.5;
+    background-color: var(--ifm-color-emphasis-100);
+    /* Slight tint for deprecated */
+}
+
+/* Icon Cell */
+.sb-ref-cell-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Content Cell */
+.sb-ref-cell-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    font-family: var(--ifm-font-family-monospace);
+    font-size: 0.9rem;
+    flex: 1;
+    overflow: hidden;
+    /* Prevent overflow */
+}
+
+.sb-ref-name {
+    font-weight: 600;
+    color: var(--ifm-link-color);
+    text-decoration: none;
+}
+
+.sb-ref-name:hover {
+    text-decoration: underline;
+}
+
+.sb-ref-type {
+    color: var(--ifm-color-emphasis-700);
+    font-size: 0.9rem;
+    /* Match name size */
+}
+
+/* Tag Badges */
+.sb-ref-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.sb-ref-badge-deprecated {
+    background: #495057;
+    color: #fff;
+}
+
+.sb-ref-badge-readonly {
+    background: transparent;
+    border: 1px solid var(--ifm-color-emphasis-400);
+    color: var(--ifm-color-emphasis-700);
+}
+
+.sb-ref-badge-yields {
+    background: #12b886;
+    color: #fff;
+}
+
+.sb-ref-badge-server {
+    background: #fab005;
+    color: #000;
+}
+
+.sb-ref-badge-client {
+    background: #7950f2;
+    color: #fff;
+}
+
+/* Class Badges (under heading) */
+.sb-ref-class-badges {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Inherited Members Details - Legacy/Fallback */
+.sb-ref-inherited-kind>strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--ifm-color-emphasis-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
+
+/* Inherited parent class headers */
+.sb-ref-inherited-parent {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--ifm-color-emphasis-700);
+}
+
+.sb-ref-inherited-parent strong {
+    color: var(--ifm-link-color);
+}
+
+/* Inherited By Details (Show more...) */
+.sb-ref-inherited-details {
+    /* Reset border for "Show more" block */
+    background: transparent;
+    border: none;
+    margin: 0;
+}
+
+.sb-ref-inherited-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    /* background: transparent; */
+    /* Handled by inline style but good to reset */
+    color: var(--ifm-color-emphasis-800);
+    font-size: 0.9rem;
+    list-style: none;
+    transition: background-color 0.15s;
+}
+
+.sb-ref-inherited-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.sb-ref-inherited-details[open] summary {
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.sb-ref-inherited-details summary:hover {
+    background-color: var(--ifm-color-emphasis-100);
+}
+
+/* Indent classes for inherited members */
+.sb-ref-indent-1 {
+    margin-left: 1.5rem;
+}
+
+.sb-ref-indent-2 {
+    margin-left: 3rem;
+}
+
+.sb-ref-indent-3 {
+    margin-left: 4.5rem;
+}

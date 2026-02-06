@@ -1,0 +1,45 @@
+/* Navbar 확장 스타일 */
+.sb-navbar-extras {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: fixed;
+    top: 0;
+    right: 1rem;
+    height: var(--ifm-navbar-height);
+    z-index: 200;
+    pointer-events: none;
+}
+
+.sb-navbar-extras>* {
+    pointer-events: auto;
+}
+
+/* 반응형 */
+@media (max-width: 996px) {
+    .sb-navbar-extras {
+        right: 60px;
+        /* 햄버거 메뉴 공간 확보 */
+    }
+}
+
+@media (max-width: 576px) {
+    .sb-navbar-extras {
+        gap: 0.25rem;
+    }
+
+    /* 모바일에서 검색 버튼 축소 */
+    .sb-navbar-extras .sb-search-placeholder,
+    .sb-navbar-extras .sb-search-kbd {
+        display: none;
+    }
+
+    .sb-navbar-extras .sb-search-button {
+        padding: 0.5rem;
+    }
+
+    /* 모바일에서 로케일 버튼 축소 */
+    .sb-navbar-extras .sb-locale-current {
+        display: none;
+    }
+}

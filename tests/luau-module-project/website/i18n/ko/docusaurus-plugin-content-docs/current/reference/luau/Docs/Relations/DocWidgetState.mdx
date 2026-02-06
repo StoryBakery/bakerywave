@@ -1,0 +1,60 @@
+---
+title: DocWidgetState
+id: DocWidgetState
+---
+
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">DocWidgetState</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L50"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
+
+
+위젯의 실행 상태입니다.
+이 상태는 [DocWidget](/reference/luau/Docs/Relations/DocWidget)이 내부적으로 소유합니다(조합 관계).
+
+## Summary
+
+#### Constructors
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#new">new</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Docs/Relations/DocWidgetState">DocWidgetState</a></span></span></div>
+</div>
+
+#### Metrics
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Clicks">Clicks</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#LastUpdated">LastUpdated</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number</span></span></div>
+</div>
+
+## Constructors {#Constructors}
+
+### new {#new}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L62"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> DocWidgetState
+```
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Docs/Relations/DocWidgetState">DocWidgetState</a></span></div><div class="sb-ref-param-desc">상태 인스턴스</div></div>
+</div>
+
+## Metrics {#Properties}
+
+### Clicks {#Clicks}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L73"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+number
+```
+
+클릭 횟수
+
+### LastUpdated {#LastUpdated}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L79"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+number
+```
+
+마지막 갱신 시간 (Global.RobloxGlobals.tick())

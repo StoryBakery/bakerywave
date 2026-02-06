@@ -1,0 +1,119 @@
+/* Footer 스타일 */
+.sb-footer {
+    background: var(--ifm-footer-background-color, #1e293b);
+    color: var(--ifm-footer-color, #94a3b8);
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sb-footer-container {
+    max-width: var(--ifm-container-width);
+    margin: 0 auto;
+    padding: 0 var(--ifm-spacing-horizontal);
+}
+
+.sb-footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.sb-footer-left,
+.sb-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.sb-footer-copyright {
+    font-size: 0.875rem;
+}
+
+.sb-footer-license {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.sb-footer-license-label {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.sb-footer-github {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ifm-footer-link-color, #e2e8f0);
+    text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    transition: background 0.15s ease;
+}
+
+.sb-footer-github:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    text-decoration: none;
+}
+
+.sb-footer-github-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.sb-footer-powered {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.sb-footer-powered a {
+    color: var(--ifm-color-primary-light);
+    text-decoration: none;
+}
+
+.sb-footer-powered a:hover {
+    text-decoration: underline;
+}
+
+/* 다크모드 대응 (이미 다크 배경이므로 라이트 모드에서만 조정) */
+[data-theme='light'] .sb-footer {
+    background: #f1f5f9;
+    color: #475569;
+    border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .sb-footer-license-label {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='light'] .sb-footer-github {
+    color: #334155;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .sb-footer-github:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #1e293b;
+}
+
+[data-theme='light'] .sb-footer-powered {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .sb-footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .sb-footer-left,
+    .sb-footer-right {
+        justify-content: center;
+    }
+}

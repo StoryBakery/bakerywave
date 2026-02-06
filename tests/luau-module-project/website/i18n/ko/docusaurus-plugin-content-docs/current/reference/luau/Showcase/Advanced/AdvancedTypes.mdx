@@ -1,0 +1,68 @@
+---
+title: AdvancedTypes
+id: AdvancedTypes
+---
+
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">AdvancedTypes</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/AdvancedTypes.luau#L1"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
+
+
+복잡한 Luau 타입 시스템을 테스트하기 위한 클래스입니다.
+제네릭, 중첩된 테이블 타입, 함수 타입 링크 등을 검증합니다.
+
+## Summary
+
+#### Types
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#AdvancedScriptAlias">AdvancedScriptAlias</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123; source: &quot;docgen-script&quot; &#125;</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#NestedGenericT-U">NestedGeneric&lt;T, U&gt;</a></span></div>
+</div>
+
+#### Methods
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#BuildFromScript">BuildFromScript</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Showcase/Advanced/AdvancedTypes">AdvancedTypes</a>:BuildFromScript(id: string): boolean</span></span></div>
+</div>
+
+## Types {#Types}
+
+### AdvancedScriptAlias {#AdvancedScriptAlias}
+
+```lua
+{ source: "docgen-script" }
+```
+
+기존 AdvancedTypes 페이지에 타입을 주입합니다.
+
+### NestedGeneric&lt;T, U&gt; {#NestedGenericT-U}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/AdvancedTypes.luau#L12"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+재귀적 구조를 가진 제네릭 인터페이스입니다.
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">data</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">T</span> <span class="sb-ref-interface-desc">- 기본 데이터</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">metadata</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">U</span> <span class="sb-ref-interface-desc">- 메타데이터 정보</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><span class="sb-ref-name">children</span> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">&#123;NestedGeneric&lt;T, U&gt;&#125;</span> <span class="sb-ref-interface-desc">- 재귀적 제네릭 정의</span></span></div>
+</div>
+
+## Methods {#Methods}
+
+### BuildFromScript {#BuildFromScript}
+
+```lua
+AdvancedTypes:BuildFromScript(id: string): boolean
+```
+
+기존 AdvancedTypes 페이지에 메서드를 주입합니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>id</code> <span class="sb-ref-param-type">string</span></div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">생성 성공 여부</div></div>
+</div>

@@ -57,6 +57,17 @@ function sanitizeArgs(args) {
     return args.filter((item) => typeof item === "string" && item.length > 0);
 }
 
+function hasNoOpenArg(args) {
+    return args.some((arg) => arg === "--no-open" || arg.startsWith("--no-open="));
+}
+
+function appendNoOpenArg(args) {
+    if (hasNoOpenArg(args)) {
+        return args.slice();
+    }
+    return [...args, "--no-open"];
+}
+
 
 
 function splitArgs(argv) {
@@ -82,8 +93,9 @@ function hasConfigFile(dirPath) {
     return candidates.some((name) => fs.existsSync(path.join(dirPath, name)));
 }
 
-function findSingleDocusaurusSiteDir(baseCwd) {
+function findSingleDocusaurusSiteDir(baseCwd, preferredSegment) {
     const ignoreNames = new Set(["node_modules", ".git", ".docusaurus", "build", "dist", ".generated", ".turbo"]);
+    const ignoreSegments = new Set(["tmp", "template"]);
     const queue = [{ dir: baseCwd, depth: 0 }];
     const maxDepth = 4;
     const matches = [];
@@ -118,11 +130,41 @@ function findSingleDocusaurusSiteDir(baseCwd) {
         }
     }
 
+    const shouldIgnore = (candidate) => {
+        const parts = path.normalize(candidate).split(path.sep);
+        for (const part of parts) {
+            if (ignoreSegments.has(part)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    let candidates = matches.filter((candidate) => !shouldIgnore(candidate));
+    if (preferredSegment) {
+        const preferred = candidates.filter((candidate) => path.normalize(candidate).split(path.sep).includes(preferredSegment));
+        if (preferred.length > 0) {
+            candidates = preferred;
+        }
+    }
+
+    if (candidates.length === 1) {
+        return candidates[0];
+    }
+    if (candidates.length > 1) {
+        candidates.sort((a, b) => a.length - b.length);
+        return candidates[0];
+    }
     if (matches.length === 1) {
+        return matches[0];
+    }
+    if (matches.length > 1) {
+        matches.sort((a, b) => a.length - b.length);
         return matches[0];
     }
     return null;
 }
+
 
 function parseGlobalArgs(argv) {
     const args = argv.slice();
@@ -168,6 +210,7 @@ function parseGlobalArgs(argv) {
 function parseDevArgs(argv) {
     const args = [];
     let restart = true;
+    let watchCli = false;
 
     for (let i = 0; i < argv.length; i += 1) {
         const arg = argv[i];
@@ -179,12 +222,17 @@ function parseDevArgs(argv) {
             restart = true;
             continue;
         }
+        if (arg === "--dev-watch-cli") {
+            watchCli = true;
+            continue;
+        }
         args.push(arg);
     }
 
     return {
         args,
         restart,
+        watchCli,
     };
 }
 
@@ -194,9 +242,9 @@ function resolveSiteDir(baseCwd, siteDir) {
     if (hasConfigFile(resolved)) {
         return resolved;
     }
-    const detected = findSingleDocusaurusSiteDir(baseCwd);
+    const detected = findSingleDocusaurusSiteDir(baseCwd, path.basename(resolved));
     if (detected) {
-        console.log(`[bakerywave] resolved site dir: `);
+        console.log("[bakerywave] resolved site dir: " + detected);
         return detected;
     }
     return resolved;
@@ -206,12 +254,80 @@ function resolveCommand(command) {
     return COMMAND_ALIASES.get(command) || command;
 }
 
+function runInit(baseCwd, initArgs) {
+    const hasArg = (value) => initArgs.includes(value);
+    const argsWithLocal = () => {
+        const args = initArgs.slice();
+        if (!hasArg("--local")) {
+            args.push("--local");
+        }
+        if (!hasArg("--workspace-root")) {
+            args.push("--workspace-root", baseCwd);
+        }
+        return args;
+    };
+
+    const localCreateDocs = path.resolve(baseCwd, "packages", "create-docs", "bin", "create-docs.js");
+    if (fs.existsSync(localCreateDocs)) {
+        console.log("[bakerywave] init using local template.");
+        const localResult = spawnSync(process.execPath, [localCreateDocs, ...argsWithLocal()], {
+            stdio: "inherit",
+            cwd: baseCwd,
+        });
+        if (localResult.status === 0) {
+            return;
+        }
+        if (localResult.status !== null) {
+            process.exit(localResult.status);
+        }
+        process.exit(1);
+    }
+
+    const npmExec = resolveNpmCommand();
+    const args = sanitizeArgs([...npmExec.args, "create", "@storybakery/docs", ...initArgs]);
+    let result;
+    try {
+        result = spawnSync(npmExec.command, args, {
+            stdio: "inherit",
+            cwd: baseCwd,
+        });
+    } catch (error) {
+        result = { status: 1, error };
+    }
+
+    if (result && result.status === 0) {
+        return;
+    }
+
+    const fallbackCreateDocs = path.resolve(__dirname, "..", "..", "create-docs", "bin", "create-docs.js");
+    if (!fs.existsSync(fallbackCreateDocs)) {
+        if (result && result.error) {
+            console.error("[bakerywave] init failed: " + result.error.message);
+        }
+        process.exit(result && result.status !== null ? result.status : 1);
+    }
+
+    console.warn("[bakerywave] npm create failed. Falling back to local template.");
+    const fallback = spawnSync(process.execPath, [fallbackCreateDocs, ...argsWithLocal()], {
+        stdio: "inherit",
+        cwd: baseCwd,
+    });
+
+    if (fallback.status !== 0) {
+        process.exit(fallback.status === null ? 1 : fallback.status);
+    }
+}
+
 function runCommand(command, args, options) {
     const result = spawnSync(command, sanitizeArgs(args), {
         stdio: "inherit",
         cwd: options.cwd,
         env: options.env || process.env,
     });
+    if (result.error) {
+        console.error(`[bakerywave] failed to execute command: ${command}`);
+        console.error(result.error.message);
+    }
     if (result.status !== null) {
         process.exit(result.status);
     }
@@ -266,6 +382,7 @@ function spawnDocusaurus(command, args, siteDirAbs) {
             stdio: "inherit",
             cwd: siteDirAbs,
             env: process.env,
+            detached: process.platform !== "win32",
         });
     } catch (error) {
         const docusaurusBin = require.resolve("@docusaurus/core/bin/docusaurus.mjs", { paths: [siteDirAbs, __dirname] });
@@ -273,6 +390,7 @@ function spawnDocusaurus(command, args, siteDirAbs) {
             stdio: "inherit",
             cwd: siteDirAbs,
             env: process.env,
+            detached: process.platform !== "win32",
         });
     }
 }
@@ -299,6 +417,42 @@ function resolveProjectRoot(baseCwd, siteDirAbs) {
     return baseCwd;
 }
 
+function hasWorkspacePackages(dirPath) {
+    const packagesDir = path.join(dirPath, "packages");
+    if (!fs.existsSync(packagesDir)) {
+        return false;
+    }
+    const required = [
+        path.join(packagesDir, "docs-preset"),
+        path.join(packagesDir, "docs-theme"),
+        path.join(packagesDir, "docusaurus-plugin-reference"),
+        path.join(packagesDir, "luau-docgen"),
+    ];
+    return required.every((entry) => fs.existsSync(entry));
+}
+
+function findWorkspaceRoot(baseCwd, siteDirAbs) {
+    const candidates = [
+        resolveProjectRoot(baseCwd, siteDirAbs),
+        baseCwd,
+        path.resolve(baseCwd, ".."),
+    ];
+    for (const candidate of candidates) {
+        if (candidate && hasWorkspacePackages(candidate)) {
+            return candidate;
+        }
+    }
+
+    let current = baseCwd;
+    while (current && current !== path.dirname(current)) {
+        if (hasWorkspacePackages(current)) {
+            return current;
+        }
+        current = path.dirname(current);
+    }
+    return resolveProjectRoot(baseCwd, siteDirAbs);
+}
+
 function findBakerywaveTomlPath(baseCwd, siteDirAbs) {
     const projectRoot = resolveProjectRoot(baseCwd, siteDirAbs);
     const candidates = [
@@ -318,7 +472,7 @@ function findBakerywaveTomlPath(baseCwd, siteDirAbs) {
 function resolveTomlPathOptions(tomlPath, options) {
     const resolved = { ...options };
     const baseDir = path.dirname(tomlPath);
-    const pathKeys = ["rootDir", "input", "outDir", "manifestPath"];
+    const pathKeys = ["rootDir", "input", "outDir", "manifestPath", "customDocConfig"];
 
     for (const key of pathKeys) {
         const value = resolved[key];
@@ -573,6 +727,7 @@ function resolveReferenceOptions(baseOptions, overrides) {
         "input",
         "outDir",
         "manifestPath",
+        "customDocConfig",
         "includePrivate",
         "clean",
         "renderMode",
@@ -707,8 +862,8 @@ function runReferenceBuild(docgenScript, generator, baseCwd, siteDirAbs, referen
 
     const result = generator.generateReferenceDocs(siteDirAbs, generatorOptions);
     if (result.skipped) {
-        console.error("[bakerywave] reference generation skipped.");
-        process.exit(1);
+        console.warn("[bakerywave] reference generation skipped.");
+        return;
     }
 
     const i18nOptions = loadI18nOptions(baseCwd, siteDirAbs, configPath);
@@ -769,7 +924,14 @@ function syncReferenceI18n(siteDirAbs, outDir, lang, i18nOptions) {
             "reference",
             lang
         );
-        fs.rmSync(target, { recursive: true, force: true });
+        try {
+            fs.rmSync(target, { recursive: true, force: true });
+        } catch (error) {
+            if (!error || (error.code !== "EPERM" && error.code !== "EBUSY")) {
+                throw error;
+            }
+            console.warn(`[bakerywave] i18n cleanup skipped (locked): ${target}`);
+        }
         copyDirSync(outDir, target);
     }
 }
@@ -781,14 +943,154 @@ function createWatchers(targets, onChange) {
         }
         try {
             const watcher = fs.watch(target, { recursive: true }, onChange);
+            watcher.on("error", (error) => {
+                console.warn(`[bakerywave] watch error (${target}): ${error.message}`);
+            });
             watchers.push(watcher);
             continue;
         } catch (error) {
             const watcher = fs.watch(target, onChange);
+            watcher.on("error", (watchError) => {
+                console.warn(`[bakerywave] watch error (${target}): ${watchError.message}`);
+            });
             watchers.push(watcher);
         }
     }
     return watchers;
+}
+
+function shouldTrackFileForMode(filePath, mode) {
+    if (mode !== "reference") {
+        return true;
+    }
+    const ext = path.extname(filePath).toLowerCase();
+    return ext === ".luau" || ext === ".lua" || ext === ".json" || ext === ".toml";
+}
+
+function collectFingerprintFiles(target, output, mode) {
+    if (!fs.existsSync(target)) {
+        return;
+    }
+    const stat = fs.statSync(target);
+    if (stat.isDirectory()) {
+        const entries = fs.readdirSync(target, { withFileTypes: true });
+        for (const entry of entries) {
+            if (entry.name.startsWith(".") || entry.name === "node_modules") {
+                continue;
+            }
+            collectFingerprintFiles(path.join(target, entry.name), output, mode);
+        }
+        return;
+    }
+    if (stat.isFile() && shouldTrackFileForMode(target, mode)) {
+        output.push({ path: target, size: stat.size, mtimeMs: Math.trunc(stat.mtimeMs) });
+    }
+}
+
+function buildTargetsFingerprint(targets, mode = "generic") {
+    const records = [];
+    for (const target of targets) {
+        collectFingerprintFiles(target, records, mode);
+    }
+    records.sort((left, right) => left.path.localeCompare(right.path));
+    return records
+        .map((record) => `${record.path.replace(/\\/g, "/")}|${record.size}|${record.mtimeMs}`)
+        .join("\n");
+}
+
+function collectJsonFiles(dirPath, output) {
+    if (!fs.existsSync(dirPath)) {
+        return;
+    }
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
+        if (entry.isDirectory()) {
+            collectJsonFiles(fullPath, output);
+            continue;
+        }
+        if (entry.isFile() && entry.name.endsWith(".json")) {
+            output.push(fullPath);
+        }
+    }
+}
+
+function isStaleDocSource(siteDirAbs, source) {
+    if (!source || typeof source !== "string" || !source.startsWith("@site/")) {
+        return false;
+    }
+    const rel = source.replace(/^@site\//, "");
+    const abs = path.join(siteDirAbs, rel);
+    return !fs.existsSync(abs);
+}
+
+function cleanupDocusaurusCacheIfStale(siteDirAbs) {
+    const cacheRoot = path.join(siteDirAbs, ".docusaurus");
+    const docsCache = path.join(cacheRoot, "docusaurus-plugin-content-docs");
+    if (!fs.existsSync(docsCache)) {
+        return;
+    }
+    const files = [];
+    collectJsonFiles(docsCache, files);
+    for (const filePath of files) {
+        let raw;
+        try {
+            raw = fs.readFileSync(filePath, "utf8");
+        } catch (error) {
+            continue;
+        }
+        let parsed;
+        try {
+            parsed = JSON.parse(raw);
+        } catch (error) {
+            continue;
+        }
+        if (parsed && isStaleDocSource(siteDirAbs, parsed.source)) {
+            try {
+                fs.rmSync(cacheRoot, { recursive: true, force: true });
+                console.warn(`[bakerywave] cleared stale docusaurus cache: ${cacheRoot}`);
+            } catch (error) {
+                console.warn(`[bakerywave] failed to clear stale cache: ${cacheRoot}`);
+            }
+            return;
+        }
+    }
+}
+
+function killProcessTree(child, signal) {
+    if (!child || !child.pid || child.exitCode !== null) {
+        return;
+    }
+    if (process.platform === "win32") {
+        try {
+            spawnSync("taskkill", ["/pid", String(child.pid), "/T", "/F"], { stdio: "ignore" });
+            return;
+        } catch (error) {
+            // fall through
+        }
+    }
+    try {
+        process.kill(-child.pid, signal);
+    } catch (error) {
+        try {
+            child.kill(signal);
+        } catch (innerError) {
+            // ignore
+        }
+    }
+}
+
+function ensureProcessExit(child, delayMs) {
+    if (!child || !child.pid || process.platform === "win32") {
+        return;
+    }
+    const pid = child.pid;
+    setTimeout(() => {
+        if (!child || child.pid !== pid || child.exitCode !== null) {
+            return;
+        }
+        killProcessTree(child, "SIGKILL");
+    }, delayMs);
 }
 
 function runReferenceWatch(docgenScript, generator, baseCwd, siteDirAbs, referenceOptions, docgenFlags, configPath) {
@@ -801,9 +1103,14 @@ function runReferenceWatch(docgenScript, generator, baseCwd, siteDirAbs, referen
     if (defaults.typesDir) {
         watchTargets.push(path.join(defaults.rootDir, defaults.typesDir));
     }
+    if (typeof referenceOptions.customDocConfig === "string" && referenceOptions.customDocConfig.length > 0) {
+        watchTargets.push(referenceOptions.customDocConfig);
+    }
 
     let running = false;
     let pending = false;
+    let watchFingerprint = buildTargetsFingerprint(watchTargets, "reference");
+    let watchChangeTimer = null;
 
     const trigger = () => {
         if (running) {
@@ -825,12 +1132,22 @@ function runReferenceWatch(docgenScript, generator, baseCwd, siteDirAbs, referen
     trigger();
 
     const watchers = createWatchers(watchTargets, () => {
-        trigger();
+        if (watchChangeTimer) {
+            clearTimeout(watchChangeTimer);
+        }
+        watchChangeTimer = setTimeout(() => {
+            const nextFingerprint = buildTargetsFingerprint(watchTargets, "reference");
+            if (nextFingerprint === watchFingerprint) {
+                return;
+            }
+            watchFingerprint = nextFingerprint;
+            trigger();
+        }, 80);
     });
 
     if (watchers.length === 0) {
-        console.error("[bakerywave] no watch targets found.");
-        process.exit(1);
+        console.warn("[bakerywave] no watch targets found. skipping reference watch.");
+        return;
     }
 
     console.log("[bakerywave] watching reference sources...");
@@ -844,15 +1161,26 @@ function buildReferenceWatchArgs(siteDirAbs, configPath) {
     return args;
 }
 
+function buildReferenceWatchTargets(baseCwd, siteDirAbs, referenceOptions) {
+    const defaults = resolveReferenceDefaults(baseCwd, siteDirAbs, referenceOptions);
+    const targets = [path.join(defaults.rootDir, defaults.srcDir)];
+    if (defaults.typesDir) {
+        targets.push(path.join(defaults.rootDir, defaults.typesDir));
+    }
+    if (typeof referenceOptions.customDocConfig === "string" && referenceOptions.customDocConfig.length > 0) {
+        targets.push(referenceOptions.customDocConfig);
+    }
+    return targets.filter((target) => fs.existsSync(target));
+}
+
 function buildRestartTargets(baseCwd, siteDirAbs, configPath) {
     const targets = [];
-    const projectRoot = resolveProjectRoot(baseCwd, siteDirAbs);
+    const projectRoot = findWorkspaceRoot(baseCwd, siteDirAbs);
 
     const packageDirs = [
         path.join(projectRoot, "packages", "docs-preset"),
         path.join(projectRoot, "packages", "docs-theme"),
         path.join(projectRoot, "packages", "docusaurus-plugin-reference"),
-        path.join(projectRoot, "packages", "bakerywave"),
         path.join(projectRoot, "packages", "luau-docgen"),
     ];
 
@@ -891,6 +1219,16 @@ function buildRestartTargets(baseCwd, siteDirAbs, configPath) {
     return targets;
 }
 
+function buildCliRestartTargets(baseCwd, siteDirAbs) {
+    const targets = [];
+    const projectRoot = findWorkspaceRoot(baseCwd, siteDirAbs);
+    const cliDir = path.join(projectRoot, "packages", "bakerywave");
+    if (fs.existsSync(cliDir)) {
+        targets.push(cliDir);
+    }
+    return targets;
+}
+
 
 function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
     const loadedReferenceOptions = loadReferenceOptions(baseCwd, siteDirAbs, configPath);
@@ -899,22 +1237,176 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
     let watchProcess = null;
     if (referenceOptions.enabled === false) {
         console.log("[bakerywave] reference disabled. skipping watch.");
+    } else if (buildReferenceWatchTargets(baseCwd, siteDirAbs, referenceOptions).length === 0) {
+        console.warn("[bakerywave] reference watch targets missing. skipping watch.");
     } else {
         watchProcess = spawn(process.execPath, [__filename, ...watchArgs], {
             stdio: "inherit",
             cwd: baseCwd,
             env: process.env,
+            detached: process.platform !== "win32",
         });
     }
 
     const restartEnabled = !(devOptions && devOptions.restart === false);
-    const restartTargets = restartEnabled ? buildRestartTargets(baseCwd, siteDirAbs, configPath) : [];
-    let startProcess = spawnDocusaurus("start", docusaurusArgs, siteDirAbs);
+    const restartTargets = restartEnabled
+        ? buildRestartTargets(baseCwd, siteDirAbs, configPath)
+        : [];
+    const cliRestartTargets = devOptions && devOptions.watchCli ? buildCliRestartTargets(baseCwd, siteDirAbs) : [];
+    const restartNoOpen = process.env.BAKERYWAVE_DEV_NO_OPEN === "1";
+    const startArgs = restartNoOpen ? appendNoOpenArg(docusaurusArgs) : docusaurusArgs.slice();
+    const restartArgs = appendNoOpenArg(docusaurusArgs);
+    cleanupDocusaurusCacheIfStale(siteDirAbs);
+    let startProcess = spawnDocusaurus("start", startArgs, siteDirAbs);
     const children = watchProcess ? [watchProcess, startProcess] : [startProcess];
+    const watchIndex = watchProcess ? 0 : -1;
     const startIndex = watchProcess ? 1 : 0;
-    const restartWatchers = restartTargets.length > 0 ? createWatchers(restartTargets, () => scheduleRestart()) : [];
+    let restartFingerprint = buildTargetsFingerprint(restartTargets, "generic");
+    let restartWatchTimer = null;
+    const restartWatchers = restartTargets.length > 0
+        ? createWatchers(restartTargets, () => {
+            if (restartWatchTimer) {
+                clearTimeout(restartWatchTimer);
+            }
+            restartWatchTimer = setTimeout(() => {
+                const nextFingerprint = buildTargetsFingerprint(restartTargets, "generic");
+                if (nextFingerprint === restartFingerprint) {
+                    return;
+                }
+                restartFingerprint = nextFingerprint;
+                console.log("[bakerywave] restart targets changed. restarting dev server...");
+                scheduleRestart();
+            }, 120);
+        })
+        : [];
+    let cliWatchReady = false;
+    let cliFingerprint = buildTargetsFingerprint(cliRestartTargets, "generic");
+    let cliWatchTimer = null;
+    const cliRestartWatchers = cliRestartTargets.length > 0
+        ? createWatchers(cliRestartTargets, () => {
+            if (cliWatchTimer) {
+                clearTimeout(cliWatchTimer);
+            }
+            cliWatchTimer = setTimeout(() => {
+                const nextFingerprint = buildTargetsFingerprint(cliRestartTargets, "generic");
+                if (nextFingerprint === cliFingerprint) {
+                    return;
+                }
+                cliFingerprint = nextFingerprint;
+                console.log("[bakerywave] cli source changed. restarting bakerywave dev...");
+                scheduleCliRestart();
+            }, 120);
+        })
+        : [];
     let exiting = false;
     let restartTimer = null;
+    const ignoredExitPids = new Set();
+    let cliRestartTimer = null;
+    let restartingSelf = false;
+
+    let restartingStart = false;
+    let restartingWatch = false;
+    let pendingRestart = false;
+    let lastStartExit = 0;
+    let startExitStreak = 0;
+    let pendingWatchRespawn = false;
+
+    const attachExitHandler = (child, role) => {
+        if (!child) {
+            return;
+        }
+        child.__bwRole = role;
+        child.on("exit", (nextCode) => handleChildExit(child, nextCode));
+    };
+
+    const spawnStart = () => {
+        if (startProcess && startProcess.exitCode === null) {
+            return;
+        }
+        cleanupDocusaurusCacheIfStale(siteDirAbs);
+        startProcess = spawnDocusaurus("start", restartArgs, siteDirAbs);
+        children[startIndex] = startProcess;
+        attachExitHandler(startProcess, "start");
+    };
+
+    const respawnWatch = () => {
+        if (exiting || !watchProcess) {
+            return;
+        }
+        if (restartingWatch) {
+            return;
+        }
+        restartingWatch = true;
+        setTimeout(() => {
+            restartingWatch = false;
+            if (exiting) {
+                return;
+            }
+            watchProcess = spawn(process.execPath, [__filename, ...watchArgs], {
+                stdio: "inherit",
+                cwd: baseCwd,
+                env: process.env,
+                detached: process.platform !== "win32",
+            });
+            children[watchIndex] = watchProcess;
+            attachExitHandler(watchProcess, "watch");
+        }, 250);
+    };
+
+    const handleChildExit = (child, code) => {
+        if (exiting) {
+            return;
+        }
+        if (child && child.pid && ignoredExitPids.has(child.pid)) {
+            ignoredExitPids.delete(child.pid);
+            if (pendingRestart) {
+                pendingRestart = false;
+                spawnStart();
+            }
+            return;
+        }
+        if (child && child.__bwRole === "start") {
+            if (pendingRestart) {
+                pendingRestart = false;
+                spawnStart();
+                return;
+            }
+            const now = Date.now();
+            if (now - lastStartExit < 2000) {
+                startExitStreak += 1;
+            } else {
+                startExitStreak = 0;
+            }
+            lastStartExit = now;
+            if (startExitStreak >= 3) {
+                console.error("[bakerywave] start exited repeatedly. skipping auto-restart.");
+                return;
+            }
+            if (restartingStart) {
+                return;
+            }
+            restartingStart = true;
+            setTimeout(() => {
+                restartingStart = false;
+                if (exiting) {
+                    return;
+                }
+                spawnStart();
+            }, 500);
+            return;
+        }
+        if (child && child.__bwRole === "watch") {
+            if (!pendingWatchRespawn) {
+                const codeText = code === null || code === undefined ? "unknown" : String(code);
+                console.error(`[bakerywave] reference watch exited (code: ${codeText}). not restarting.`);
+                return;
+            }
+            pendingWatchRespawn = false;
+            respawnWatch();
+            return;
+        }
+        shutdown(code === null ? 1 : code);
+    };
 
     const scheduleRestart = () => {
         if (!restartEnabled || exiting) {
@@ -928,26 +1420,61 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
             if (exiting) {
                 return;
             }
-            if (startProcess && startProcess.pid && startProcess.exitCode === null) {
-                startProcess.kill();
+            if (pendingRestart) {
+                return;
             }
-            startProcess = spawnDocusaurus("start", docusaurusArgs, siteDirAbs);
-            children[startIndex] = startProcess;
-            startProcess.on("exit", (code) => {
-                if (exiting) {
-                    return;
-                }
-                shutdown(code === null ? 1 : code);
-            });
+            pendingRestart = true;
+            if (startProcess && startProcess.pid && startProcess.exitCode === null) {
+                ignoredExitPids.add(startProcess.pid);
+                killProcessTree(startProcess, "SIGTERM");
+                ensureProcessExit(startProcess, 2000);
+            } else {
+                pendingRestart = false;
+                spawnStart();
+            }
+            if (watchProcess && watchProcess.pid && watchProcess.exitCode === null) {
+                pendingWatchRespawn = true;
+                killProcessTree(watchProcess, "SIGTERM");
+                ensureProcessExit(watchProcess, 2000);
+            }
         }, 150);
     };
 
-    const shutdown = (exitCode) => {
+    const scheduleCliRestart = () => {
+        if (!cliWatchReady) {
+            return;
+        }
+        if (exiting || restartingSelf) {
+            return;
+        }
+        if (cliRestartTimer) {
+            return;
+        }
+        cliRestartTimer = setTimeout(() => {
+            cliRestartTimer = null;
+            if (exiting || restartingSelf) {
+                return;
+            }
+            restartingSelf = true;
+            shutdown(0, { restartSelf: true });
+        }, 150);
+    };
+
+    const shutdown = (exitCode, options) => {
+        const restartSelf = options && options.restartSelf === true;
         if (exiting) {
             return;
         }
         exiting = true;
-        for (const watcher of restartWatchers) {
+        if (restartWatchTimer) {
+            clearTimeout(restartWatchTimer);
+            restartWatchTimer = null;
+        }
+        if (cliWatchTimer) {
+            clearTimeout(cliWatchTimer);
+            cliWatchTimer = null;
+        }
+        for (const watcher of [...restartWatchers, ...cliRestartWatchers]) {
             try {
                 watcher.close();
             } catch (error) {
@@ -956,19 +1483,35 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
         }
         for (const child of children) {
             if (child && child.pid && child.exitCode === null) {
-                child.kill();
+                killProcessTree(child, "SIGTERM");
             }
+        }
+        if (restartSelf) {
+            setTimeout(() => {
+                spawn(process.execPath, process.argv.slice(1), {
+                    stdio: "inherit",
+                    cwd: process.cwd(),
+                    env: { ...process.env, BAKERYWAVE_DEV_NO_OPEN: "1" },
+                });
+                process.exit(exitCode);
+            }, 300);
+            return;
         }
         process.exit(exitCode);
     };
 
     for (const child of children) {
-        child.on("exit", (code) => {
-            if (exiting) {
-                return;
-            }
-            shutdown(code === null ? 1 : code);
-        });
+        if (!child) {
+            continue;
+        }
+        const role = child === startProcess ? "start" : "watch";
+        attachExitHandler(child, role);
+    }
+
+    if (cliRestartWatchers.length > 0) {
+        setTimeout(() => {
+            cliWatchReady = true;
+        }, 1000);
     }
 
     process.on("SIGINT", () => shutdown(0));
@@ -981,8 +1524,9 @@ function printHelp() {
     console.log("\nUsage:");
     console.log("  bakerywave <command> [siteDir] [-- ...args]");
     console.log("\nCommands:");
-    console.log("  start               Start Docusaurus dev server");
-    console.log("  dev                 Start dev server with reference watch (auto restart)");
+    console.log("  init [dir]           Initialize a new documentation site");
+    console.log("  start                Start Docusaurus dev server");
+    console.log("  dev                  Start dev server with reference watch (auto restart)");
     console.log("  build                Build the site");
     console.log("  serve|preview        Serve the built site");
     console.log("  clear                Clear Docusaurus cache");
@@ -994,29 +1538,102 @@ function printHelp() {
     console.log("\nGlobal Options:");
     console.log("  --cwd <dir>          Base working directory");
     console.log("  --site-dir <dir>     Site directory (default: website or cwd)");
-    console.log("  --config <path>      Docusaurus config path\n  --no-restart         Disable auto restart for dev");
+    console.log("  --config <path>      Docusaurus config path");
+    console.log("\nRun 'bakerywave <command> --help' for more information on a specific command.");
+}
+
+function printInitHelp() {
+    console.log("bakerywave init");
+    console.log("\nInitialize a new documentation site using the StoryBakery template.");
+    console.log("\nUsage:");
+    console.log("  bakerywave init [dir] [options]");
+    console.log("\nOptions:");
+    console.log("  --dir <dir>              Target directory (default: website)");
+    console.log("  --template <path>        Template directory path");
+    console.log("  --no-install             Skip package installation");
+    console.log("  --package-manager <pm>   npm | pnpm | yarn | bun (default: npm)");
+    console.log("  --force                  Allow non-empty directory");
+}
+
+function printDevHelp() {
+    console.log("bakerywave dev");
+    console.log("\nStart dev server with reference watch and auto-restart on config/plugin changes.");
+    console.log("\nUsage:");
+    console.log("  bakerywave dev [siteDir] [options] [-- ...docusaurusArgs]");
+    console.log("\nOptions:");
+    console.log("  --no-restart             Disable auto-restart when configuration or plugins change");
+    console.log("  --dev-watch-cli          Watch bakerywave's own source code for changes");
+    console.log("\nNote: Any additional arguments after '--' are passed directly to 'docusaurus start'.");
+}
+
+function printReferenceHelp() {
+    console.log("bakerywave reference <subcommand>");
+    console.log("\nManage API reference documentation (Luau docgen and MDX generation).");
+    console.log("\nSubcommands:");
+    console.log("  build                    Run docgen and generate reference MDX files");
+    console.log("  watch                    Watch source files and rebuild reference automatically");
+    console.log("\nOptions:");
+    console.log("  --lang <lang>            Target language (default: luau)");
+    console.log("  --root <dir>             Project root directory");
+    console.log("  --src <dir>              Source directory for docgen");
+    console.log("  --types <dir>            Directory containing type definitions");
+    console.log("  --out-dir <dir>          Output directory for generated MDX files");
+    console.log("  --manifest <path>        Path to reference manifest file");
+    console.log("  --include-private        Include private members in documentation");
+    console.log("  --no-clean               Don't clean output directory before generation");
+    console.log("  --render-mode <mode>     Render mode ('mdx' or 'json')");
+    console.log("  --fail-on-warning        Exit with error if docgen produces warnings");
+    console.log("  --legacy                 Use legacy docgen logic");
+    console.log("  --no-reference           Disable reference generation for this run");
 }
 
 function main() {
     const { head, tail } = splitArgs(process.argv.slice(2));
     const { cwd, siteDir, configPath, rest } = parseGlobalArgs(head);
 
-    if (rest.length === 0) {
+    const isHelp = (arg) => arg === "--help" || arg === "-h" || arg === "help";
+
+    if (rest.length === 0 || (rest.length === 1 && isHelp(rest[0]))) {
         printHelp();
         return;
     }
 
     const commandRaw = rest[0];
-    if (commandRaw === "--help" || commandRaw === "-h" || commandRaw === "help") {
+    const command = resolveCommand(commandRaw);
+    const commandArgs = rest.slice(1);
+    const hasHelpArg = commandArgs.some(isHelp) || tail.some(isHelp);
+
+    if (hasHelpArg) {
+        if (command === "dev") {
+            printDevHelp();
+            return;
+        }
+        if (command === "reference") {
+            printReferenceHelp();
+            return;
+        }
+        if (command === "init") {
+            printInitHelp();
+            return;
+        }
         printHelp();
         return;
     }
 
-    const command = resolveCommand(commandRaw);
-    const commandArgs = rest.slice(1);
+    if (command === "help") {
+        printHelp();
+        return;
+    }
+
+
+
+    if (command === "init") {
+        runInit(cwd, [...commandArgs, ...tail]);
+        return;
+    }
 
     let siteDirOverride = null;
-    if ((DOCUSAURUS_COMMANDS.has(command) || command === "init" || command === "dev") && commandArgs[0] && !commandArgs[0].startsWith("-")) {
+    if ((DOCUSAURUS_COMMANDS.has(command) || command === "dev") && commandArgs[0] && !commandArgs[0].startsWith("-")) {
         siteDirOverride = commandArgs[0];
         commandArgs.shift();
     }
@@ -1024,20 +1641,13 @@ function main() {
     const siteDirAbs = resolveSiteDir(cwd, siteDirOverride || siteDir);
 
     if (command === "dev") {
-        const { args: devArgs, restart } = parseDevArgs([...commandArgs, ...tail]);
-        runDev(cwd, siteDirAbs, configPath, devArgs, { restart });
+        const { args: devArgs, restart, watchCli } = parseDevArgs([...commandArgs, ...tail]);
+        runDev(cwd, siteDirAbs, configPath, devArgs, { restart, watchCli });
         return;
     }
 
     if (DOCUSAURUS_COMMANDS.has(command)) {
         runDocusaurus(command, [...commandArgs, ...tail], siteDirAbs);
-        return;
-    }
-
-    if (command === "init") {
-        runCommand("npm", ["create", "@storybakery/docs", siteDirOverride || ""].filter(Boolean), {
-            cwd,
-        });
         return;
     }
 

@@ -1,0 +1,170 @@
+---
+title: DocWidget
+id: DocWidget
+---
+
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">DocWidget</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L85"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
+
+
+UI 위젯 본체입니다.
+이 클래스는 [DocWidgetConfig](/reference/luau/Docs/Relations/DocWidgetConfig)를 주입받고,
+[DocWidgetState](/reference/luau/Docs/Relations/DocWidgetState)를 내부에 생성해 관리합니다.
+
+이것은 설정과 상태를 조합하여 동작해야 합니다:
+1) 설정의 Enabled가 false면 렌더링을 중단
+2) Enabled가 true면 제목과 색상을 사용해 UI를 구성
+
+## Summary
+
+#### Constructors
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#new">new</a> (config: <a href="Docs/Relations/DocWidgetConfig">DocWidgetConfig</a>) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Docs/Relations/DocWidget">DocWidget</a></span></span></div>
+</div>
+
+#### Composition
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Config">Config</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Docs/Relations/DocWidgetConfig">DocWidgetConfig</a></span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#State">State</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Docs/Relations/DocWidgetState">DocWidgetState</a></span></span></div>
+</div>
+
+#### Methods
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#GetClicks">GetClicks</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#IncrementClicks">IncrementClicks</a> (increment: number) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">number</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#IsEnabled">IsEnabled</a> () <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#SetEnabled">SetEnabled</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">(enabled: boolean)</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#SetTitle">SetTitle</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">(text: string)</span></span></div>
+</div>
+
+## Constructors {#Constructors}
+
+### new {#new}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L102"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(config: DocWidgetConfig) -> DocWidget
+```
+
+의도하는 UI는 다음과 같습니다:
+- 헤더 텍스트는 [TextLabel](https://create.roblox.com/docs/reference/engine/classes/TextLabel)로 렌더링
+- 클릭 이벤트는 [GuiButton.Activated](https://create.roblox.com/docs/reference/engine/classes/GuiButton#Activated)를 사용
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>config</code> <span class="sb-ref-param-type"><a href="Docs/Relations/DocWidgetConfig">DocWidgetConfig</a></span></div><div class="sb-ref-param-desc">구성 데이터</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Docs/Relations/DocWidget">DocWidget</a></span></div><div class="sb-ref-param-desc">위젯 인스턴스</div></div>
+</div>
+
+## Composition {#Properties}
+
+### Config {#Config}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L118"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+DocWidgetConfig
+```
+
+조합된 설정 객체
+
+### State {#State}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L124"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+DocWidgetState
+```
+
+내부 상태 객체
+
+## Methods {#Methods}
+
+### GetClicks {#GetClicks}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L185"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> number
+```
+
+클릭 횟수는 [DocWidgetState.Clicks](/reference/luau/Docs/Relations/DocWidgetState#Clicks)를 반환합니다.
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">클릭 횟수</div></div>
+</div>
+
+### IncrementClicks {#IncrementClicks}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L197"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(increment: number) -> number
+```
+
+이 함수는 내부 상태를 갱신하고,
+[DocWidget.Changed](/reference/luau/Docs/Relations/DocWidget#Changed) 이벤트를 발생시켜야 합니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>increment</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">증가량</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">number</span></div><div class="sb-ref-param-desc">갱신된 클릭 횟수</div></div>
+</div>
+
+### IsEnabled {#IsEnabled}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L164"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+() -> boolean
+```
+
+[GuiObject.Visible](https://create.roblox.com/docs/reference/engine/classes/GuiObject#Visible)에 대응하는 상태입니다.
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">활성 여부</div></div>
+</div>
+
+### SetEnabled {#SetEnabled}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L174"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(enabled: boolean)
+```
+
+이것은 [GuiObject.Visible](https://create.roblox.com/docs/reference/engine/classes/GuiObject#Visible)처럼 UI의 표시 여부를 토글해야 합니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>enabled</code> <span class="sb-ref-param-type">boolean</span></div><div class="sb-ref-param-desc">활성 여부</div></div>
+</div>
+
+### SetTitle {#SetTitle}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/DocRelations.luau#L153"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(text: string)
+```
+
+이것은 [DocWidgetConfig](/reference/luau/Docs/Relations/DocWidgetConfig)의 Title을 갱신하고
+UI 텍스트를 다시 렌더링해야 합니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>text</code> <span class="sb-ref-param-type">string</span></div><div class="sb-ref-param-desc">제목 텍스트</div></div>
+</div>

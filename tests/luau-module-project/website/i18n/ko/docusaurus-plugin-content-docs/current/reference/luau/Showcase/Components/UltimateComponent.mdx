@@ -1,0 +1,59 @@
+---
+title: UltimateComponent
+id: UltimateComponent
+---
+
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">UltimateComponent</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Showcase.luau#L163"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
+
+
+가장 깊은 상속 단계(Level 4)를 테스트하기 위한 클래스입니다.
+`BaseObject` -> `InteractiveObject` -> `ComplexComponent` -> `DeepNestedComponent` -> `UltimateComponent`
+
+**의도하는 문서 모습:**
+- 상속받은 모든 레이어의 멤버들이 올바르게 누적되어 표시되는지 확인합니다.
+
+
+#### Inherited Members
+
+<details class="sb-ref-inherited-details">
+<summary class="sb-ref-inherited-summary"><span class="sb-ref-inherited-count">4</span> inherited from <a href="Showcase/Components/ComplexComponent">ComplexComponent</a></summary>
+<div class="sb-ref-inherited-content">
+<div class="sb-ref-inherited-group-title">Interfaces</div>
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Components/ComplexComponent#IConfig">IConfig</a></span></div>
+</div>
+<div class="sb-ref-inherited-group-title">Methods</div>
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Components/ComplexComponent#SyncWithDatabase">SyncWithDatabase</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span><span class="sb-ref-badge sb-ref-badge-server">Server</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Components/ComplexComponent#Render">Render</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span><span class="sb-ref-badge sb-ref-badge-client">Client</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Components/ComplexComponent#OpenEditor">OpenEditor</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span><span class="sb-ref-badge sb-ref-badge-plugin">Plugin</span></span></div>
+</div>
+</div></details>
+
+<details class="sb-ref-inherited-details">
+<summary class="sb-ref-inherited-summary"><span class="sb-ref-inherited-count">2</span> inherited from <a href="Showcase/Core/InteractiveObject">InteractiveObject</a></summary>
+<div class="sb-ref-inherited-content">
+<div class="sb-ref-inherited-group-title">Methods</div>
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Core/InteractiveObject#ProcessAsync">ProcessAsync</a> (data: table) <span class="sb-ref-separator">:</span> <span class="sb-ref-type">boolean</span></span></div>
+<div class="sb-ref-row sb-ref-row-deprecated"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Core/InteractiveObject#OldAction">OldAction</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span><span class="sb-ref-badge sb-ref-badge-deprecated">Deprecated</span></span></div>
+</div>
+</div></details>
+
+<details class="sb-ref-inherited-details">
+<summary class="sb-ref-inherited-summary"><span class="sb-ref-inherited-count">4</span> inherited from <a href="Showcase/Core/BaseObject">BaseObject</a></summary>
+<div class="sb-ref-inherited-content">
+<div class="sb-ref-inherited-group-title">Constructors</div>
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Core/BaseObject#new">new</a> (id: string) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Showcase/Core/BaseObject">BaseObject</a></span></span></div>
+</div>
+<div class="sb-ref-inherited-group-title">Properties</div>
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Core/BaseObject#ID">ID</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">string</span></span></div>
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Core/BaseObject#Config">Config</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">IConfig</span></span></div>
+</div>
+<div class="sb-ref-inherited-group-title">Methods</div>
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="Showcase/Core/BaseObject#Destroy">Destroy</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span></span></div>
+</div>
+</div></details>

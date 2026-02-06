@@ -1086,7 +1086,7 @@ end
 	```
 
 	@param seconds number
-	@param rejectionValue? any -- The value to reject with if the timeout is reached
+	@param rejectionValue any -- The value to reject with if the timeout is reached
 	@return Promise
 ]=]
 function Promise.prototype:timeout(seconds, rejectionValue)
@@ -1189,7 +1189,7 @@ end
 	:::
 
 	@param successHandler (...: any) -> ...any
-	@param failureHandler? (...: any) -> ...any
+	@param failureHandler (...: any) -> ...any
 	@return Promise<...any>
 ]=]
 function Promise.prototype:andThen(successHandler, failureHandler)
@@ -1272,7 +1272,7 @@ end
 	```
 
 	@param callback (...: any) -> any
-	@param ...? any -- Additional arguments which will be passed to `callback`
+	@param ... any -- Additional arguments which will be passed to `callback`
 	@return Promise
 ]=]
 function Promise.prototype:andThenCall(callback, ...)
@@ -1482,7 +1482,7 @@ end
 	Attaches a `finally` handler to this Promise that calls the given callback with the predefined arguments.
 
 	@param callback (...: any) -> any
-	@param ...? any -- Additional arguments which will be passed to `callback`
+	@param ... any -- Additional arguments which will be passed to `callback`
 	@return Promise
 ]=]
 function Promise.prototype:finallyCall(callback, ...)
@@ -1843,7 +1843,7 @@ end
 	@since 3.0.0
 	@param callback (...: P) -> Promise<T>
 	@param times number
-	@param ...? P
+	@param ... P
 	@return Promise<T>
 ]=]
 function Promise.retry(callback, times, ...)
@@ -1871,7 +1871,7 @@ end
 	@param callback (...: P) -> Promise<T>
 	@param times number
 	@param seconds number
-	@param ...? P
+	@param ... P
 	@return Promise<T>
 ]=]
 function Promise.retryWithDelay(callback, times, seconds, ...)
@@ -1913,7 +1913,7 @@ end
 
 	@since 3.0.0
 	@param event Event -- Any object with a `Connect` method. This includes all Roblox events.
-	@param predicate? (...: P) -> boolean -- A function which determines if the Promise should resolve with the given value, or wait for the next event to check again.
+	@param predicate (...: P) -> boolean -- A function which determines if the Promise should resolve with the given value, or wait for the next event to check again.
 	@return Promise<P>
 ]=]
 function Promise.fromEvent(event, predicate)

@@ -1,0 +1,107 @@
+---
+title: BaseObject
+id: BaseObject
+---
+
+# <span class="sb-ref-heading-row"><span class="sb-ref-heading-text">BaseObject</span><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Showcase.luau#L1"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></span>
+
+
+모든 쇼케이스 객체의 최상위 기반 클래스입니다.
+이 클래스는 객체의 생명주기와 아이덴티티를 관리하는 기본적인 기능을 제공합니다.
+
+**의도하는 문서 모습:**
+- `Showcase/Core` 카테고리 안에 위치합니다.
+- `base` 태그가 배지로 표시됩니다.
+- 상속 계층의 가장 뿌리가 됩니다.
+
+## Summary
+
+#### Constructors
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#new">new</a> (id: string) <span class="sb-ref-separator">:</span> <span class="sb-ref-type"><a href="Showcase/Core/BaseObject">BaseObject</a></span></span></div>
+</div>
+
+#### Configuration
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Config">Config</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">IConfig</span></span></div>
+</div>
+
+#### Identity
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" stroke-width="1"/><path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8 8V15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#ID">ID</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">string</span></span></div>
+</div>
+
+#### Lifecycle
+
+<div class="sb-ref-list">
+<div class="sb-ref-row"><span class="sb-ref-cell-icon"><svg width="14" height="14" class="sb-ref-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA"/><path d="M1 6H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5 8.5H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/><path d="M1 11H3" stroke="#9F70EA" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sb-ref-cell-content"><a class="sb-ref-name" href="#Destroy">Destroy</a> <span class="sb-ref-separator">:</span> <span class="sb-ref-type">()</span></span></div>
+</div>
+
+## Constructors {#Constructors}
+
+### new {#new}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Showcase.luau#L32"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+(id: string) -> BaseObject
+```
+
+새로운 BaseObject를 생성합니다.
+
+#### Parameters
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>id</code> <span class="sb-ref-param-type">string</span></div><div class="sb-ref-param-desc">객체의 고유 ID</div></div>
+</div>
+
+#### Returns
+
+<div class="sb-ref-param-list">
+<div class="sb-ref-param-card"><div class="sb-ref-param-name"><code>return</code> <span class="sb-ref-param-type"><a href="Showcase/Core/BaseObject">BaseObject</a></span></div><div class="sb-ref-param-desc">생성된 객체 인스턴스</div></div>
+</div>
+
+## Configuration {#Properties}
+
+### Config {#Config}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Showcase.luau#L265"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+IConfig
+```
+
+컴포넌트의 현재 설정 상태입니다. `IConfig` 인터페이스 타입을 사용합니다.
+
+## Identity {#Properties}
+
+### ID {#ID}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Showcase.luau#L20"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+string
+```
+
+객체의 유니크한 식별자입니다. 생성 시 한 번만 설정되며 변경할 수 없습니다.
+
+**문서 기대 사항:**
+- `ReadOnly` 배지가 이름 옆에 붙어야 합니다.
+- `Identity` 그룹 섹션에 분류됩니다.
+
+## Lifecycle {#Methods}
+
+### Destroy {#Destroy}
+<div class="sb-ref-heading-actions"><a class="sb-ref-source sb-ref-source-inline" href="https://github.com/StoryBakery/bakerywave/main/src/Showcase.luau#L50"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="sb-ref-source-icon"><path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z"/></svg></a></div>
+
+```lua
+()
+```
+
+객체를 파괴하고 메모리에서 해제합니다.
+내부적으로 사용하던 모든 리소스를 정리하므로 호출 후에는 객체를 사용하지 마십시오.
+
+
+#### Inherited By
+
+<div class="sb-ref-inherited-by-list"><span class="sb-ref-inherited-by-item"><a href="Showcase/Core/CoreService">CoreService</a></span><span class="sb-ref-inherited-by-item"><a href="Showcase/Core/InteractiveObject">InteractiveObject</a></span></div>
