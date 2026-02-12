@@ -25,6 +25,19 @@ export default {
             label: "가이드",
             items: [
                 "guides/configuration",
+                {
+                    type: "category",
+                    label: "번역 (i18n)",
+                    items: [
+                        "guides/translation",
+                        "guides/translation/getting-started",
+                        "guides/translation/initial-setup",
+                        "guides/translation/document-workflow",
+                        "guides/translation/reference-workflow",
+                        "guides/translation/non-native-contribution",
+                        "guides/translation/troubleshooting",
+                    ],
+                },
                 "guides/cli",
                 "guides/customization",
                 "guides/deployment",

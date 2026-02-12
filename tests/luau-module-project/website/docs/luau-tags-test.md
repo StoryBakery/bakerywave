@@ -22,7 +22,7 @@ sidebar_label: Luau 태그
 - @__index
 - @external
 
-참고 문서: `Classes.DocFeatureClass`, `Classes.BaseFeature`
+참고 문서: `Docs.Features.DocFeatureClass`, `Docs.Features.BaseFeature`
 
 ## @param 멀티라인 + @default
 
@@ -51,7 +51,7 @@ end
 - `@param` 목록과 멀티라인 설명이 렌더링되는지 확인
 - `@default`와 `@since`가 이벤트에도 표시되는지 확인
 
-참고 문서: `Classes.DocFeatureClass`, `Classes.DocWidget`, `Classes.InteractiveObject`
+참고 문서: `Docs.Features.DocFeatureClass`, `Docs.Relations.DocWidget`, [InteractiveObject](/reference/luau/Showcase/Core/InteractiveObject)
 
 ## docgen 스크립트 타입 확인
 - `Showcase/Advanced`에 `DocgenTypes` 클래스가 생성되는지 확인
@@ -65,16 +65,16 @@ end
 - `DocgenCrossWithin`에서 `within`으로 `DocgenMembers`에 주입한 심볼이 나타나는지 확인
 - `DocgenCrossWithin`에서 `within`으로 `AdvancedTypes`에 주입한 타입/메서드가 나타나는지 확인
 
-참고 문서: `Classes.DocgenTypes`, `Classes.DocgenMembers`, `Classes.DocgenMultiLine`, `Classes.DocgenCrossWithin`
+참고 문서: [DocgenTypes](/reference/luau/Showcase/Advanced/DocgenTypes), [DocgenMembers](/reference/luau/Showcase/Advanced/DocgenMembers), [DocgenMultiLine](/reference/luau/Showcase/Advanced/DocgenMultiLine), [DocgenCrossWithin](/reference/luau/Showcase/Advanced/DocgenCrossWithin)
 
 ## 카테고리/그룹 확인
 - 카테고리: `Docs/Categories` 계층이 Overview에 표시되는지 확인
 - 그룹: `Setup`, `Query`, `Basics` 섹션이 클래스 페이지에 표시되는지 확인
 
-참고 문서: `Classes.CategoryAlpha`, `Classes.CategoryBeta`, `Classes.CategoryRoot`
+참고 문서: [CategoryTest](/reference/luau/Tests/Deep/Nested/Category/CategoryTest), [MultiCategory](/reference/luau/Tests/A/MultiCategory)
 
 ## 조합 관계/링크 확인
-- 조합 관계: `Classes.DocWidget`이 `Classes.DocWidgetConfig`, `Classes.DocWidgetState`를 포함하는지 확인
+- 조합 관계: `Docs.Relations.DocWidget`이 `Docs.Relations.DocWidgetConfig`, `Docs.Relations.DocWidgetState`를 포함하는지 확인
 - 링크: `Class.TextLabel`, `Class.GuiButton.Activated`, `Library.coroutine.create()`가 Roblox 문서로 링크되는지 확인
 
-참고 문서: `Classes.DocWidget`, `Classes.DocWidgetConfig`, `Classes.DocWidgetState`
+참고 문서: `Docs.Relations.DocWidget`, `Docs.Relations.DocWidgetConfig`, `Docs.Relations.DocWidgetState`

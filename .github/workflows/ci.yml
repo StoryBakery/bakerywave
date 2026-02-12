@@ -24,9 +24,12 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install website dependencies
         working-directory: tests/luau-module-project/website
-        run: npm install
+        run: npm ci
 
       - name: Run tests
         working-directory: tests/luau-module-project/website

@@ -28,6 +28,9 @@ jobs:
 
       - name: Setup Rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          cache-workspaces: |
+            packages/luau-docgen/native -> target
 
       - name: Build Native Binary (Release)
         working-directory: packages/luau-docgen/native
@@ -45,15 +48,15 @@ jobs:
         include:
           - os: windows-latest
             artifact: bakerywave-windows-x64
-            target: node20-win-x64
+            target: node18-win-x64
             output: bakerywave.exe
           - os: ubuntu-latest
             artifact: bakerywave-linux-x64
-            target: node20-linux-x64
+            target: node18-linux-x64
             output: bakerywave-linux
           - os: macos-latest
             artifact: bakerywave-macos-x64
-            target: node20-macos-x64
+            target: node18-macos-x64
             output: bakerywave-macos
     runs-on: ${{ matrix.os }}
     steps:

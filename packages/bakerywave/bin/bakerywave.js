@@ -254,7 +254,40 @@ function resolveCommand(command) {
     return COMMAND_ALIASES.get(command) || command;
 }
 
+function parseInitWorkspaceRootArg(initArgs) {
+    for (let i = 0; i < initArgs.length; i += 1) {
+        const arg = initArgs[i];
+        if (arg === "--workspace-root" && initArgs[i + 1]) {
+            return path.resolve(initArgs[i + 1]);
+        }
+    }
+    return null;
+}
+
+function hasCreateDocsPackage(rootDir) {
+    return fs.existsSync(path.join(rootDir, "packages", "create-docs", "bin", "create-docs.js"));
+}
+
+function resolveInitWorkspaceRoot(baseCwd, initArgs) {
+    const fromArg = parseInitWorkspaceRootArg(initArgs);
+    if (fromArg) {
+        return fromArg;
+    }
+
+    if (hasCreateDocsPackage(baseCwd)) {
+        return baseCwd;
+    }
+
+    const fromCli = path.resolve(__dirname, "..", "..", "..");
+    if (hasCreateDocsPackage(fromCli)) {
+        return fromCli;
+    }
+
+    return baseCwd;
+}
+
 function runInit(baseCwd, initArgs) {
+    const workspaceRoot = resolveInitWorkspaceRoot(baseCwd, initArgs);
     const hasArg = (value) => initArgs.includes(value);
     const argsWithLocal = () => {
         const args = initArgs.slice();
@@ -262,12 +295,12 @@ function runInit(baseCwd, initArgs) {
             args.push("--local");
         }
         if (!hasArg("--workspace-root")) {
-            args.push("--workspace-root", baseCwd);
+            args.push("--workspace-root", workspaceRoot);
         }
         return args;
     };
 
-    const localCreateDocs = path.resolve(baseCwd, "packages", "create-docs", "bin", "create-docs.js");
+    const localCreateDocs = path.resolve(workspaceRoot, "packages", "create-docs", "bin", "create-docs.js");
     if (fs.existsSync(localCreateDocs)) {
         console.log("[bakerywave] init using local template.");
         const localResult = spawnSync(process.execPath, [localCreateDocs, ...argsWithLocal()], {

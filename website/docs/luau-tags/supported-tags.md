@@ -23,6 +23,8 @@ sidebar_position: 2
 local MyModule = {}
 ```
 
+#### 생략-패턴
+
 생략 규칙:
 - 아래 조건을 모두 만족하면 `@class`를 생략해도 됩니다.
 - 파일의 **첫 문서 주석**이어야 합니다.
@@ -35,6 +37,13 @@ local MyModule = {}
 - 예: `MyService.luau` -> `MyService`
 - 파일명이 `init.luau`, `init.client.luau`, `init.server.luau`이면 **상위 디렉토리명**을 클래스 이름으로 사용합니다.
 - 예: `Inventory/init.luau` -> `Inventory`
+
+```lua
+-- Class/init.luau
+--[=[
+    태그 `@class Class` 없이 Class 에 대한 문서 주석이 가능 
+]=]
+```
 
 ### @within
 멤버가 속한 클래스를 명시합니다. 자동 추론이 어려울 때 사용합니다.
@@ -186,7 +195,7 @@ MyClass.Enabled = true
 ]=]
 ```
 
-### .<field> (인터페이스 필드 축약)
+### `.<field>` (인터페이스 필드 축약)
 `@field` 대신 점(`.`)으로 시작하는 필드 줄을 사용할 수 있습니다.
 
 형식: `.<Name> [Type] -- [설명]`

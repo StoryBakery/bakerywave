@@ -1,12 +1,17 @@
 {
-  "name": "storybakery-docs-template",
+  "name": "bakerywave",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "test": "npm --prefix tests/luau-module-project/website test",
-    "test:website": "npm --prefix tests/luau-module-project/website test"
+    "dev": "npm --prefix tests/luau-module-project/website run dev",
+    "start": "npm --prefix tests/luau-module-project/website run start",
+    "build": "npm --prefix tests/luau-module-project/website run build",
+    "serve": "npm --prefix tests/luau-module-project/website run serve",
+    "reference:build": "npm --prefix tests/luau-module-project/website run reference:build",
+    "test": "npm run test:website",
+    "test:website": "npm --prefix tests/luau-module-project/website run test"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
