@@ -40,7 +40,19 @@ export default {
                 },
                 "guides/cli",
                 "guides/customization",
-                "guides/deployment",
+                {
+                    type: "category",
+                    label: "배포하기",
+                    link: {
+                        type: "doc",
+                        id: "guides/deployment/index",
+                    },
+                    items: [
+                        "guides/deployment/github-pages",
+                        "guides/deployment/vercel",
+                        "guides/deployment/netlify",
+                    ],
+                },
             ],
         },
         {

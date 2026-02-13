@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-02-12T09:54:11.550Z",
+  "generatedAt": "2026-02-13T14:33:51.737Z",
   "categories": [],
   "entries": [
     {
@@ -104,14 +104,44 @@
       "content": "--- title: 디자인 커스터마이징 sidebar_position: 3 --- 디자인 커스터마이징 Bakerywave는 Docusaurus를 기반으로 하기 때문에, Docusaurus의 강력한 커스터마이징 기능을 그대로 사용할 수 있습니다. 1. 색상 변경 (CSS) 사이트의 주조색(Primary Color)이나 배경색, 폰트 등을 바꾸고 싶다면 src/css/custom.css 파일을 수정하세요. 저장하면 즉시 색상이 바뀝니다. 2. 로고 및 제목 변경 docusaurus.config.js 파일에서 themeConfig.navbar 섹션을 찾아 수정하세요. 3. 사이드바 메뉴 구조 왼쪽 사이드바 메뉴는 sidebars.js (또는 .ts) 파일에서 정의합니다. 문서의 순서를 바꾸거나, 카테고리 이름을 변경하고, 외부 링크를 추가할 수 있습니다. 더 자세한 내용은 Docusaurus 공식 문서를 참고하세요."
     },
     {
-      "id": "guides/deployment.md",
-      "title": "deployment",
+      "id": "guides/deployment/github-pages.md",
+      "title": "github-pages",
+      "url": "/guides/deployment/github-pages",
+      "section": "manual",
+      "category": "",
+      "type": "doc",
+      "excerpt": "--- title: GitHub Pages 배포하기 --- GitHub Pages 배포하기 GitHub Pages는 GitHub 저장소의 정적 파일들을 무료로 호스팅해주는 서비스입니다. GitHub Actions를 사용하면 소스 코드를 푸시할 때마다 자동으로 문서를 빌드하고 배포할 수 있습니다. 이 가이드에서는 GitHub Actions를 사용하여 배포하는",
+      "content": "--- title: GitHub Pages 배포하기 --- GitHub Pages 배포하기 GitHub Pages는 GitHub 저장소의 정적 파일들을 무료로 호스팅해주는 서비스입니다. GitHub Actions를 사용하면 소스 코드를 푸시할 때마다 자동으로 문서를 빌드하고 배포할 수 있습니다. 이 가이드에서는 GitHub Actions를 사용하여 배포하는 방법을 다룹니다. 1. GitHub Actions 권한 설정 저장소 설정에서 Actions가 GITHUBTOKEN으로 쓰기 권한을 가질 수 있도록 허용해야 합니다. 1. GitHub 저장소의 Settings 탭으로 이동합니다. 2. 왼쪽 사이드바에서 Actions > General을 클릭합니다. 3. Workflow permissions 섹션까지 스크롤합니다. 4. Read and write permissions를 선택하고 저장합니다. 2. 배포 워크플로우 만들기 프로젝트 루트에 .github/workflows/pages.yml 파일을 만들고 아래 내용을 복사하세요. (이미 bakerywave init으로 프로젝트를 만들었다면 파일이 포함되어 있을 수 있습니다.) 주의사항 - npm --prefix website run build: 이 부분은 website 폴더 안에 문서 프로젝트가 있을 때의 경로입니다. 만약 프로젝트 루트가 문서 프로젝트라면 --prefix website를 제거하세요. - branches: - main: 배포를 트리거할 브랜치 이름이 master라면 이 부분을 수정해야 합니다. 3. 배포 확인 1. 파일을 커밋하고 GitHub에 푸시합니다. 2. 저장소의 Actions 탭으로 이동하여 Deploy Pages 워크플로우가 실행되는지 확인합니다. 3. 실행이 성공(초록색 체크)하면, 워크플로우 로그의 deploy 단계에서 배포된 URL을 확인할 수 있습니다. 4. 해당 URL로 접속하여 사이트가 잘 나오는지 확인합니다. --- (참고) 다른 방법: gh-pages 패키지 사용 GitHub Actions를 사용하지 않고, 로컬에서 빌드하여 gh-pages 브랜치로 직접 푸시하는 고전적인 방법도 있습니다. 하지만 Docusaurus 및 최신 GitHub Pages에서는 GitHub Actions** 방식을 더 권장합니다. Actions 방식이 빌드 환경을 일관되게 유지해주고, 빌드 결과물을 저장소 커밋 내역에 남기지 않아 저장소 크기 관리에도 유리하기 때문입니다."
+    },
+    {
+      "id": "guides/deployment/index.md",
+      "title": "index",
       "url": "/guides/deployment",
       "section": "manual",
       "category": "",
       "type": "doc",
-      "excerpt": "--- title: 배포하기 sidebarposition: 4 --- 배포하기 문서 작성이 끝났다면 전 세계 사람들에게 공개해야겠죠? 1. 정적 파일 생성 (Build) 먼저 배포 가능한 형태(HTML, CSS, JS)로 변환해야 합니다. 또는 이 명령어를 실행하면 build/ 폴더가 새로 생깁니다. 이 폴더 안의 내용물이 바로 실제 웹사이트 파일들입니다.",
-      "content": "--- title: 배포하기 sidebarposition: 4 --- 배포하기 문서 작성이 끝났다면 전 세계 사람들에게 공개해야겠죠? 1. 정적 파일 생성 (Build) 먼저 배포 가능한 형태(HTML, CSS, JS)로 변환해야 합니다. 또는 이 명령어를 실행하면 build/ 폴더가 새로 생깁니다. 이 폴더 안의 내용물이 바로 실제 웹사이트 파일들입니다. 2. 호스팅 서비스에 올리기 build/ 폴더 안의 내용물을 정적 웹사이트 호스팅 서비스에 업로드하면 배포가 완료됩니다. 대표적인 무료 호스팅 서비스: GitHub Pages: 설정이 쉽고 무료입니다. (추천) Vercel: 빠르고 사용하기 편리합니다. Netlify: 다양한 기능을 제공합니다. GitHub Pages 배포 예시 만약 GitHub 저장소를 사용 중이라면, bakerywave.toml 설정만으로는 부족하고 추가 설정이 필요할 수 있습니다. 가장 쉬운 방법은 GitHub Actions를 사용하는 것입니다. .github/workflows/deploy.yml 파일을 만들고 아래 내용을 참고하여 작성하세요. (Docusaurus 공식 가이드 참고 권장) 기본적으로는 build/ 폴더를 웹 서버에 올린다는 원리만 기억하시면 됩니다!"
+      "excerpt": "--- title: 배포하기 sidebarposition: 4 --- 배포하기 문서 작성이 끝났다면 전 세계 사람들에게 공개할 차례입니다. Bakerywave로 만든 문서는 정적 웹사이트(Static Website)로 빌드되므로, GitHub Pages, Vercel, Netlify 등 다양한 무료 호스팅 서비스에 쉽게 배포할 수 있습니다. 배포 과정 요약",
+      "content": "--- title: 배포하기 sidebarposition: 4 --- 배포하기 문서 작성이 끝났다면 전 세계 사람들에게 공개할 차례입니다. Bakerywave로 만든 문서는 정적 웹사이트(Static Website)로 빌드되므로, GitHub Pages, Vercel, Netlify 등 다양한 무료 호스팅 서비스에 쉽게 배포할 수 있습니다. 배포 과정 요약 1. 빌드(Build): bakerywave build 명령어로 배포 가능한 정적 파일들을 생성합니다. 2. 배포(Deploy): 생성된 파일들을 웹 호스팅 서비스에 업로드합니다. 보통은 이 과정을 CI/CD 파이프라인(GitHub Actions 등) 을 통해 자동화하여, GitHub에 커밋을 푸시할 때마다 자동으로 사이트가 업데이트되도록 설정합니다. 로컬에서 빌드하기 배포 설정을 하기 전에, 내 컴퓨터에서 빌드가 잘 되는지 먼저 확인해보세요. 또는 이 명령어를 실행하면 build/ 폴더가 새로 생깁니다. 이 폴더 안의 내용물이 바로 실제 웹사이트 파일들**입니다. 이 폴더를 그대로 웹 서버에 올리면 사이트가 동작합니다. 배포 방법 선택 가장 많이 사용되는 세 가지 방법을 안내합니다. - GitHub Pages 배포하기 (추천) - Vercel 배포하기 - Netlify 배포하기"
+    },
+    {
+      "id": "guides/deployment/netlify.md",
+      "title": "netlify",
+      "url": "/guides/deployment/netlify",
+      "section": "manual",
+      "category": "",
+      "type": "doc",
+      "excerpt": "--- title: Netlify 배포하기 --- Netlify 배포하기 Netlify 역시 정적 웹사이트 호스팅으로 매우 유명하며, 간단한 설정으로 배포가 가능합니다. 1. Netlify 사이트 생성 1. Netlify에 로그인합니다. 2. Add new site > Import an existing project를 클릭합니다. 3. GitHub를 선택하",
+      "content": "--- title: Netlify 배포하기 --- Netlify 배포하기 Netlify 역시 정적 웹사이트 호스팅으로 매우 유명하며, 간단한 설정으로 배포가 가능합니다. 1. Netlify 사이트 생성 1. Netlify에 로그인합니다. 2. Add new site > Import an existing project를 클릭합니다. 3. GitHub를 선택하고 저장소를 연결합니다. 2. 빌드 설정 구성 저장소를 선택하면 빌드 설정 화면이 나옵니다. - Base directory: - 문서 프로젝트가 루트에 있다면 비워둡니다. - website 폴더 안에 있다면 website라고 입력합니다. - Build command: npm run build - Publish directory: build 3. 배포 실행 Deploy site 버튼을 클릭합니다. Netlify가 빌드를 시작하고, 완료되면 랜덤하게 생성된 URL(예: brave-curie-123456.netlify.app)로 사이트에 접속할 수 있습니다. 4. 도메인 설정 (선택 사항) Site settings > Domain management에서 사이트 주소를 변경하거나, 구매한 커스텀 도메인을 연결할 수 있습니다."
+    },
+    {
+      "id": "guides/deployment/vercel.md",
+      "title": "vercel",
+      "url": "/guides/deployment/vercel",
+      "section": "manual",
+      "category": "",
+      "type": "doc",
+      "excerpt": "--- title: Vercel 배포하기 --- Vercel 배포하기 Vercel은 정적 사이트 및 서버리스 함수 배포를 위한 클라우드 플랫폼으로, 설정이 매우 간편하고 성능이 뛰어납니다. 1. Vercel 프로젝트 생성 1. Vercel 대시보드에 로그인합니다. 2. Add New... > Project를 클릭합니다. 3. GitHub 계정을 연결하고, ",
+      "content": "--- title: Vercel 배포하기 --- Vercel 배포하기 Vercel은 정적 사이트 및 서버리스 함수 배포를 위한 클라우드 플랫폼으로, 설정이 매우 간편하고 성능이 뛰어납니다. 1. Vercel 프로젝트 생성 1. Vercel 대시보드에 로그인합니다. 2. Add New... > Project를 클릭합니다. 3. GitHub 계정을 연결하고, 문서 사이트가 있는 저장소를 Import 합니다. 2. 빌드 설정 구성 Vercel이 프로젝트를 분석하여 대부분의 설정을 자동으로 채워주지만, 폴더 구조에 따라 확인이 필요합니다. - Framework Preset: Other 또는 Docusaurus (자동 감지됨) - Root Directory: - 문서 프로젝트가 루트에 있다면 그대로 둡니다. - website 폴더 안에 있다면 Edit을 눌러 website를 선택합니다. - Build Command: npm run build (또는 bakerywave build) - Output Directory: build - Install Command: npm install (또는 npm ci) 3. 배포 실행 Deploy 버튼을 누르면 Vercel이 자동으로 코드를 받아 빌드를 시작합니다. 빌드가 완료되면 미리보기 URL과 프로덕션 URL이 제공됩니다. 4. 자동 배포 이제 GitHub의 main 브랜치에 코드를 푸시할 때마다 Vercel이 자동으로 변경사항을 감지하여 재배포합니다. PR(Pull Request)이 생성되면 미리보기(Preview) 배포도 자동으로 생성되어, 병합 전에 변경된 문서를 미리 확인할 수 있습니다."
     },
     {
       "id": "guides/translation/document-workflow.md",

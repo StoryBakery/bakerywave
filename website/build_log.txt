@@ -1,0 +1,71 @@
+
+> storybakery-bakerywave-website@0.0.0 build
+> bakerywave build --site-dir .
+
+[INFO] [en] Creating an optimized production build...
+[ERROR] Loading of version failed for version current
+
+[INFO] Docusaurus version: 3.9.2
+Node version: v24.13.0
+[ERROR] Error: Unable to build website for locale en.
+    at tryToBuildLocale (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\commands\build\build.js:83:15)
+    at async C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\commands\build\build.js:35:9
+    at async mapAsyncSequential (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\utils\lib\jsUtils.js:21:24)
+    at async Command.build (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\commands\build\build.js:34:5)
+    at async Promise.all (index 0)
+    at async runCLI (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\commands\cli.js:56:5)
+    at async file:///C:/MainFiles/StoryBakery/bakerywave/website/node_modules/@docusaurus/core/bin/docusaurus.mjs:44:3 {
+  [cause]: Error: Invalid sidebar file at "sidebars.ts".
+  These sidebar document ids do not exist:
+  - guides/deployment
+  
+  Available document ids are:
+  - development/contributing
+  - development/index
+  - development/release
+  - development/style
+  - development/tests/fixture
+  - development/tests/index
+  - development/tests/scenarios
+  - guides/cli
+  - guides/configuration
+  - guides/customization
+  - guides/deployment/github-pages
+  - guides/deployment/index
+  - guides/deployment/netlify
+  - guides/deployment/vercel
+  - guides/translation
+  - guides/translation/document-workflow
+  - guides/translation/getting-started
+  - guides/translation/initial-setup
+  - guides/translation/non-native-contribution
+  - guides/translation/reference-workflow
+  - guides/translation/troubleshooting
+  - intro/installation
+  - intro/what-is-bakerywave
+  - luau-tags/best-practices
+  - luau-tags/docgen-scripts
+  - luau-tags/overview
+  - luau-tags/supported-tags
+  - reference/behavior
+  - reference/cli
+  - reference/index
+  - reference/luau/index
+  - reference/pipeline
+  - reference/ui
+  - tutorial/create-site
+  - tutorial/luau-api
+  - tutorial/run-server
+  - tutorial/write-manual
+  
+      at Object.checkSidebarsDocIds (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\plugin-content-docs\lib\sidebars\utils.js:245:19)
+      at doLoadVersion (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\plugin-content-docs\lib\versions\loadVersion.js:102:19)
+      at async loadVersion (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\plugin-content-docs\lib\versions\loadVersion.js:119:16)
+      at async Promise.all (index 0)
+      at async Object.loadContent (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\plugin-content-docs\lib\index.js:152:33)
+      at async C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\server\plugins\plugins.js:40:23
+      at async Promise.all (index 0)
+      at async C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\server\plugins\plugins.js:146:25
+      at async loadSite (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\server\site.js:155:45)
+      at async buildLocale (C:\MainFiles\StoryBakery\bakerywave\website\node_modules\@docusaurus\core\lib\commands\build\buildLocale.js:33:18)
+}
