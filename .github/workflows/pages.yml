@@ -60,3 +60,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Write deployment URL
+        run: |
+          echo "### GitHub Pages 배포 완료" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- URL: ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"

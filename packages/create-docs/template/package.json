@@ -16,7 +16,10 @@
     "@docusaurus/theme-classic": "^3.0.0",
     "@storybakery/bakerywave": "^0.1.0",
     "@storybakery/docs-preset": "^0.1.0",
+    "@storybakery/docs-theme": "^0.1.0",
     "@storybakery/docusaurus-plugin-reference": "^0.1.0",
+    "@storybakery/docusaurus-plugin-search-index": "^0.1.0",
+    "@storybakery/luau-docgen": "^0.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
