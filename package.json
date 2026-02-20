@@ -5,7 +5,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm --prefix tests/luau-module-project/website run dev",
+    "dev": "npm --prefix website run dev",
+    "dev:test": "npm --prefix tests/luau-module-project/website run dev",
     "start": "npm --prefix tests/luau-module-project/website run start",
     "build": "npm --prefix tests/luau-module-project/website run build",
     "serve": "npm --prefix tests/luau-module-project/website run serve",

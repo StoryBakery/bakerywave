@@ -15,4 +15,8 @@ coverage/
 .turbo/
 .eslintcache
 *.log
+# generated artifacts
+website/static/search-index.json
+tests/luau-module-project/website/static/search-index.json
+website/build_log*.txt
 .DS_Store

@@ -22,22 +22,23 @@ sidebar_position: 3
 
 ## 2. 마크다운 활용하기
 설명 안에서 마크다운 문법을 적극적으로 활용하세요.
-코드를 넣거나, 경고 문구(Admonition)를 넣으면 훨씬 보기 좋아집니다.
+코드를 넣거나, 경고 문구(`<Alert>`)를 넣으면 훨씬 보기 좋아집니다.
 
-```lua
+````lua
 --[=[
     데이터를 저장합니다.
     
-    :::warning 주의
+    <Alert severity="warning">
+    <AlertTitle>주의</AlertTitle>
     저장하는 동안에는 게임을 종료하지 마세요.
-    :::
+    </Alert>
     
     사용 예:
     ```lua
     DataStore:Save("Key", value)
     ```
 ]=]
-```
+````
 
 ## 3. 타입 명시하기
 Luau의 장점인 정적 타입을 적극 활용하세요.
@@ -46,7 +47,7 @@ Luau의 장점인 정적 타입을 적극 활용하세요.
 ## 4. 링크 걸기
 
 다른 클래스나 함수를 언급할 때는 링크를 걸어주는 것이 좋습니다.
-Bakerywave는 두 가지 방식을 지원하며, **Roblox 공식 문서 스타일**인 백틱(`) 방식을 권장합니다.
+Bakerywave 문서에서는 **Roblox 공식 문서 스타일**인 백틱(`) API 링크 문법을 사용합니다.
 
 ### 권장: Roblox 스타일 (`Class.Name`)
 백틱 안에 `Class.` 접두어를 붙여 클래스 이름을 적으면 자동으로 링크로 변환됩니다.
@@ -62,6 +63,23 @@ Bakerywave는 두 가지 방식을 지원하며, **Roblox 공식 문서 스타�
 *   **메서드/함수:** `` `Class.Name:Method()` `` → 해당 함수의 앵커로 연결
 *   **속성:** `` `Class.Name.Property` `` → 해당 속성의 앵커로 연결
 
+### 주석 전용 단축 문법 (`[Class.Member]`, `[Class:Method]`)
+레퍼런스 문서를 만드는 Luau 주석에서는 다음 단축 문법도 사용할 수 있습니다.
+
+```lua
+--[=[
+    상태 값은 [DocWidgetState.Clicks]를 참고하세요.
+    갱신 흐름은 [DocWidget:Refresh]를 확인하세요.
+]=]
+```
+
+- `` [Class.Member] ``: 클래스 멤버(속성/이벤트/함수) 링크
+- `` [Class:Method] ``: 클래스 메서드 링크
+- 카테고리(`Docs.`, `Classes.` 등)를 명시하지 않아도 자동으로 대상 클래스를 탐색합니다.
+
+moonwave link 와의 호환을 위해 구현되었으며, 백틱 링크보다 간편한 면이 있기에 내부 모듈의 클래스/멤버를 연결할 때 유용합니다.
+단 주석 문서가 아닌, 일반 문서를 작성하는 경우에는 백틱 링크를 권장합니다.
+
 **텍스트 변경하기:**
 파이프(`|`)를 사용하여 링크 텍스트를 바꿀 수 있습니다.
 *   `` `Class.Player|플레이어` `` → `[플레이어](...)`로 표시됨
@@ -70,18 +88,10 @@ Bakerywave는 두 가지 방식을 지원하며, **Roblox 공식 문서 스타�
 링크를 걸지 않고 코드 스타일만 유지하고 싶다면 `no-link`를 사용하세요.
 *   `` `Class.Player|no-link` ``
 
-:::note 참고
+<Alert severity="info">
+<AlertTitle>참고</AlertTitle>
 `Class.`, `Datatype.`, `Enum.`, `Global.`, `Library.` 접두어는
 Roblox 공식 문서로 링크됩니다.
-`Classes.`, `Docs.` 접두어는 Bakerywave 문서로 링크됩니다.
-:::
+`Classes.` 나 `@category {CategoryName}`로 정의된 `{CategoryName}.` 등의 접두어는 Bakerywave 문서로 링크됩니다.
+</Alert>
 
-### 호환: Moonwave 스타일 (`[Name]`)
-기존 Moonwave 프로젝트와의 호환성을 위해 대괄호 방식도 지원합니다.
-
-```lua
---[=[
-    참고: [MyClass]
-]=]
-```
-이 방식도 작동하지만, 가급적이면 표준화된 `Class.` 접두어 방식을 사용하는 것을 추천합니다.

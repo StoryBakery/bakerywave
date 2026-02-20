@@ -1,8 +1,8 @@
 ---
-title: Reference
-sidebar_label: Reference
+title: API
+sidebar_label: API
 ---
 
-# Reference
+# API
 
 Generated API docs go here.

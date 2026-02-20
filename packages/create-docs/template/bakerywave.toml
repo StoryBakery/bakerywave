@@ -1,4 +1,20 @@
 schemaVersion = 1
 
-# reference/i18n 설정은 필요 시 추가합니다.
-# 자세한 옵션은 문서를 참고하세요.
+# Bakerywave preset defaults.
+# Keep this file minimal and add options only when needed.
+
+[site.navigation]
+autoNavigationFromDocsFolders = true
+
+[site.navigation.sectionLabels]
+guides = "Guides"
+reference = "API"
+
+[site.footer]
+enabled = true
+showLicense = true
+showCopyright = true
+showGithub = true
+showPoweredBy = true
+
+# Add [reference], [i18n], [site.search], and [site.locale] only when required.

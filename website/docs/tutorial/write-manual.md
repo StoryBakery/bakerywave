@@ -41,5 +41,20 @@ sidebar_position: 1
 
 문서가 많아지면 폴더를 만들어 정리할 수 있습니다.
 `docs/guides/` 폴더를 만들고 그 안에 `installation.md`를 넣으면, 사이드바에도 "Guides"라는 그룹이 자동으로 생깁니다.
+문서 폴더는 프로젝트 목적에 맞게 자유롭게 늘릴 수 있습니다. 예를 들어 `docs/intro`, `docs/tutorial`, `docs/development`처럼 구성해도 됩니다.
+
+### 운영 기준
+
+- `guides`(또는 원하는 이름)는 일반 문서를 묶는 사이드바 그룹 이름입니다.
+- 일반 문서는 `docs/` 아래에서 원하는 폴더 구조로 관리합니다.
+- `docs/reference/`는 `bakerywave reference build`가 생성하는 영역이므로 수동 편집하지 않습니다.
 
 이를 더 세밀하게 제어하고 싶다면 `_category_.json` 파일을 사용하거나 `sidebars.js`를 수정할 수 있습니다. (나중에 [심화 가이드](../guides/customization)에서 다룹니다)
+
+## 더 배우기
+
+이제 기초를 익혔으니, 더 멋진 문서를 만들기 위한 가이드를 확인해보세요.
+
+- [**Markdown 문법 가이드**](../guides/writing/markdown): 텍스트 스타일, 목록, 표 등을 만드는 방법
+- [**MDX 확장 문법**](../guides/writing/mdx): React 컴포넌트, 탭, 경고 박스 사용법
+- [**API 링크 (백틱)**](../guides/writing/api-links): `Class.Part` 같은 링크를 쉽게 거는 방법

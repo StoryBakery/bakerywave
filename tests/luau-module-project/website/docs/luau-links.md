@@ -21,12 +21,13 @@ sidebar_label: Luau 링크
 
 ## Bakerywave 로컬 링크
 
-- `Docs.Features.DocFeatureClass`
-- `Docs.Features.DocFeatureClass:Double()`
-- `Docs.Features.BaseFeature:Echo()`
-- `Docs.Features.DocFeatureClass:Double()|두 배`
-- `Docs.Features.DocFeatureClass:Double()|no-link`
+- `AnotherCategory.Features.DocFeatureClass`
+- `AnotherCategory.Features.DocFeatureClass:Double()`
+- `AnotherCategory.Features.BaseFeature:Echo()`
+- `AnotherCategory.Features.DocFeatureClass:Double()|두 배`
+- `AnotherCategory.Features.DocFeatureClass:Double()|no-link`
 
-:::note 참고
+<Alert severity="info">
+<AlertTitle>참고</AlertTitle>
 `no-link`는 링크를 끄고 코드 스타일만 유지합니다.
-:::
+</Alert>

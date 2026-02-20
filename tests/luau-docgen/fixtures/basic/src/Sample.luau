@@ -9,10 +9,10 @@ Sample.__index = Sample
 --[=[
 	Creates a new Sample.
 
-	@param name string -- Identifier.
-	@param enabled boolean -- Whether the instance is enabled.
+	@param name string - Identifier.
+	@param enabled boolean - Whether the instance is enabled.
 	  Additional details for the enabled flag.
-	@return Sample -- New instance.
+	@return Sample - New instance.
 ]=]
 function Sample.new(name: string, enabled: boolean): Sample
 	return setmetatable({ name = name, enabled = enabled }, Sample)

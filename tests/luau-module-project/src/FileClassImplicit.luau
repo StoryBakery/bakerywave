@@ -4,7 +4,7 @@
 
 --[=[
     @function BuildImplicitLabel
-    @return string -- 생성된 라벨
+    @return string - 생성된 라벨
 ]=]
 function BuildImplicitLabel()
     return "implicit-class"

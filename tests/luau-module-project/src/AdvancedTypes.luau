@@ -26,8 +26,8 @@ type NestedGeneric<T, U> = {
 
 --[=[
     @group Types
-    @param pipeline (source: string) -> (boolean, { [string]: any }) -- 복잡한 함수 파이프라인
-    @return NestedGeneric<string, number> -- 제네릭 리턴 타입
+    @param pipeline (source: string) -> (boolean, { [string]: any }) - 복잡한 함수 파이프라인
+    @return NestedGeneric<string, number> - 제네릭 리턴 타입
 
     복잡한 함수 시그니처와 제네릭 리턴 타입을 가집니다.
 
@@ -43,8 +43,8 @@ end
 
 --[=[
     @group Types
-    @param callback (id: number) -> InteractiveObject -- 다른 클래스를 참조하는 콜백
-    @return {InteractiveObject} -- 객체 배열
+    @param callback (id: number) -> InteractiveObject - 다른 클래스를 참조하는 콜백
+    @return {InteractiveObject} - 객체 배열
 
     다른 클래스(`InteractiveObject`)를 타입으로 참조하는 경우를 테스트합니다.
 

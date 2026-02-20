@@ -5,4 +5,4 @@ sidebar_label: Overview
 
 # Overview
 
-This is the manual documentation area.
+This is the guides documentation area.

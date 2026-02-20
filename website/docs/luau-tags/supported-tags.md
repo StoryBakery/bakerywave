@@ -11,7 +11,10 @@ sidebar_position: 2
 ## 분류/구조 태그
 
 ### @class
-클래스(또는 모듈) 문서임을 지정합니다. 파일 상단에 1회 사용합니다.
+클래스(또는 모듈) 문서임을 지정합니다. 
+
+주로 파일 상단에 1회 사용합니다.
+같은 파일 안에 2개 이상의 @class를 사용할 수 있지만, 표준은 1개만 입니다.
 
 형식: `@class <ClassName>`
 
@@ -58,28 +61,35 @@ local MyModule = {}
 MyClass.Enabled = true
 ```
 
-### @withinDefault
-파일 내 기본 소속 클래스를 지정합니다.
-이후 `@within`이 없는 멤버는 기본값으로 연결됩니다.
+### @file
+파일 수준 옵션 블록을 표시합니다.
+보통 파일 상단에서 `@option`과 함께 사용합니다.
 
-형식: `@withinDefault <ClassName>`
+형식: `@file`
 
 ```lua
 --[=[
-    @class MyClass
-    @withinDefault MyClass
+    @file
+    @option within.default MyClass
+    @option within.require true
 ]=]
-local MyClass = {}
 ```
 
-### @withinRequire
-자동 소속 추론을 끄고, `@within`을 명시적으로 쓰도록 합니다.
+### @option
+파일 수준 옵션을 설정합니다.
+같은 파일에서 여러 번 사용할 수 있습니다.
 
-형식: `@withinRequire`
+형식: `@option <Key> [Value]`
+
+지원 키:
+- `within.default <ClassName>`: `@within`이 없는 멤버의 기본 소속 클래스
+- `within.require [boolean]`: 자동 소속 추론 사용 여부 (`true`면 명시 `@within` 권장)
 
 ```lua
 --[=[
-    @withinRequire
+    @file
+    @option within.default MyClass
+    @option within.require false
 ]=]
 ```
 
@@ -90,13 +100,21 @@ local MyClass = {}
 
 ```lua
 --[=[
-    @class Weapon
+    @class Item1
+    @category Items
+]=]
+
+--[=[
+    @class WoodenSword
     @category Items/Weapons
 ]=]
 ```
 
 ### @group
-멤버를 그룹 섹션으로 묶습니다.
+멤버를 그룹으로 묶습니다.
+
+원래는 Types, Constructors, Properties, Methods, Events, Functions 이렇게 사이드바에서 분류되지만,
+`@group` 으로 묶으면 하나의 다른 그룹으로 묶을 수 있습니다.
 
 형식: `@group <GroupName>`
 
@@ -156,7 +174,7 @@ MyClass.Enabled = true
 ```lua
 --[=[
     @event Touched
-    @param other BasePart -- 충돌한 파트
+    @param other BasePart - 충돌한 파트
 ]=]
 ```
 
@@ -170,6 +188,38 @@ MyClass.Enabled = true
     @type UserId number
 ]=]
 ```
+
+타입 별칭 제너릭은 선언부(`type A<T = ...>`)에서 자동으로 읽습니다.
+`@param`을 함께 사용하면 타입 파라미터 설명이 `Type Parameters`로 표시됩니다.
+
+```lua
+--[=[
+    @type Box { value: T }
+    @param T - 값 타입
+]=]
+export type Box<T = number> = { value: T }
+```
+
+### @variant
+유니온 타입의 항목 설명을 정의합니다.
+`@type` 블록 안에서 사용하며, 여러 번 쓸 수 있습니다.
+
+형식: `@variant <Literal> - [설명]`
+
+```lua
+--[=[
+    @type HandleType "Auto" | "AutoClamped" | "Vector" | "Free" | "Aligned"
+
+    @variant "Auto"
+        양쪽 기울기를 일정하게 맞춰 자연스럽게 이어집니다.
+        @default
+    @variant "AutoClamped" - Auto와 같지만 오버슈트를 방지하도록 값을 클램프합니다.
+    @variant "Vector" - 이전·다음 키프레임 벡터 방향으로 1/3 핸들을 만듭니다.
+]=]
+```
+
+여러 줄 설명은 `@param`과 동일하게 들여쓰기 이어쓰기를 사용합니다.
+`@default`가 들어간 `@variant`는 해당 항목이 기본값으로 표시됩니다.
 
 ### @interface
 인터페이스를 선언합니다.
@@ -195,7 +245,7 @@ MyClass.Enabled = true
 ]=]
 ```
 
-### `.<field>` (인터페이스 필드 축약)
+#### `.<field>` (인터페이스 필드 축약)
 `@field` 대신 점(`.`)으로 시작하는 필드 줄을 사용할 수 있습니다.
 
 형식: `.<Name> [Type] -- [설명]`
@@ -250,29 +300,39 @@ end
 ## 함수 시그니처 태그
 
 ### @param
-매개변수를 설명합니다.
+함수 매개변수와 타입 별칭의 타입 파라미터를 설명합니다.
 
-형식: `@param <Name> [Type] -- [설명]`
+형식: `@param <Name> [Type] - [설명]`
 
 ```lua
 --[=[
-    @param a number -- 첫 번째 숫자
-    @param b number -- 두 번째 숫자
+    @param a number - 첫 번째 숫자
+    @param b number - 두 번째 숫자
 ]=]
 function add(a: number, b: number)
 end
 ```
 
-여러 줄 설명이 필요하면 `-- [[` 블록을 사용할 수 있습니다.
-블록 안에서 `@default`를 사용하면 기본값을 표시할 수 있습니다.
+타입 별칭에서 사용하면 제너릭 설명으로 처리됩니다.
+선언부에 기본값(`T = number`)이 있으면 자동으로 기본값으로 노출됩니다.
 
 ```lua
 --[=[
-    @param recursive boolean -- [[
+    @type Dictionary {[string]: T}
+    @param T - 값 타입
+]=]
+export type Dictionary<T = string> = {[string]: T}
+```
+
+여러 줄 설명이 필요하면 다음 줄부터 들여쓰기하여 이어서 작성합니다.
+들여쓰기 영역에서 `@default`를 사용하면 기본값을 표시할 수 있습니다.
+
+```lua
+--[=[
+    @param recursive boolean
         재귀적으로 탐색합니다.
         여러 줄 설명이 가능합니다.
         @default false
-    ]]
 ]=]
 function find(recursive: boolean)
 end
@@ -281,11 +341,21 @@ end
 ### @return
 반환값을 설명합니다.
 
-형식: `@return [Type] -- [설명]`
+형식: `@return [Type] - [설명]`
 
 ```lua
 --[=[
-    @return number -- 덧셈 결과
+    @return number - 덧셈 결과
+]=]
+function add(a, b)
+end
+```
+
+```lua
+--[=[
+    @return number
+        덧셈 결과입니다.
+        여러 줄 설명이 가능합니다.
 ]=]
 function add(a, b)
 end

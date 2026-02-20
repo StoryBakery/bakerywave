@@ -42,7 +42,7 @@ module.exports = {
         navbar: {
             title: "Bakerywave",
             items: [
-                { type: "docSidebar", sidebarId: "manual", label: "Manual" },
+                { type: "docSidebar", sidebarId: "guides", label: "Docs" },
                 { type: "docSidebar", sidebarId: "reference", label: "Reference" },
             ],
         },

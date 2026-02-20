@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useHistory } from '@docusaurus/router';
 import { useThemeConfig } from '@docusaurus/theme-common';
 import './styles.css';
@@ -11,10 +11,30 @@ const TYPE_CONFIG = {
     doc: { label: 'Doc', icon: '📄', color: '#6b7280' },
 };
 
-const SECTION_CONFIG = {
-    manual: { label: 'Manual', color: '#10b981' },
-    reference: { label: 'Reference', color: '#3b82f6' },
-};
+const SECTION_COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16'];
+
+function toSectionLabel(section) {
+    if (!section) {
+        return 'Unknown';
+    }
+    return section
+        .split(/[-_]/g)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+}
+
+function getSectionColor(section) {
+    if (!section) {
+        return SECTION_COLORS[0];
+    }
+    let hash = 0;
+    for (let index = 0; index < section.length; index += 1) {
+        hash = (hash << 5) - hash + section.charCodeAt(index);
+        hash |= 0;
+    }
+    return SECTION_COLORS[Math.abs(hash) % SECTION_COLORS.length];
+}
 
 export default function SearchBar() {
     const { bakerywave } = useThemeConfig();
@@ -23,12 +43,12 @@ export default function SearchBar() {
     const navbarConfig = config.navbar || {};
 
     // 검색이 비활성화되면 렌더링하지 않음
-    if (searchConfig.enabled === false || navbarConfig.showSearch === false) {
+    if (searchConfig.enabled !== true || navbarConfig.showSearch !== true) {
         return null;
     }
 
     // 설정 값들
-    const placeholder = searchConfig.placeholder || '검색...';
+    const placeholder = searchConfig.placeholder || 'Search...';
     const shortcut = searchConfig.shortcut || 'Ctrl K';
     const minChars = searchConfig.minChars || 2;
     const hints = searchConfig.hints || {};
@@ -51,7 +71,7 @@ export default function SearchBar() {
         fetch('/search-index.json')
             .then(res => res.json())
             .then(data => setIndex(data))
-            .catch(err => console.warn('검색 인덱스 로드 실패:', err));
+            .catch(err => console.warn('Failed to load search index:', err));
     }, []);
 
     // 키보드 단축키 (Ctrl+K 또는 /)
@@ -178,15 +198,54 @@ export default function SearchBar() {
         }
     };
 
-    // 사용 가능한 카테고리 목록
-    const availableCategories = index?.categories || [];
+    const availableSections = useMemo(() => {
+        if (!index) {
+            return [];
+        }
+        const explicitSections = Array.isArray(index.sections) ? index.sections.filter(Boolean) : [];
+        if (explicitSections.length > 0) {
+            return [...explicitSections].sort((a, b) => a.localeCompare(b));
+        }
+        const derivedSections = [
+            ...new Set(
+                (index.entries || [])
+                    .map((entry) => entry && entry.section)
+                    .filter(Boolean)
+            ),
+        ];
+        return derivedSections.sort((a, b) => a.localeCompare(b));
+    }, [index]);
+
+    const availableCategories = useMemo(() => {
+        if (!index || sectionFilter === 'all') {
+            return [];
+        }
+        const categories = [
+            ...new Set(
+                (index.entries || [])
+                    .filter((entry) => entry && entry.section === sectionFilter && entry.category)
+                    .map((entry) => entry.category)
+            ),
+        ];
+        return categories.sort((a, b) => a.localeCompare(b));
+    }, [index, sectionFilter]);
+
+    useEffect(() => {
+        setCategoryFilter('all');
+    }, [sectionFilter]);
 
     // 필터 라벨
-    const filterLabels = {
-        all: filters.all || '전체',
-        manual: filters.manual || 'Manual',
-        reference: filters.reference || 'Reference',
+    const sectionLabels = filters.sections || {};
+    const getSectionLabel = (section) => {
+        if (sectionLabels[section]) {
+            return sectionLabels[section];
+        }
+        if (filters[section]) {
+            return filters[section];
+        }
+        return toSectionLabel(section);
     };
+    const allLabel = filters.all || 'All';
 
     return (
         <>
@@ -194,7 +253,7 @@ export default function SearchBar() {
             <button
                 className="sb-search-button"
                 onClick={() => setIsOpen(true)}
-                aria-label="검색"
+                aria-label="Search"
             >
                 <svg className="sb-search-icon" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
@@ -235,13 +294,16 @@ export default function SearchBar() {
                                     value={sectionFilter}
                                     onChange={(e) => setSectionFilter(e.target.value)}
                                 >
-                                    <option value="all">{filterLabels.all}</option>
-                                    <option value="manual">{filterLabels.manual}</option>
-                                    <option value="reference">{filterLabels.reference}</option>
+                                    <option value="all">{allLabel}</option>
+                                    {availableSections.map((section) => (
+                                        <option key={section} value={section}>
+                                            {getSectionLabel(section)}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
-                            {sectionFilter === 'reference' && availableCategories.length > 0 && (
+                            {sectionFilter !== 'all' && availableCategories.length > 0 && (
                                 <div className="sb-search-filter-group">
                                     <label className="sb-search-filter-label">Category</label>
                                     <select
@@ -249,7 +311,7 @@ export default function SearchBar() {
                                         value={categoryFilter}
                                         onChange={(e) => setCategoryFilter(e.target.value)}
                                     >
-                                        <option value="all">{filterLabels.all}</option>
+                                        <option value="all">{allLabel}</option>
                                         {availableCategories.map(cat => (
                                             <option key={cat} value={cat}>{cat}</option>
                                         ))}
@@ -261,14 +323,15 @@ export default function SearchBar() {
                         {/* 결과 */}
                         <div className="sb-search-results">
                             {query.length < minChars ? (
-                                <div className="sb-search-hint">{hints.minChars || `${minChars}글자 이상 입력하세요`}</div>
+                                <div className="sb-search-hint">{hints.minChars || `Type at least ${minChars} characters`}</div>
                             ) : results.length === 0 ? (
-                                <div className="sb-search-no-results">{hints.noResults || '결과가 없습니다'}</div>
+                                <div className="sb-search-no-results">{hints.noResults || 'No results found'}</div>
                             ) : (
                                 <ul className="sb-search-result-list">
                                     {results.map((entry, idx) => {
                                         const typeConfig = TYPE_CONFIG[entry.type] || TYPE_CONFIG.doc;
-                                        const sectionConfig = SECTION_CONFIG[entry.section] || SECTION_CONFIG.manual;
+                                        const sectionColor = getSectionColor(entry.section);
+                                        const sectionLabel = getSectionLabel(entry.section);
 
                                         return (
                                             <li
@@ -285,9 +348,9 @@ export default function SearchBar() {
                                                     <div className="sb-search-result-meta">
                                                         <span
                                                             className="sb-search-result-section"
-                                                            style={{ backgroundColor: `${sectionConfig.color}20`, color: sectionConfig.color }}
+                                                            style={{ backgroundColor: `${sectionColor}20`, color: sectionColor }}
                                                         >
-                                                            {sectionConfig.label}
+                                                            {sectionLabel}
                                                         </span>
                                                         <span className="sb-search-result-type" style={{ color: typeConfig.color }}>
                                                             {typeConfig.label}
@@ -312,9 +375,9 @@ export default function SearchBar() {
 
                         {/* 푸터 */}
                         <div className="sb-search-footer">
-                            <span><kbd>↑↓</kbd> 이동</span>
-                            <span><kbd>Enter</kbd> 선택</span>
-                            <span><kbd>Esc</kbd> 닫기</span>
+                            <span><kbd>↑↓</kbd> Navigate</span>
+                            <span><kbd>Enter</kbd> Select</span>
+                            <span><kbd>Esc</kbd> Close</span>
                         </div>
                     </div>
                 </div>

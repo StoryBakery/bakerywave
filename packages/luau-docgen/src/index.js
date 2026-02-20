@@ -199,6 +199,427 @@ function parseParamList(paramText) {
     return params;
 }
 
+function findTopLevelWhitespace(value) {
+    let depthAngle = 0;
+    let depthRound = 0;
+    let depthCurly = 0;
+    let depthSquare = 0;
+    let quote = null;
+    let escaped = false;
+
+    for (let index = 0; index < value.length; index += 1) {
+        const char = value[index];
+
+        if (quote) {
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+            if (char === quote) {
+                quote = null;
+            }
+            continue;
+        }
+
+        if (char === "'" || char === "\"") {
+            quote = char;
+            continue;
+        }
+
+        if (char === "<") {
+            depthAngle += 1;
+            continue;
+        }
+        if (char === ">") {
+            if (depthAngle > 0) {
+                depthAngle -= 1;
+            }
+            continue;
+        }
+        if (char === "(") {
+            depthRound += 1;
+            continue;
+        }
+        if (char === ")") {
+            if (depthRound > 0) {
+                depthRound -= 1;
+            }
+            continue;
+        }
+        if (char === "{") {
+            depthCurly += 1;
+            continue;
+        }
+        if (char === "}") {
+            if (depthCurly > 0) {
+                depthCurly -= 1;
+            }
+            continue;
+        }
+        if (char === "[") {
+            depthSquare += 1;
+            continue;
+        }
+        if (char === "]") {
+            if (depthSquare > 0) {
+                depthSquare -= 1;
+            }
+            continue;
+        }
+
+        if (
+            /\s/.test(char) &&
+            depthAngle === 0 &&
+            depthRound === 0 &&
+            depthCurly === 0 &&
+            depthSquare === 0
+        ) {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
+function splitTopLevelByComma(value) {
+    const parts = [];
+    let start = 0;
+    let depthAngle = 0;
+    let depthRound = 0;
+    let depthCurly = 0;
+    let depthSquare = 0;
+    let quote = null;
+    let escaped = false;
+
+    for (let index = 0; index < value.length; index += 1) {
+        const char = value[index];
+
+        if (quote) {
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+            if (char === quote) {
+                quote = null;
+            }
+            continue;
+        }
+
+        if (char === "'" || char === "\"") {
+            quote = char;
+            continue;
+        }
+
+        if (char === "<") {
+            depthAngle += 1;
+            continue;
+        }
+        if (char === ">") {
+            if (depthAngle > 0) {
+                depthAngle -= 1;
+            }
+            continue;
+        }
+        if (char === "(") {
+            depthRound += 1;
+            continue;
+        }
+        if (char === ")") {
+            if (depthRound > 0) {
+                depthRound -= 1;
+            }
+            continue;
+        }
+        if (char === "{") {
+            depthCurly += 1;
+            continue;
+        }
+        if (char === "}") {
+            if (depthCurly > 0) {
+                depthCurly -= 1;
+            }
+            continue;
+        }
+        if (char === "[") {
+            depthSquare += 1;
+            continue;
+        }
+        if (char === "]") {
+            if (depthSquare > 0) {
+                depthSquare -= 1;
+            }
+            continue;
+        }
+
+        if (
+            char === "," &&
+            depthAngle === 0 &&
+            depthRound === 0 &&
+            depthCurly === 0 &&
+            depthSquare === 0
+        ) {
+            const part = value.slice(start, index).trim();
+            if (part) {
+                parts.push(part);
+            }
+            start = index + 1;
+        }
+    }
+
+    const tail = value.slice(start).trim();
+    if (tail) {
+        parts.push(tail);
+    }
+
+    return parts;
+}
+
+function findTopLevelChar(value, target) {
+    let depthAngle = 0;
+    let depthRound = 0;
+    let depthCurly = 0;
+    let depthSquare = 0;
+    let quote = null;
+    let escaped = false;
+
+    for (let index = 0; index < value.length; index += 1) {
+        const char = value[index];
+
+        if (quote) {
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+            if (char === quote) {
+                quote = null;
+            }
+            continue;
+        }
+
+        if (char === "'" || char === "\"") {
+            quote = char;
+            continue;
+        }
+
+        if (char === "<") {
+            depthAngle += 1;
+            continue;
+        }
+        if (char === ">") {
+            if (depthAngle > 0) {
+                depthAngle -= 1;
+            }
+            continue;
+        }
+        if (char === "(") {
+            depthRound += 1;
+            continue;
+        }
+        if (char === ")") {
+            if (depthRound > 0) {
+                depthRound -= 1;
+            }
+            continue;
+        }
+        if (char === "{") {
+            depthCurly += 1;
+            continue;
+        }
+        if (char === "}") {
+            if (depthCurly > 0) {
+                depthCurly -= 1;
+            }
+            continue;
+        }
+        if (char === "[") {
+            depthSquare += 1;
+            continue;
+        }
+        if (char === "]") {
+            if (depthSquare > 0) {
+                depthSquare -= 1;
+            }
+            continue;
+        }
+
+        if (
+            char === target &&
+            depthAngle === 0 &&
+            depthRound === 0 &&
+            depthCurly === 0 &&
+            depthSquare === 0
+        ) {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
+function findMatchingAngleBracket(value, startIndex) {
+    if (!value || value[startIndex] !== "<") {
+        return -1;
+    }
+
+    let depth = 0;
+    let quote = null;
+    let escaped = false;
+
+    for (let index = startIndex; index < value.length; index += 1) {
+        const char = value[index];
+
+        if (quote) {
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+            if (char === quote) {
+                quote = null;
+            }
+            continue;
+        }
+
+        if (char === "'" || char === "\"") {
+            quote = char;
+            continue;
+        }
+
+        if (char === "<") {
+            depth += 1;
+            continue;
+        }
+        if (char === ">") {
+            depth -= 1;
+            if (depth === 0) {
+                return index;
+            }
+            continue;
+        }
+    }
+
+    return -1;
+}
+
+function parseTypeParameterEntry(entry) {
+    const raw = entry ? entry.trim() : "";
+    if (!raw) {
+        return null;
+    }
+
+    const equalIndex = findTopLevelChar(raw, "=");
+    const left = equalIndex === -1 ? raw : raw.slice(0, equalIndex).trim();
+    const defaultValue = equalIndex === -1 ? null : raw.slice(equalIndex + 1).trim() || null;
+
+    const colonIndex = findTopLevelChar(left, ":");
+    const name = colonIndex === -1 ? left : left.slice(0, colonIndex).trim();
+    const type = colonIndex === -1 ? null : left.slice(colonIndex + 1).trim() || null;
+
+    if (!name) {
+        return null;
+    }
+
+    return {
+        name,
+        type,
+        default: defaultValue,
+    };
+}
+
+function parseTypeParameters(typeParamsText) {
+    const text = typeParamsText ? typeParamsText.trim() : "";
+    if (!text) {
+        return [];
+    }
+
+    return splitTopLevelByComma(text)
+        .map(parseTypeParameterEntry)
+        .filter(Boolean);
+}
+
+function parseTypeAliasDeclaration(line) {
+    const match = line.match(/^\s*(?:export\s+)?type\s+([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/);
+    if (!match) {
+        return null;
+    }
+
+    const name = match[1];
+    let rest = (match[2] || "").trim();
+    let typeParams = [];
+
+    if (rest.startsWith("<")) {
+        const closeIndex = findMatchingAngleBracket(rest, 0);
+        if (closeIndex === -1) {
+            return null;
+        }
+        const paramsText = rest.slice(1, closeIndex);
+        typeParams = parseTypeParameters(paramsText);
+        rest = rest.slice(closeIndex + 1).trim();
+    }
+
+    if (!rest.startsWith("=")) {
+        return null;
+    }
+
+    const typeText = rest.slice(1).trim();
+    if (!typeText) {
+        return null;
+    }
+
+    const isTableType =
+        typeText.includes("{") ||
+        typeText.startsWith("setmetatable") ||
+        typeText.startsWith("setmetatable<") ||
+        typeText.startsWith("setmetatable <");
+
+    return {
+        name,
+        type: typeText,
+        typeParams,
+        isTableType,
+    };
+}
+
+function parseTypeTagName(rawName) {
+    const text = rawName ? rawName.trim() : "";
+    if (!text) {
+        return { name: "", typeParams: [] };
+    }
+
+    const openIndex = text.indexOf("<");
+    if (openIndex === -1) {
+        return { name: text, typeParams: [] };
+    }
+
+    const closeIndex = findMatchingAngleBracket(text, openIndex);
+    if (closeIndex === -1 || closeIndex !== text.length - 1) {
+        return { name: text, typeParams: [] };
+    }
+
+    const name = text.slice(0, openIndex).trim();
+    const typeParams = parseTypeParameters(text.slice(openIndex + 1, closeIndex));
+
+    return {
+        name: name || text,
+        typeParams,
+    };
+}
+
 function parseFunctionBinding(line) {
     const trimmed = line.trim();
     const declMatch = trimmed.match(
@@ -266,26 +687,12 @@ function buildFunctionInfo(nameRaw, paramsRaw, returnType) {
 }
 
 function matchTypeTableDeclaration(line) {
-    const match = line.match(/^\s*(export\s+)?type\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$/);
-    if (!match) {
+    const typeAlias = parseTypeAliasDeclaration(line);
+    if (!typeAlias || !typeAlias.isTableType) {
         return null;
     }
 
-    const name = match[2];
-    const rest = (match[3] || "").trim();
-    if (!rest) {
-        return null;
-    }
-
-    if (rest.includes("{")) {
-        return { name };
-    }
-
-    if (rest.startsWith("setmetatable") || rest.startsWith("setmetatable<") || rest.startsWith("setmetatable <")) {
-        return { name };
-    }
-
-    return null;
+    return { name: typeAlias.name };
 }
 
 function parseBindingAt(lines, index) {
@@ -296,16 +703,22 @@ function parseBindingAt(lines, index) {
         return functionInfo;
     }
 
-    const typeInfo = matchTypeTableDeclaration(cleanLine);
-    if (typeInfo) {
-        const result = extractTypeTableFields(lines, index);
-        return {
+    const typeAlias = parseTypeAliasDeclaration(cleanLine);
+    if (typeAlias) {
+        const binding = {
             kind: "type",
-            name: typeInfo.name,
+            name: typeAlias.name,
             within: null,
-            typeFields: result.fields,
-            typeTableRange: { startLine: index + 1, endLine: result.endIndex + 1 },
+            typeAlias: typeAlias.type,
+            typeParams: typeAlias.typeParams,
+            typeFields: [],
         };
+        if (typeAlias.isTableType) {
+            const result = extractTypeTableFields(lines, index);
+            binding.typeFields = result.fields;
+            binding.typeTableRange = { startLine: index + 1, endLine: result.endIndex + 1 };
+        }
+        return binding;
     }
 
     const assignMatch = cleanLine.match(/^([A-Za-z0-9_\.]+)\s*=/);
@@ -347,9 +760,18 @@ function parseTagLine(tagLine) {
 }
 
 function splitTagValue(value) {
-    const parts = value.split(/\s+/);
-    const name = parts.shift() || "";
-    const rest = parts.join(" ").trim();
+    const text = value ? value.trim() : "";
+    if (!text) {
+        return { name: "", rest: "" };
+    }
+
+    const boundary = findTopLevelWhitespace(text);
+    if (boundary === -1) {
+        return { name: text, rest: "" };
+    }
+
+    const name = text.slice(0, boundary).trim();
+    const rest = text.slice(boundary + 1).trim();
     return { name, rest };
 }
 
@@ -358,6 +780,42 @@ function parseTypeAndDescription(value) {
     const typePart = parts[0] ? parts[0].trim() : "";
     const description = parts.length > 1 ? parts.slice(1).join("--").trim() : "";
     return { typePart, description };
+}
+
+function parseTypeAndDescriptionDash(value) {
+    const text = value ? value.trim() : "";
+    if (!text) {
+        return { typePart: "", description: "" };
+    }
+
+    if (text.startsWith("-")) {
+        return { typePart: "", description: text.slice(1).trim() };
+    }
+
+    const index = text.search(/\s-\s/);
+    if (index === -1) {
+        return { typePart: text, description: "" };
+    }
+    return {
+        typePart: text.slice(0, index).trim(),
+        description: text.slice(index + 3).trim(),
+    };
+}
+
+function parseOptionBooleanValue(value, fallback = true) {
+    const text = value ? value.trim().toLowerCase() : "";
+    if (!text) {
+        return fallback;
+    }
+
+    if (text === "true" || text === "1" || text === "yes" || text === "on") {
+        return true;
+    }
+    if (text === "false" || text === "0" || text === "no" || text === "off") {
+        return false;
+    }
+
+    return null;
 }
 
 function parseMemberName(value) {
@@ -549,6 +1007,7 @@ function parseDocBlock(contentLines) {
     const lines = dedentLines(contentLines);
     const descriptionLines = [];
     const fields = [];
+    const variants = [];
     const params = [];
     const returns = [];
     const errors = [];
@@ -577,11 +1036,13 @@ function parseDocBlock(contentLines) {
         groups: [],
         withinDefault: null,
         withinRequire: false,
+        hasWithinDefault: false,
+        hasWithinRequire: false,
+        fileMeta: false,
     };
 
     let inFence = false;
     let continuation = null;
-    let block = null;
 
     const handleBlockLine = (rawLine, target) => {
         if (!target) {
@@ -598,6 +1059,7 @@ function parseDocBlock(contentLines) {
                 value = value.slice(1).trim();
             }
             target.default = value || null;
+            target.hasDefault = true;
             return;
         }
         target.description.push(rawLine.trimEnd());
@@ -605,20 +1067,6 @@ function parseDocBlock(contentLines) {
 
     for (const line of lines) {
         const trimmed = line.trim();
-
-        if (block) {
-            const closeIndex = line.indexOf("]]");
-            if (closeIndex !== -1) {
-                const before = line.slice(0, closeIndex);
-                if (before.trim().length > 0) {
-                    handleBlockLine(before, block);
-                }
-                block = null;
-                continue;
-            }
-            handleBlockLine(line, block);
-            continue;
-        }
 
         if (trimmed.startsWith("```")) {
             inFence = !inFence;
@@ -634,7 +1082,11 @@ function parseDocBlock(contentLines) {
             !(afterIndent.trim().startsWith("@") || afterIndent.trim().startsWith("."));
 
         if (isContinuation && !inFence) {
-            continuation.description.push(afterIndent.trimEnd());
+            if (continuation.allowDefault) {
+                handleBlockLine(afterIndent.trimEnd(), continuation);
+            } else {
+                continuation.description.push(afterIndent.trimEnd());
+            }
             continue;
         }
 
@@ -660,8 +1112,14 @@ function parseDocBlock(contentLines) {
                     break;
                 }
                 case "type": {
-                    const { name, rest } = splitTagValue(tag.value);
-                    typeTags.push({ kind: "type", name, type: rest || null });
+                    const { name: rawName, rest } = splitTagValue(tag.value);
+                    const parsedTypeName = parseTypeTagName(rawName);
+                    typeTags.push({
+                        kind: "type",
+                        name: parsedTypeName.name,
+                        type: rest || null,
+                        typeParams: parsedTypeName.typeParams,
+                    });
                     break;
                 }
                 case "interface":
@@ -694,12 +1152,24 @@ function parseDocBlock(contentLines) {
                 case "within":
                     state.within = tag.value;
                     break;
-                case "withinDefault":
-                    state.withinDefault = tag.value || null;
+                case "file":
+                    state.fileMeta = true;
                     break;
-                case "withinRequire":
-                    state.withinRequire = true;
+                case "option": {
+                    const { name: optionName, rest: optionValue } = splitTagValue(tag.value);
+                    state.fileMeta = true;
+                    if (optionName === "within.default") {
+                        state.withinDefault = optionValue || null;
+                        state.hasWithinDefault = true;
+                    } else if (optionName === "within.require") {
+                        const parsedValue = parseOptionBooleanValue(optionValue, true);
+                        if (parsedValue !== null) {
+                            state.withinRequire = parsedValue;
+                            state.hasWithinRequire = true;
+                        }
+                    }
                     break;
+                }
                 case "field": {
                     const { name, rest } = splitTagValue(tag.value);
                     const { typePart, description } = parseTypeAndDescription(rest);
@@ -708,49 +1178,52 @@ function parseDocBlock(contentLines) {
                 }
                 case "param": {
                     const { name, rest } = splitTagValue(tag.value);
-                    const { typePart, description } = parseTypeAndDescription(rest);
+                    const { typePart, description } = parseTypeAndDescriptionDash(rest);
                     const param = {
                         name,
                         type: typePart || null,
                         description: [],
                         default: null,
+                        hasDefault: false,
                         allowDefault: true,
                     };
                     params.push(param);
 
-                    const trimmedDesc = description ? description.trim() : "";
-                    if (trimmedDesc.startsWith("[[")) {
-                        const restBlock = trimmedDesc.slice(2).trim();
-                        if (restBlock) {
-                            const closeIndex = restBlock.indexOf("]]");
-                            if (closeIndex !== -1) {
-                                const before = restBlock.slice(0, closeIndex);
-                                if (before.trim().length > 0) {
-                                    handleBlockLine(before, param);
-                                }
-                            } else {
-                                handleBlockLine(restBlock, param);
-                                block = param;
-                            }
-                        } else {
-                            block = param;
-                        }
-                    } else {
-                        if (description) {
-                            param.description.push(description);
-                        }
-                        continuation = { description: param.description };
+                    if (description) {
+                        param.description.push(description);
                     }
+                    continuation = param;
+                    break;
+                }
+                case "variant": {
+                    const { typePart, description } = parseTypeAndDescriptionDash(tag.value);
+                    const variant = {
+                        value: typePart || "",
+                        description: [],
+                        default: null,
+                        hasDefault: false,
+                        allowDefault: true,
+                    };
+                    variants.push(variant);
+
+                    if (description) {
+                        variant.description.push(description);
+                    }
+                    continuation = variant;
                     break;
                 }
                 case "return": {
-                    const { typePart, description } = parseTypeAndDescription(tag.value);
+                    const { typePart, description } = parseTypeAndDescriptionDash(tag.value);
                     const ret = {
                         type: typePart || null,
-                        description: description ? [description] : [],
+                        description: [],
+                        allowDefault: false,
                     };
                     returns.push(ret);
-                    continuation = { description: ret.description };
+                    if (description) {
+                        ret.description.push(description);
+                    }
+                    continuation = ret;
                     break;
                 }
                 case "error": {
@@ -758,9 +1231,10 @@ function parseDocBlock(contentLines) {
                     const err = {
                         type: typePart || null,
                         description: description ? [description] : [],
+                        allowDefault: false,
                     };
                     errors.push(err);
-                    continuation = { description: err.description };
+                    continuation = err;
                     break;
                 }
                 case "yields":
@@ -853,45 +1327,18 @@ function parseDocBlock(contentLines) {
                     break;
                 default: {
                     const { typePart, description } = parseTypeAndDescription(tag.value);
-                    let valuePart = typePart || "";
-                    let desc = description || "";
-                    if (!desc && valuePart.trim().startsWith("[[")) {
-                        desc = valuePart;
-                        valuePart = "";
-                    }
                     const custom = {
                         name: tag.name,
-                        value: valuePart || null,
+                        value: typePart || null,
                         description: [],
                         allowDefault: false,
                     };
                     customTags.push(custom);
 
-                    const trimmedDesc = desc ? desc.trim() : "";
-                    if (trimmedDesc.startsWith("[[")) {
-                        const restBlock = trimmedDesc.slice(2).trim();
-                        if (restBlock) {
-                            const closeIndex = restBlock.indexOf("]]");
-                            if (closeIndex !== -1) {
-                                const before = restBlock.slice(0, closeIndex);
-                                if (before.trim().length > 0) {
-                                    handleBlockLine(before, custom);
-                                }
-                            } else {
-                                handleBlockLine(restBlock, custom);
-                                block = custom;
-                            }
-                        } else {
-                            block = custom;
-                        }
-                    } else {
-                        if (desc) {
-                            custom.description.push(desc);
-                        }
-                        if (desc) {
-                            continuation = { description: custom.description };
-                        }
+                    if (description) {
+                        custom.description.push(description);
                     }
+                    continuation = custom;
                     break;
                 }
             }
@@ -914,6 +1361,7 @@ function parseDocBlock(contentLines) {
         descriptionLines,
         typeTags,
         fields,
+        variants,
         params,
         returns,
         errors,
@@ -960,6 +1408,7 @@ function hasOnlyWhitespaceBeforeLine(lines, lineNumber) {
 function isDocStateEmpty(state) {
     return (
         !state.within &&
+        state.fileMeta !== true &&
         !state.withinDefault &&
         state.withinRequire !== true &&
         state.yields !== true &&
@@ -988,6 +1437,7 @@ function isImplicitClassDocCandidate(doc) {
     return (
         doc.typeTags.length === 0 &&
         doc.fields.length === 0 &&
+        doc.variants.length === 0 &&
         doc.params.length === 0 &&
         doc.returns.length === 0 &&
         doc.errors.length === 0 &&
@@ -1132,12 +1582,61 @@ function buildInterfaceTypes(doc) {
     };
 }
 
-function buildTypeTypes(doc) {
+function buildTypeTypes(doc, binding) {
     const typeTag = doc.typeTags.find((tag) => tag.kind === "type");
-    const typeValue = typeTag ? typeTag.type : null;
+    const typeValue = (typeTag && typeTag.type) || (binding && binding.typeAlias) || null;
+    const tagTypeParams = typeTag && Array.isArray(typeTag.typeParams) ? typeTag.typeParams : [];
+    const bindingTypeParams = binding && Array.isArray(binding.typeParams) ? binding.typeParams : [];
+    const resolvedTypeParams = bindingTypeParams.length > 0 ? bindingTypeParams : tagTypeParams;
+    const params = [];
+
+    if (doc.params.length > 0) {
+        const consumed = new Set();
+        for (const param of doc.params) {
+            const matched = resolvedTypeParams.find((item) => item.name === param.name);
+            params.push({
+                name: param.name,
+                type: param.type || (matched ? matched.type || null : null),
+                description: param.description.join("\n").trim() || null,
+                default: param.default || (matched ? matched.default || null : null),
+            });
+            consumed.add(param.name);
+        }
+
+        for (const item of resolvedTypeParams) {
+            if (!item || !item.name || consumed.has(item.name)) {
+                continue;
+            }
+            params.push({
+                name: item.name,
+                type: item.type || null,
+                description: null,
+                default: item.default || null,
+            });
+        }
+    } else {
+        for (const item of resolvedTypeParams) {
+            if (!item || !item.name) {
+                continue;
+            }
+            params.push({
+                name: item.name,
+                type: item.type || null,
+                description: null,
+                default: item.default || null,
+            });
+        }
+    }
+
+    const variants = doc.variants.map((variant) => ({
+        value: variant.value || "",
+        description: variant.description.join("\n").trim() || null,
+        default: variant.default || null,
+        isDefault: Boolean(variant.hasDefault),
+    }));
     return {
         display: typeValue || "",
-        structured: { type: typeValue },
+        structured: { type: typeValue, params, variants },
     };
 }
 
@@ -1380,7 +1879,7 @@ function buildSymbolsForBlock(doc, block, binding, filePath, relativePath, diagn
     } else if (kind === "interface") {
         types = buildInterfaceTypes(doc);
     } else if (kind === "type") {
-        types = buildTypeTypes(doc);
+        types = buildTypeTypes(doc, binding);
     } else if (kind === "class") {
         types = buildClassTypes(doc);
     }
@@ -1537,13 +2036,13 @@ function generateModule(filePath, rootDir, srcDir, typesDir, moduleIdOverrides, 
                 doc.typeTags.unshift({ kind: "class", name: inferredClassName });
             }
         }
-        if (doc.state.withinDefault) {
-            fileWithinDefault = doc.state.withinDefault;
+        if (doc.state.hasWithinDefault) {
+            fileWithinDefault = doc.state.withinDefault || null;
         }
-        if (doc.state.withinRequire) {
-            fileWithinRequire = true;
+        if (doc.state.hasWithinRequire) {
+            fileWithinRequire = doc.state.withinRequire === true;
         }
-        const isFileMeta = (doc.state.withinDefault || doc.state.withinRequire) && doc.typeTags.length === 0;
+        const isFileMeta = doc.state.fileMeta === true && doc.typeTags.length === 0;
         if (isFileMeta) {
             continue;
         }
@@ -1563,13 +2062,27 @@ function generateModule(filePath, rootDir, srcDir, typesDir, moduleIdOverrides, 
         const typeTag = resolveTypeTag(doc);
         let binding = null;
 
-        if (!typeTag || typeTag.kind === "function") {
+        if (!typeTag || typeTag.kind === "function" || typeTag.kind === "type") {
             const next = findNextBindingLine(lines, block.endLine, blockByStart);
             if (next) {
                 binding = parseBindingAt(lines, next.lineNumber - 1);
                 if (binding) {
                     binding.line = next.line;
                     binding.lineNumber = next.lineNumber;
+                }
+                if (typeTag && typeTag.kind === "type" && binding && binding.kind !== "type") {
+                    binding = null;
+                }
+                if (
+                    typeTag &&
+                    typeTag.kind === "type" &&
+                    binding &&
+                    binding.kind === "type" &&
+                    typeTag.name &&
+                    binding.name &&
+                    typeTag.name !== binding.name
+                ) {
+                    binding = null;
                 }
             }
         }

@@ -96,16 +96,17 @@ function extractCategory(filePath, docsDir) {
 }
 
 /**
- * 섹션(Manual/Reference)을 판별합니다.
+ * 섹션을 문서 최상위 폴더명으로 판별합니다.
  */
 function getSection(filePath, docsDir) {
     const relative = path.relative(docsDir, filePath).replace(/\\/g, "/");
+    const parts = relative.split("/");
 
-    if (relative.startsWith("reference/")) {
-        return "reference";
+    if (parts.length > 1 && parts[0]) {
+        return parts[0];
     }
 
-    return "manual";
+    return "root";
 }
 
 /**
@@ -163,17 +164,19 @@ function collectDocs(dir, docsDir, entries = []) {
  */
 function buildSearchIndex(siteDir, options = {}) {
     const docsDir = path.resolve(siteDir, options.docsPath || "docs");
-    const outDir = path.resolve(siteDir, options.outDir || "static");
+    const outDir = path.resolve(siteDir, options.outDir || ".generated");
     const outFile = path.join(outDir, "search-index.json");
 
     const entries = collectDocs(docsDir, docsDir);
 
-    // 카테고리 목록 추출
-    const categories = [...new Set(entries.filter(e => e.category).map(e => e.category))].sort();
+    // 섹션 및 카테고리 목록 추출
+    const sections = [...new Set(entries.filter((entry) => entry.section).map((entry) => entry.section))].sort();
+    const categories = [...new Set(entries.filter((entry) => entry.category).map((entry) => entry.category))].sort();
 
     const index = {
         version: "1.0",
         generatedAt: new Date().toISOString(),
+        sections,
         categories,
         entries,
     };
@@ -189,9 +192,17 @@ function buildSearchIndex(siteDir, options = {}) {
 
 module.exports = function searchIndexPlugin(context, opts = {}) {
     const siteDir = context.siteDir;
+    const docsDir = path.resolve(siteDir, opts.docsPath || "docs");
 
     return {
         name: "storybakery-search-index",
+
+        getPathsToWatch() {
+            return [
+                path.join(docsDir, "**/*.md"),
+                path.join(docsDir, "**/*.mdx"),
+            ];
+        },
 
         async postBuild() {
             const result = buildSearchIndex(siteDir, opts);

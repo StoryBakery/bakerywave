@@ -8,7 +8,7 @@ export default function Footer() {
     const footer = config.footer || {};
 
     // Footer가 비활성화되면 렌더링하지 않음
-    if (footer.enabled === false) {
+    if (footer.enabled !== true) {
         return null;
     }
 

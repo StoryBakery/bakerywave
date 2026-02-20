@@ -1,116 +1,81 @@
 ---
 title: 문서 스타일 가이드
-sidebar_label: Style Guide
+sidebar_label: 스타일 가이드
+sidebar_position: 10
 ---
 
-# 문서 스타일 가이드
+# 문서 스타일 가이드 (Style Guide)
 
-이 문서는 문서 작성 규칙을 정의합니다. 변경될 수 있으며 모든 상황을 포괄하지 않습니다.
+이 문서는 Bakerywave의 모든 문서가 **일관성 있고 읽기 쉬운** 형태를 유지하도록 돕는 가이드라인입니다.
 
-> 이 문서는 **Roblox Creator Docs의 STYLE 가이드에서 영감을 받았습니다.**
-> 참고: `https://github.com/Roblox/creator-docs/blob/main/STYLE.md`
+> 💡 **참고**: 이 가이드는 [Roblox Creator Docs Style Guide](https://github.com/Roblox/creator-docs/blob/main/STYLE.md)에서 영감을 얻어 작성되었습니다.
 
-## 문서 유형
+---
 
-문서는 다음 네 가지 유형 중 하나에 속합니다.
+## 1. 기본 원칙 (Principles)
 
-- **개념(Conceptual)**
-- **작업(Task-based)**
-- **레퍼런스(Reference)**
-- **튜토리얼(Tutorial)**
+좋은 문서는 독자를 배려합니다. 우리는 다음과 같은 톤을 지향합니다.
 
-하나의 페이지에 여러 유형이 섞일 수 있습니다. 이 경우 **Markdown 헤더로 구간을 분리**합니다. 각 구간의 목적을 명확히 드러내면 읽기와 탐색이 쉬워집니다.
+### ✅ 능동태와 현재 시제 쓰기
+- **나쁨**: 버튼이 눌려지면, 설정창이 열리게 될 것입니다. (수동태 + 미래 시제)
+- **좋음**: 버튼을 누르면 설정창이 열립니다. (능동태 + 현재 시제)
 
-## 문체 및 톤
+### ✅ 간결하고 명확하게
+- **나쁨**: 이 기능을 사용하기 위해서는, 사용자는 반드시 사전에 설정을 완료해두어야만 합니다.
+- **좋음**: 이 기능을 사용하려면 먼저 설정을 완료하세요.
 
-- 가능한 한 **현재 시제**를 사용합니다.
-  - 나쁨: 버튼을 눌렀기 때문에 커서가 곧 바뀝니다.
-  - 좋음: 버튼을 누르면 커서가 바뀝니다.
-- 가능한 한 **능동태**를 사용합니다.
-  - 나쁨: 리스트가 반환됩니다.
-  - 좋음: 서버가 리스트를 반환합니다.
-- **we/our**는 권장 사항이나 공통 정책을 설명할 때만 제한적으로 사용합니다.
-- **2인칭**으로 독자를 지칭하되 “you can”을 과하게 쓰지 않습니다.
-- UI 요소, 핵심 용어는 **굵게** 표시합니다. 기울임은 사용하지 않습니다.
-- 파일 경로, 코드, 함수/변수명은 `monospace`로 표시합니다.
-- 관용구/은유/속어는 사용하지 않습니다.
-- **can**은 선택/권한, **might**는 가능성, **must**는 요구사항, **should**는 권장 사항입니다.
-- 성별 표현은 피하고 가능하면 복수형으로 작성합니다.
-- UI에서 **option/객체는 select**, **버튼/아이콘은 click**을 사용합니다.
-- 숫자 표기: **1~9는 철자**, **10 이상은 숫자**를 사용합니다.
-  - 단위가 있으면 숫자를 사용합니다(예: `6 GB`).
+### ✅ 독자를 존중하기
+- **나쁨**: 당연히 아시겠지만... / 쉽습니다.
+- **좋음**: (불필요한 가정 생략)
 
-## 링크 규칙
+---
 
-### 외부 링크
-- `create.roblox.com` 외부 링크는 **표준 Markdown 링크**를 사용합니다.
-  - 예: `[Creator Dashboard](https://create.roblox.com/dashboard/creations)`
+## 2. 텍스트 서식 (Formatting)
 
-### 문서 내부 링크
-- 동일 문서 사이트 내 다른 문서는 **상대 경로 + .md 확장자**로 연결합니다.
-  - 예: `[Meshes](../parts/meshes.md)`
+### 강조 (Bold)
+- **UI 요소**: 버튼, 메뉴, 탭 이름은 굵게 표시합니다.
+  - 예: **설정** 탭에서 **저장** 버튼을 클릭하세요.
+- **핵심 용어**: 문단의 주제가 되는 중요한 단어는 굵게 표시합니다.
 
-### API 링크 문법 (레퍼런스 문서)
+### 코드 (Inline Code)
+- **파일 경로, 변수명, 함수명, 값**은 백틱(`)으로 감쌉니다.
+- 예: `replicated-storage` 폴더 안에 `config.json` 파일을 만듭니다.
 
-레퍼런스 문서에서는 **API 링크 문법**을 사용합니다. 이 문법은 백틱으로 감싸며, 렌더 시 자동 링크로 변환됩니다.
+### 기울임 (Italic)
+- **사용하지 않습니다.** 한글 문서에서 이탤릭체는 가독성이 떨어지므로, 강조가 필요하면 **굵게** 처리하거나 "따옴표"를 사용하세요.
 
-#### 클래스
-- `` `Class.Name` ``
-- `` `Class.Name.Property` ``
-- `` `Class.Name:Method()` ``
-- `` `Class.Name.Event` ``
+---
 
-#### 데이터 타입
-- `` `Datatype.Name` ``
-- `` `Datatype.Name:Method()` ``
-- `` `Datatype.Name.constructor()` ``
+## 3. 링크 작성법 (Links)
 
-#### 열거형
-- `` `Enum.Name` ``
+문서 간 이동이나 API 참조를 위해 링크를 적극적으로 사용합니다.
 
-#### 전역 / 라이브러리
-- `` `Global.LuaGlobals.Function()` ``
-- `` `Global.RobloxGlobals.Property` ``
-- `` `Library.Name.Function()` ``
-
-> 현재 구현 기준으로 **내부 레퍼런스 링크는 `Classes.`/`Docs.` 접두어**를 사용합니다.  
-> 예: `` `Docs.Features.DocFeatureClass:Double()` ``  
-> `Class.`, `Datatype.`, `Enum.`, `Global.`, `Library.`는 Roblox 공식 문서로 연결됩니다.
-
-#### 링크 텍스트 대체 (Link substitution)
-
-표시 텍스트를 바꾸려면 `|`를 사용합니다.
-
-- `` `Class.Name.Property|PropertyName` ``
-- `` `Enum.Name|EnumItemName` ``
-
-#### 링크 비활성화
-
-링크를 만들지 않으려면 `|no-link`를 사용합니다.
-
-- `` `monospace|no-link` `` → `monospace`
-
-## 이미지
-
-- 이미지가 문서를 명확히 설명할 때만 사용합니다.
-- 파일명은 하이픈(`-`)으로 단어를 구분합니다.
-- 스크린샷은 PNG, 사진은 JPG를 권장합니다.
-- 다이어그램은 SVG를 권장합니다.
-- 용량은 가능하면 200 KB 이하로 유지합니다.
-
-## 경고/알림 블록
-
-필요한 경우에만 사용하며, 짧게 작성합니다.
+### 🔗 다른 문서로 이동하기
+같은 사이트 내의 다른 문서는 **상대 경로**로 연결합니다. `.md` 확장자를 포함해야 합니다.
 
 ```md
-<Alert severity="warning">
-This feature is beta and can change in future releases.
-</Alert>
+[개발 환경 구축하기](../development/getting-started.md)
 ```
 
-`severity`는 아래 중 하나입니다.
+### 🔗 API 레퍼런스 연결하기 (특수 문법)
+Bakerywave는 API 문서로 쉽게 연결할 수 있는 **백틱 링크 문법**을 제공합니다.
 
-- `error`
-- `info`
-- `success`
-- `warning`
+| 문법                        | 설명                    | 예시                        |
+| :-------------------------- | :---------------------- | :-------------------------- |
+| `` `Class.Name` ``          | 클래스 문서로 연결      | `` `Class.Part` ``          |
+| `` `Class.Name.Property` `` | 속성 문서로 연결        | `` `Class.Part.Anchored` `` |
+| `` `Datatype.Name` ``       | 데이터 타입 문서로 연결 | `` `Datatype.CFrame` ``     |
+| `` `Enum.Name` ``           | 열거형 문서로 연결      | `` `Enum.Material` ``       |
+
+만약 링크는 걸고 싶은데 표시되는 텍스트를 바꾸고 싶다면 `|`를 사용하세요.
+- `` `Class.Part.Anchored|고정(Anchored)` `` → [고정(Anchored)](#)
+
+---
+
+## 4. 이미지와 미디어 (Images)
+
+백문이 불여일견! 글보다 그림 하나가 더 효과적일 때가 많습니다.
+
+- **스크린샷**: 전체 화면보다는 **관련된 부분만 잘라서(Crop)** 보여주는 것이 좋습니다.
+- **파일 형식**: 스크린샷은 `.png`, 사진은 `.jpg`, 다이어그램은 `.svg`를 권장합니다.
+- **용량**: 페이지 로딩 속도를 위해 불필요하게 큰 이미지는 피해주세요 (개당 500KB 이하 권장).

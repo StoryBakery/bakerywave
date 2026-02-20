@@ -80,6 +80,9 @@ struct DocState
     std::string within;
     std::string withinDefault;
     bool withinRequire = false;
+    bool hasWithinDefault = false;
+    bool hasWithinRequire = false;
+    bool fileMeta = false;
     bool yields = false;
     bool readonly = false;
     std::string visibility;
@@ -403,6 +406,25 @@ static std::pair<std::string, std::string> parseTypeAndDescription(const std::st
     return {typePart, description};
 }
 
+static std::optional<bool> parseOptionBooleanValue(const std::string& rawValue, bool fallback = true)
+{
+    std::string value = trim(rawValue);
+    if (value.empty())
+        return fallback;
+
+    std::string lower;
+    lower.reserve(value.size());
+    for (char ch : value)
+        lower.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
+
+    if (lower == "true" || lower == "1" || lower == "yes" || lower == "on")
+        return true;
+    if (lower == "false" || lower == "0" || lower == "no" || lower == "off")
+        return false;
+
+    return std::nullopt;
+}
+
 struct ParsedMemberName
 {
     std::string within;
@@ -624,13 +646,28 @@ static ParsedDoc parseDocBlock(const std::vector<std::string>& contentLines)
             {
                 doc.state.within = tagValue;
             }
-            else if (tagName == "withinDefault")
+            else if (tagName == "file")
             {
-                doc.state.withinDefault = tagValue;
+                doc.state.fileMeta = true;
             }
-            else if (tagName == "withinRequire")
+            else if (tagName == "option")
             {
-                doc.state.withinRequire = true;
+                auto [optionName, optionValue] = splitTagValue(tagValue);
+                doc.state.fileMeta = true;
+                if (optionName == "within.default")
+                {
+                    doc.state.withinDefault = optionValue;
+                    doc.state.hasWithinDefault = true;
+                }
+                else if (optionName == "within.require")
+                {
+                    std::optional<bool> parsed = parseOptionBooleanValue(optionValue, true);
+                    if (parsed.has_value())
+                    {
+                        doc.state.withinRequire = *parsed;
+                        doc.state.hasWithinRequire = true;
+                    }
+                }
             }
             else if (tagName == "field")
             {
@@ -1417,6 +1454,7 @@ static bool hasOnlyWhitespaceBeforeLine(const std::vector<std::string>& lines, i
 static bool isDocStateEmpty(const DocState& state)
 {
     return state.within.empty() &&
+        !state.fileMeta &&
         state.withinDefault.empty() &&
         !state.withinRequire &&
         !state.yields &&
@@ -2394,10 +2432,10 @@ static std::vector<Symbol> buildSymbols(
             }
         }
 
-        if (!doc.state.withinDefault.empty())
+        if (doc.state.hasWithinDefault)
             fileWithinDefault = doc.state.withinDefault;
-        if (doc.state.withinRequire)
-            fileWithinRequire = true;
+        if (doc.state.hasWithinRequire)
+            fileWithinRequire = doc.state.withinRequire;
     }
 
     for (size_t index = 0; index < context.blocks.size(); ++index)
@@ -2445,7 +2483,7 @@ static std::vector<Symbol> buildSymbols(
             doc.state.snippets.empty() &&
             doc.state.aliases.empty();
 
-        if (isMetaDoc && (!doc.state.withinDefault.empty() || doc.state.withinRequire))
+        if ((doc.state.fileMeta && doc.typeTags.empty()) || (isMetaDoc && (!doc.state.withinDefault.empty() || doc.state.withinRequire)))
             continue;
 
         for (const TypeTag& tag : doc.typeTags)

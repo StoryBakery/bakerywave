@@ -23,9 +23,9 @@ local MyModule = {}
 --[=[
     두 숫자를 더합니다.
 
-    @param a number -- 첫 번째 숫자
-    @param b number -- 두 번째 숫자
-    @return number -- 더한 결과
+    @param a number - 첫 번째 숫자
+    @param b number - 두 번째 숫자
+    @return number - 더한 결과
 ]=]
 function MyModule.add(a: number, b: number): number
     return a + b

@@ -41,8 +41,8 @@ module.exports = {
     navbar: {
       title: "Project Docs",
       items: [
-        { type: "docSidebar", sidebarId: "manual", label: "Manual" },
-        { type: "docSidebar", sidebarId: "reference", label: "Reference" },
+        { type: "docSidebar", sidebarId: "guides", label: "Guides" },
+        { type: "docSidebar", sidebarId: "reference", label: "API" },
       ],
     },
   },

@@ -1,6 +1,10 @@
 --[=[
+    @file
+    @option within.default BaseObject
+]=]
+
+--[=[
     @class BaseObject
-    @withinDefault BaseObject
     @category Showcase/Core
     @tag base
     @since 1.0.0
@@ -31,8 +35,8 @@ BaseObject.ID = ""
 
 --[=[
     @constructor new
-    @param id string -- 객체의 고유 ID
-    @return BaseObject -- 생성된 객체 인스턴스
+    @param id string - 객체의 고유 ID
+    @return BaseObject - 생성된 객체 인스턴스
 
     새로운 BaseObject를 생성합니다.
 ]=]
@@ -72,8 +76,8 @@ setmetatable(InteractiveObject, BaseObject)
 --[=[
     @event Activated
     @group Events
-    @param timestamp number -- 활성화된 시점의 tick
-    @param source string -- 입력 소스 (Mouse/Touch/Gamepad)
+    @param timestamp number - 활성화된 시점의 tick
+    @param source string - 입력 소스 (Mouse/Touch/Gamepad)
     객체가 활성화되었을 때 발생하는 이벤트입니다.
 
     **문서 기대 사항:**
@@ -84,8 +88,8 @@ InteractiveObject.Activated = nil
 --[=[
     @yields
     @group Processing
-    @param data table -- 처리할 데이터 패킷
-    @return boolean -- 처리 성공 여부
+    @param data table - 처리할 데이터 패킷
+    @return boolean - 처리 성공 여부
     @error string -- 데이터 형식이 잘못된 경우 발생
     데이터를 비동기적으로 처리합니다. 내부적으로 `task.wait()`를 호출할 수 있습니다.
 
@@ -320,8 +324,8 @@ local ShowcaseLibrary = {}
 
 --[=[
     @within ShowcaseLibrary
-    @param value any -- 평가할 값
-    @return boolean -- 결과
+    @param value any - 평가할 값
+    @return boolean - 결과
     값이 유효한지 검사합니다.
 ]=]
 function ShowcaseLibrary.IsValid(value: any): boolean
@@ -334,6 +338,28 @@ end
     특수 핸들러를 정의하기 위한 함수 타입입니다.
 ]=]
 export type CustomHandler = (name: string, id: number) -> boolean
+
+--[=[
+    @type TypedMap {[string]: T}
+    @within ShowcaseLibrary
+    @param T - 맵에 저장할 값 타입
+    제너릭 기본 타입 파라미터가 적용되는 맵 타입입니다.
+]=]
+export type TypedMap<T = number> = {[string]: T}
+
+--[=[
+    @type HandleType "Auto" | "AutoClamped" | "Vector" | "Free" | "Aligned"
+    @within ShowcaseLibrary
+    베지어 핸들을 자동 계산할 때 사용하는 규칙 이름입니다.
+    @variant "Auto"
+        양쪽 기울기를 일정하게 맞춰 자연스럽게 이어집니다.
+        @default
+    @variant "AutoClamped" - Auto와 같지만 오버슈트를 방지하도록 값을 클램프합니다.
+    @variant "Vector" - 이전·다음 키프레임을 향하는 벡터 방향으로 1/3 비율의 핸들을 만듭니다.
+    @variant "Free" - 핸들 값을 직접 지정할 수 있도록 기본값을 키프레임 값으로 둡니다.
+    @variant "Aligned" - 한쪽 핸들을 기준으로 180° 반대 방향의 동일 길이 핸들을 맞춥니다.
+]=]
+export type HandleType = "Auto" | "AutoClamped" | "Vector" | "Free" | "Aligned"
 
 return {
 	BaseObject = BaseObject,

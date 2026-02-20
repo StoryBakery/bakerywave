@@ -171,6 +171,41 @@ function applyLocalDependencies(destPath, rootDir) {
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkg, null, 2) + "\n");
 }
 
+function parseTomlDefaultEntries(tomlPath) {
+  if (!fs.existsSync(tomlPath)) {
+    return [];
+  }
+
+  const lines = fs.readFileSync(tomlPath, "utf8").split(/\r?\n/);
+  const entries = [];
+  let currentTable = "";
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) {
+      continue;
+    }
+
+    const tableMatch = line.match(/^\[([^\]]+)\]$/);
+    if (tableMatch) {
+      currentTable = tableMatch[1].trim();
+      continue;
+    }
+
+    const assignMatch = line.match(/^([A-Za-z0-9_.-]+)\s*=\s*(.+)$/);
+    if (!assignMatch) {
+      continue;
+    }
+
+    const key = assignMatch[1].trim();
+    const value = assignMatch[2].trim();
+    const fullKey = currentTable ? `${currentTable}.${key}` : key;
+    entries.push(`${fullKey} = ${value}`);
+  }
+
+  return entries;
+}
+
 if (!fs.existsSync(templateDir)) {
   console.error("[storybakery] template directory missing.");
   process.exit(1);
@@ -205,4 +240,14 @@ console.log("[storybakery] setup complete.");
 console.log(`- cd ${targetDir}`);
 if (install) {
   console.log("- npm run dev");
+}
+
+const tomlPath = path.join(destDir, "bakerywave.toml");
+const defaultEntries = parseTomlDefaultEntries(tomlPath);
+if (defaultEntries.length > 0) {
+  console.log("");
+  console.log("[storybakery] default bakerywave.toml values:");
+  for (const entry of defaultEntries) {
+    console.log(`- ${entry}`);
+  }
 }

@@ -11,6 +11,10 @@
         "**/luau_packages/**": false,
         "**/lune_packages/**": false,
         "**/roblox_packages/**": false,
+        "**/node_modules/**": true,
+        "**/dist/**": true,
+        "**/tmp/**": false,
+        "**/out/**": true,
         "**/darklua_build/**": false,
         "**/node_modules": false
     },

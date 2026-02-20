@@ -17,12 +17,14 @@ Bakerywave는 `init` 명령어를 통해 필요한 파일들을 자동으로 생
 bakerywave init my-docs
 ```
 
-:::info npx를 사용하는 경우
+<Alert severity="info">
+<AlertTitle>npx를 사용하는 경우</AlertTitle>
 Bakerywave를 설치하지 않았다면:
+
 ```bash
 npx bakerywave init my-docs
 ```
-:::
+</Alert>
 
 명령어를 실행하면 잠시 후 `my-docs`라는 폴더가 생기고, 그 안에 필요한 파일들이 채워집니다.
 
@@ -41,5 +43,8 @@ cd my-docs
 *   📄 **`bakerywave.toml`**: Bakerywave의 설정을 담은 파일입니다.
 *   📄 **`docusaurus.config.js`**: 사이트의 제목, 메뉴바 링크 등 전반적인 설정을 담당합니다.
 *   📄 **`package.json`**: 프로젝트 정보와 실행 스크립트가 담겨 있습니다.
+
+`bakerywave.toml`에는 Bakerywave 확장 기능 기본값이 들어 있습니다.
+필요 없는 항목은 지워가며 쓰면 되고, `site.*` 항목을 비우면 Docusaurus 기본 동작에 가깝게 운영할 수 있습니다.
 
 이 구조만 잘 이해하면 반은 성공입니다! 다음 단계에서는 이 사이트를 실제로 실행해보겠습니다.

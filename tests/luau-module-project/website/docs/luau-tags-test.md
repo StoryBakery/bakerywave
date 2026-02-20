@@ -10,7 +10,9 @@ sidebar_label: Luau 태그
 ## 포함된 태그 예시
 
 - @class
-- @within / @withinDefault
+- @within
+- @file / @option
+- @type / @variant
 - @param / @return / @error / @yields
 - @category / @group
 - @since / @deprecated / @unreleased
@@ -28,11 +30,10 @@ sidebar_label: Luau 태그
 
 ```lua
 --[=[
-    @param recursive boolean -- [[
+    @param recursive boolean
         재귀적으로 탐색합니다.
         여러 줄 설명이 가능합니다.
         @default false
-    ]]
 ]=]
 function find(recursive: boolean)
 end
@@ -42,6 +43,7 @@ end
 - 파일 첫 문서 주석이 `--[=[ ... ]=]` 단독 설명일 때 자동으로 클래스가 생성되는지 확인
 - `FileClassImplicit.luau`가 `FileClassImplicit` 클래스로 생성되는지 확인
 - `AutoInitClass/init.luau`가 `AutoInitClass` 클래스로 생성되는지 확인 (`init.*`는 상위 디렉토리명 사용)
+- `Showcase.luau`의 `@file` + `@option within.default`가 기본 소속 설정으로 반영되는지 확인
 
 참고 문서: `Classes.FileClassImplicit`, `Classes.AutoInitClass`
 
@@ -60,6 +62,7 @@ end
 - `Core`, `Events`, `Meta`, `기타` 그룹으로 멤버가 분류되는지 확인
 - `Resolve` 메서드에서 `Parameters/Returns/Errors` 섹션이 표시되는지 확인
 - `Resolved` 이벤트에서 `Parameters` 섹션이 표시되는지 확인
+- `TypedMap` 타입에서 `Type Parameters` 섹션과 기본값(`T = number`)이 표시되는지 확인
 - `DocgenMultiLine` 클래스에서 멀티라인 설명/정적 메서드(`CreateFromRaw`)가 정상 반영되는지 확인
 - `DocgenMultiLine`의 `groups["기타"]`, `groups["세부"]` 멤버가 그룹 섹션으로 표시되는지 확인
 - `DocgenCrossWithin`에서 `within`으로 `DocgenMembers`에 주입한 심볼이 나타나는지 확인

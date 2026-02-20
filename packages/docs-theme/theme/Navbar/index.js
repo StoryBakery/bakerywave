@@ -11,8 +11,8 @@ export default function Navbar() {
     const config = bakerywave || {};
     const navbarConfig = config.navbar || {};
 
-    const showSearch = navbarConfig.showSearch !== false;
-    const showLocaleDropdown = navbarConfig.showLocaleDropdown !== false;
+    const showSearch = navbarConfig.showSearch === true;
+    const showLocaleDropdown = navbarConfig.showLocaleDropdown === true;
 
     return (
         <NavbarLayout>

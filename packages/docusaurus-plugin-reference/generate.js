@@ -250,6 +250,81 @@ function cleanMemberName(value) {
     return String(value).replace(/\(.*\)$/, "");
 }
 
+function resolveClassHrefLoose(className, classLinkMap) {
+    if (!className || !classLinkMap) {
+        return null;
+    }
+    if (classLinkMap.has(className)) {
+        return classLinkMap.get(className);
+    }
+    const lowerClassName = String(className).toLowerCase();
+    let suffixMatch = null;
+    for (const [name, href] of classLinkMap.entries()) {
+        if (typeof name !== "string") {
+            continue;
+        }
+        const lowerName = name.toLowerCase();
+        if (lowerName === lowerClassName) {
+            return href;
+        }
+        if (!suffixMatch && lowerName.endsWith("." + lowerClassName)) {
+            suffixMatch = href;
+        }
+    }
+    return suffixMatch;
+}
+
+function parseShortApiTarget(target) {
+    const raw = String(target || "").trim();
+    if (!raw) {
+        return null;
+    }
+
+    const colonIndex = raw.indexOf(":");
+    if (colonIndex > 0 && colonIndex < raw.length - 1) {
+        const className = raw.slice(0, colonIndex).trim();
+        const member = raw.slice(colonIndex + 1).trim();
+        if (className && member) {
+            return { className, member };
+        }
+    }
+
+    const dotIndex = raw.indexOf(".");
+    if (dotIndex > 0 && dotIndex < raw.length - 1) {
+        const className = raw.slice(0, dotIndex).trim();
+        const member = raw.slice(dotIndex + 1).trim();
+        if (className && member) {
+            return { className, member };
+        }
+    }
+
+    return null;
+}
+
+function resolveShorthandApiLink(target, options, classLinkMap) {
+    const parsed = parseShortApiTarget(target);
+    if (!parsed) {
+        return null;
+    }
+
+    const classHref = resolveClassHrefLoose(parsed.className, classLinkMap);
+    if (classHref) {
+        let link = classHref;
+        const anchor = sanitizeAnchorId(cleanMemberName(parsed.member));
+        if (anchor) {
+            link += `#${anchor}`;
+        }
+        return link;
+    }
+
+    // 클래스/멤버 형태는 Roblox Class 링크로도 해석해본다.
+    // 단, member에 추가 점(.)이 있으면 카테고리 경로일 가능성이 커서 폴백하지 않는다.
+    if (parsed.member.includes(".")) {
+        return null;
+    }
+    return resolveRobloxLink("Class", `${parsed.className}:${parsed.member}`, options);
+}
+
 function resolveLocalCategoryLink(prefix, rest, options, classLinkMap) {
     if (prefix !== "Classes") {
         return null;
@@ -316,23 +391,27 @@ function resolveApiTargetLink(target, options, classLinkMap) {
         return null;
     }
     const match = target.match(/^([A-Za-z]+)\.(.+)$/);
-    if (!match) {
-        return null;
+    if (match) {
+        const prefix = match[1];
+        const rest = match[2];
+        const localLink = resolveLocalCategoryLink(prefix, rest, options, classLinkMap);
+        if (localLink) {
+            return localLink;
+        }
+        const robloxLink = resolveRobloxLink(prefix, rest, options);
+        if (robloxLink) {
+            return robloxLink;
+        }
     }
-    const prefix = match[1];
-    const rest = match[2];
-    const localLink = resolveLocalCategoryLink(prefix, rest, options, classLinkMap);
-    if (localLink) {
-        return localLink;
-    }
-    return resolveRobloxLink(prefix, rest, options);
+
+    return resolveShorthandApiLink(target, options, classLinkMap);
 }
 
 function applyApiLinks(markdown, options, classLinkMap) {
     if (!markdown) {
         return markdown;
     }
-    return markdown.replace(/`([^`\n]+)`/g, (full, content) => {
+    const withBackticks = markdown.replace(/`([^`\n]+)`/g, (full, content) => {
         const parts = content.split("|");
         const target = parts.shift().trim();
         const label = parts.length > 0 ? parts.join("|").trim() : null;
@@ -344,6 +423,31 @@ function applyApiLinks(markdown, options, classLinkMap) {
         if (!link) {
             return "`" + (display || target) + "`";
         }
+        return `[${display}](${link})`;
+    });
+
+    return withBackticks.replace(/\[([^\]\n]+)\](?!\()/g, (full, content, offset, source) => {
+        if ((offset > 0 && source[offset - 1] === "!") || (offset > 0 && source[offset - 1] === "\\")) {
+            return full;
+        }
+        const nextChar = source[offset + full.length];
+        if (nextChar === ":") {
+            return full;
+        }
+        const parts = content.split("|");
+        const target = parts.shift().trim();
+        const label = parts.length > 0 ? parts.join("|").trim() : null;
+        if (!target || target.startsWith("[") || target.endsWith("]")) {
+            return full;
+        }
+        if (label === "no-link") {
+            return `[${target}]`;
+        }
+        const link = resolveApiTargetLink(target, options, classLinkMap);
+        if (!link) {
+            return full;
+        }
+        const display = label && label.length > 0 ? label : stripApiPrefix(target);
         return `[${display}](${link})`;
     });
 }
@@ -637,9 +741,6 @@ function buildDocsPayload(entry, defaultDescription, defaultGroup = null, extraT
     }
     if (entry && entry.category) {
         appendTag(tags, "category", entry.category);
-    }
-    if (entry && entry.withinDefault) {
-        appendTag(tags, "withinDefault", entry.withinDefault);
     }
     appendExplicitTags(tags, entry && entry.tags);
 
@@ -1511,6 +1612,11 @@ function renderSymbol(symbol, options, usedAnchorIds, anchorOverride = null, hea
         lines.push(...renderInterfaceFieldList(symbol, classLinkMap));
     }
 
+    if (symbol && symbol.kind === "type") {
+        lines.push(...renderParamSection(symbol, classLinkMap, "Type Parameters"));
+        lines.push(...renderVariantSection(symbol, "Variants"));
+    }
+
     if (symbol && (symbol.kind === "function" || symbol.kind === "method" || symbol.kind === "constructor" || symbol.kind === "event")) {
         const sectionOrder = ["params", "returns", "errors"];
         const sectionTitles = {
@@ -1780,6 +1886,57 @@ function renderInterfaceFieldList(symbol, classLinkMap) {
     }
     lines.push(`</div>`);
 
+    return lines;
+}
+
+function getTypeVariants(symbol) {
+    if (!symbol || symbol.kind !== "type") {
+        return [];
+    }
+    const structured = symbol.types && symbol.types.structured;
+    if (structured && Array.isArray(structured.variants)) {
+        return structured.variants;
+    }
+    if (symbol.types && Array.isArray(symbol.types.variants)) {
+        return symbol.types.variants;
+    }
+    return [];
+}
+
+function renderVariantSection(symbol, heading = "Variants") {
+    const variants = getTypeVariants(symbol);
+    if (!variants || variants.length === 0) {
+        return [];
+    }
+
+    const lines = [];
+    lines.push("", `#### ${escapeHtmlText(heading)}`);
+    lines.push("", `<div class="sb-ref-param-list">`);
+
+    for (const variant of variants) {
+        const value = variant && (variant.value || variant.name) ? String(variant.value || variant.name) : "variant";
+        const description = normalizeParamDescription(variant && variant.description);
+        const rawDefault = variant ? (variant.default ?? variant.defaultValue) : null;
+        const defaultValue = rawDefault === null || rawDefault === undefined ? null : String(rawDefault).trim();
+        const isDefault = Boolean((variant && variant.isDefault) || defaultValue);
+
+        let rowHtml = `<div class="sb-ref-param-card">`;
+        rowHtml += `<div class="sb-ref-param-name"><code>${escapeHtmlText(value)}</code></div>`;
+        if (description) {
+            rowHtml += `<div class="sb-ref-param-desc">${escapeHtml(description)}</div>`;
+        }
+        if (isDefault) {
+            rowHtml += `<div class="sb-ref-param-meta"><span>Default</span>`;
+            if (defaultValue) {
+                rowHtml += `<code>${escapeHtml(defaultValue)}</code>`;
+            }
+            rowHtml += `</div>`;
+        }
+        rowHtml += `</div>`;
+        lines.push(rowHtml);
+    }
+
+    lines.push(`</div>`);
     return lines;
 }
 

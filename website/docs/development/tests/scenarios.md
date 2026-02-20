@@ -1,35 +1,57 @@
 ---
 title: 테스트 시나리오
-sidebar_label: 시나리오
+sidebar_label: 체크리스트
+sidebar_position: 3
 ---
 
-# 테스트 시나리오
+# 테스트 시나리오 및 체크리스트
 
-이 문서는 **기능별 확인 항목**을 체크리스트로 제공합니다.
+이 문서는 개발자가 작업을 마치고 PR을 올리기 전에 **반드시 확인해야 할 항목(Checklist)**을 모아둔 문서입니다.
+"내 코드가 진짜 잘 도는 걸까?" 불안할 때 이 항목들을 하나씩 지워나가세요.
 
-## 1) reference 생성
-- [ ] `luau-docgen`이 JSON을 생성한다
-- [ ] JSON 경로가 표준(`website/.generated/reference/luau.json`)과 일치한다
-- [ ] 경고/진단 로그가 출력된다 (경고는 실패로 처리하지 않음)
+---
 
-## 2) JSON -> MDX 변환
-- [ ] `website/docs/reference/luau/`에 문서가 생성된다
-- [ ] `manifest.json` 기준으로 고아 파일이 제거된다
-- [ ] `@param` 멀티라인 설명이 유지된다
+## ✅ 1. 레퍼런스 생성 (Generation)
 
-## 3) 링크/태그 처리
-- [ ] short link(`[ClassName]`)가 문서 내 링크로 해석된다
-- [ ] 미해결 링크는 진단 경고로 남는다
-- [ ] `@tag`, `@deprecated`, `@since`가 태그로 렌더된다
+`npm run reference:build` 명령을 실행했을 때를 기준입니다.
 
-## 4) 코드 블록 렌더링
-- [ ] 언어가 없는 fenced code block은 Luau로 하이라이트된다
-- [ ] Luau 타입 예제의 멀티라인 인덴트가 보존된다
+- [ ] **성공 여부**: 명령어가 에러 없이 끝까지 실행되었나요?
+- [ ] **JSON 파일**: `website/.generated/reference/luau.json` 파일이 생성되었나요?
+- [ ] **경로 확인**: 생성된 파일들이 엉뚱한 곳에 생기지 않았나요?
+- [ ] **로그 확인**: 터미널에 `Error`나 예상치 못한 `Warning`이 뜨지 않았나요?
 
-## 5) Docusaurus 빌드
-- [ ] `npm --prefix tests/luau-module-project/website run build` 성공
-- [ ] 레퍼런스 사이드바가 중복되지 않는다
+## ✅ 2. 파일 변환 (Conversion)
 
-## 6) watch 동작
-- [ ] `bakerywave reference watch` 실행 시 src 변경이 반영된다
-- [ ] dev 서버는 새 문서를 즉시 반영한다
+JSON 데이터가 MDX 파일로 바뀌는 과정입니다.
+
+- [ ] **파일 생성**: `website/docs/reference/luau/` 폴더 안에 `.mdx` 파일들이 생겼나요?
+- [ ] **고아 파일 제거**: 만약 소스 코드(`src/`)에서 함수를 지웠다면, 문서 폴더에서도 해당 파일이 사라졌나요?
+- [ ] **내용 유지**: 주석에 쓴 긴 설명(`@param` 등)이 잘리지 않고 문서에 다 들어갔나요?
+
+## ✅ 3. 링크와 태그 (Links & Tags)
+
+문서 내의 링크들이 올바르게 작동하는지 확인합니다.
+
+- [ ] **API 링크**: 백틱으로 감싼 링크들(예: `` `Class.Part` ``)이 클릭 가능한 링크로 변했나요?
+- [ ] **잘못된 링크**: 없는 문서를 가리키는 링크가 있다면 경고(Warning)가 떴나요?
+- [ ] **태그 표시**: `@deprecated`, `@since` 등의 태그가 문서 상단에 예쁜 뱃지로 표시되나요?
+
+## ✅ 4. 화면 렌더링 (Rendering)
+
+`npm --prefix tests/luau-module-project/website run dev`로 서버를 켜고 브라우저에서 확인합니다.
+
+- [ ] **코드 하이라이팅**: 코드 블록의 색상이 알록달록하게 잘 나오나요? (Luau 문법 강조)
+- [ ] **들여쓰기**: 코드 예제의 들여쓰기가 망가지지 않았나요?
+- [ ] **사이드바**: 왼쪽 메뉴(사이드바)에 중복된 항목이나 깨진 글자가 없나요?
+
+## ✅ 5. 최종 빌드 (Build)
+
+배포 직전의 상태를 점검합니다.
+
+- [ ] `npm --prefix tests/luau-module-project/website run build` 명령이 성공하나요?
+- [ ] 빌드된 결과물(`build/` 폴더)을 로컬 웹서버로 띄웠을 때도 잘 동작하나요?
+
+---
+
+모든 항목에 체크가 되었다면, 여러분의 코드는 아주 튼튼한 상태입니다! 🚀
+자신 있게 PR을 보내세요.

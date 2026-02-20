@@ -21,8 +21,8 @@ SimpleExample.Name = "Example"
 
 --[=[
     @constructor new
-    @param name string -- 초기 이름 설정
-    @return SimpleExample -- 새로운 인스턴스
+    @param name string - 초기 이름 설정
+    @return SimpleExample - 새로운 인스턴스
 
     새로운 SimpleExample 인스턴스를 생성합니다.
 ]=]
@@ -33,7 +33,7 @@ function SimpleExample.new(name: string)
 end
 
 --[=[
-    @param message string -- 출력할 메시지
+    @param message string - 출력할 메시지
     콘솔에 메시지를 출력하는 간단한 메서드입니다.
 ]=]
 function SimpleExample:SayHello(message: string)

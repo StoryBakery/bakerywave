@@ -13,7 +13,7 @@ export default function LocaleDropdown() {
     const navbarConfig = config.navbar || {};
 
     // Locale Dropdown이 비활성화되면 렌더링하지 않음
-    if (localeConfig.enabled === false || navbarConfig.showLocaleDropdown === false) {
+    if (localeConfig.enabled !== true || navbarConfig.showLocaleDropdown !== true) {
         return null;
     }
 
@@ -90,7 +90,7 @@ export default function LocaleDropdown() {
                 className="sb-locale-button"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
-                aria-label="언어 선택"
+                aria-label="Select language"
             >
                 <svg className="sb-locale-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="10" />

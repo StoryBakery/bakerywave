@@ -471,7 +471,7 @@ end
 	```
 
 	@param callback (...: T...) -> ...any
-	@param ... T... -- Additional arguments passed to `callback`
+	@param ... T... - Additional arguments passed to `callback`
 	@return Promise
 ]=]
 function Promise.try(callback, ...)
@@ -966,7 +966,7 @@ end
 	Checks whether the given object is a Promise via duck typing. This only checks if the object is a table and has an `andThen` method.
 
 	@param object any
-	@return boolean -- `true` if the given `object` is a Promise.
+	@return boolean - `true` if the given `object` is a Promise.
 ]=]
 function Promise.is(object)
 	if type(object) ~= "table" then
@@ -1086,7 +1086,7 @@ end
 	```
 
 	@param seconds number
-	@param rejectionValue any -- The value to reject with if the timeout is reached
+	@param rejectionValue any - The value to reject with if the timeout is reached
 	@return Promise
 ]=]
 function Promise.prototype:timeout(seconds, rejectionValue)
@@ -1272,7 +1272,7 @@ end
 	```
 
 	@param callback (...: any) -> any
-	@param ... any -- Additional arguments which will be passed to `callback`
+	@param ... any - Additional arguments which will be passed to `callback`
 	@return Promise
 ]=]
 function Promise.prototype:andThenCall(callback, ...)
@@ -1302,7 +1302,7 @@ end
 	Promises are eager, so if you pass a Promise to `andThenReturn`, it will begin executing before `andThenReturn` is reached in the chain. Likewise, if you pass a Promise created from [[Promise.reject]] into `andThenReturn`, it's possible that this will trigger the unhandled rejection warning. If you need to return a Promise, it's usually best practice to use [[Promise.andThen]].
 	:::
 
-	@param ... any -- Values to return from the function
+	@param ... any - Values to return from the function
 	@return Promise
 ]=]
 function Promise.prototype:andThenReturn(...)
@@ -1482,7 +1482,7 @@ end
 	Attaches a `finally` handler to this Promise that calls the given callback with the predefined arguments.
 
 	@param callback (...: any) -> any
-	@param ... any -- Additional arguments which will be passed to `callback`
+	@param ... any - Additional arguments which will be passed to `callback`
 	@return Promise
 ]=]
 function Promise.prototype:finallyCall(callback, ...)
@@ -1508,7 +1508,7 @@ end
 	end)
 	```
 
-	@param ... any -- Values to return from the function
+	@param ... any - Values to return from the function
 	@return Promise
 ]=]
 function Promise.prototype:finallyReturn(...)
@@ -1522,8 +1522,8 @@ end
 	Yields the current thread until the given Promise completes. Returns the Promise's status, followed by the values that the promise resolved or rejected with.
 
 	@yields
-	@return Status -- The Status representing the fate of the Promise
-	@return ...any -- The values the Promise resolved or rejected with.
+	@return Status - The Status representing the fate of the Promise
+	@return ...any - The values the Promise resolved or rejected with.
 ]=]
 function Promise.prototype:awaitStatus()
 	self._unhandledRejection = false
@@ -1575,8 +1575,8 @@ end
 	```
 
 	@yields
-	@return boolean -- `true` if the Promise successfully resolved
-	@return ...any -- The values the Promise resolved or rejected with.
+	@return boolean - `true` if the Promise successfully resolved
+	@return ...any - The values the Promise resolved or rejected with.
 ]=]
 function Promise.prototype:await()
 	return awaitHelper(self:awaitStatus())
@@ -1613,7 +1613,7 @@ end
 
 	@error any -- Errors with the rejection value if this Promise rejects or gets cancelled.
 	@yields
-	@return ...any -- The values the Promise resolved with.
+	@return ...any - The values the Promise resolved with.
 ]=]
 function Promise.prototype:expect()
 	return expectHelper(self:awaitStatus())
@@ -1798,7 +1798,7 @@ end
 
 	If this Promise is still running, Rejected, or Cancelled, the Promise returned from `:now()` will reject with the `rejectionValue` if passed, otherwise with a `Promise.Error(Promise.Error.Kind.NotResolvedInTime)`. This can be checked with [[Error.isKind]].
 
-	@param rejectionValue? any -- The value to reject with if the Promise isn't resolved
+	@param rejectionValue? any - The value to reject with if the Promise isn't resolved
 	@return Promise
 ]=]
 function Promise.prototype:now(rejectionValue)
@@ -1912,8 +1912,8 @@ end
 	```
 
 	@since 3.0.0
-	@param event Event -- Any object with a `Connect` method. This includes all Roblox events.
-	@param predicate (...: P) -> boolean -- A function which determines if the Promise should resolve with the given value, or wait for the next event to check again.
+	@param event Event - Any object with a `Connect` method. This includes all Roblox events.
+	@param predicate (...: P) -> boolean - A function which determines if the Promise should resolve with the given value, or wait for the next event to check again.
 	@return Promise<P>
 ]=]
 function Promise.fromEvent(event, predicate)
@@ -1965,8 +1965,8 @@ end
 	The callback is called with the actual promise that rejected, followed by the rejection values.
 
 	@since v3.2.0
-	@param callback (promise: Promise, ...: any) -- A callback that runs when an unhandled rejection happens.
-	@return () -> () -- Function that unregisters the `callback` when called
+	@param callback (promise: Promise, ...: any) - A callback that runs when an unhandled rejection happens.
+	@return () -> () - Function that unregisters the `callback` when called
 ]=]
 function Promise.onUnhandledRejection(callback)
 	table.insert(Promise._unhandledRejectionCallbacks, callback)

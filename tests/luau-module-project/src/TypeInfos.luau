@@ -31,26 +31,26 @@ TypeInfo.__type = "TypeInfo"
 --[=[
 	@function TypeInfo.Serialize
 	전달된 버퍼에 값을 직렬화합니다.
-	@param buf buffer -- 데이터를 기록할 버퍼.
-	@param offset number -- 기록을 시작할 바이트 오프셋.
-	@param value any -- 직렬화할 값.
+	@param buf buffer - 데이터를 기록할 버퍼.
+	@param offset number - 기록을 시작할 바이트 오프셋.
+	@param value any - 직렬화할 값.
 ]=]
 export type Serialize = (buf: buffer, offset: number, value: any) -> ()
 
 --[=[
 	@function TypeInfo.Deserialize
 	전달된 버퍼에서 값을 역직렬화합니다.
-	@param buf buffer -- 데이터를 읽어올 버퍼.
-	@param offset number -- 읽기를 시작할 바이트 오프셋.
-	@return any -- 복원된 값.
+	@param buf buffer - 데이터를 읽어올 버퍼.
+	@param offset number - 읽기를 시작할 바이트 오프셋.
+	@return any - 복원된 값.
 ]=]
 export type Deserialize = (buf: buffer, offset: number) -> any
 
 --[=[
 	@function TypeInfo.TypeCheck
 	전달된 값이 이 TypeInfo 와 일치하는지 검증합니다.
-	@param value any -- 검증할 값.
-	@return boolean -- 유효하면 true.
+	@param value any - 검증할 값.
+	@return boolean - 유효하면 true.
 ]=]
 export type TypeCheck = (value: any) -> boolean
 
@@ -81,9 +81,9 @@ export type TypeCheck = (value: any) -> boolean
 	
 	기본적으로 TypeCheck 와 동일하게 설정됩니다.
 	
-	@param value any -- 검증할 값.
-	@return boolean -- 유효하면 true
-	@return string? -- 유효하지 않을 때의 원인, 유효하지 않을 때도 원인은 출력안될 수 있음
+	@param value any - 검증할 값.
+	@return boolean - 유효하면 true
+	@return string? - 유효하지 않을 때의 원인, 유효하지 않을 때도 원인은 출력안될 수 있음
 ]=]
 export type StrictTypeCheck = (value: any) -> (boolean, string?)
 

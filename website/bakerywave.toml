@@ -1,12 +1,28 @@
 schemaVersion = 1
 
-[reference]
+# Bakerywave preset defaults.
+# Keep this file minimal and add options only when needed.
+
+[site.navigation]
+autoNavigationFromDocsFolders = false
+
+[site.navbar]
+showSearch = true
+showLocaleDropdown = false
+
+[site.search]
+enabled = true
+
+[site.footer]
+enabled = true
+showLicense = true
+showCopyright = true
+showGithub = true
+showPoweredBy = true
+
+[site.locale]
 enabled = false
+current = "English"
 
-[i18n]
-defaultLocale = "en"
-locales = ["en", "ko"]
-referenceLocales = ["en"]
-
-[i18n.reference]
-copy = true
+# Add [reference] / [i18n] only when required.
+# See docs for full options.

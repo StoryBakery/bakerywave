@@ -20,6 +20,12 @@ luau-docgen (JSON 생성)
 - MDX 출력: `website/docs/reference/<lang>/`
 - manifest: `website/.generated/reference/manifest.json`
 
+### 폴더 운영 기준
+- `docs/reference/<lang>/`는 reference 생성 출력 폴더로 유지합니다.
+- `guides`(또는 원하는 이름)는 일반 문서를 묶는 사이드바 그룹 이름입니다.
+- 일반 문서는 `docs/` 아래에서 폴더를 자유롭게 구성해도 됩니다.
+- `docs/reference/`는 생성 결과가 덮어써질 수 있으므로 수동 편집 대상이 아닙니다.
+
 ## 2) 입력 설정 로딩 순서
 
 ### 설정 소스 우선순위
@@ -110,4 +116,3 @@ luau-docgen (JSON 생성)
 - `manifest.json`은 항상 업데이트됨
 - `outDir` 내 파일은 **현재 생성 결과만 유지**
 - `renderMode=mdx`가 아니면 실제 파일은 생성되지 않음
-
