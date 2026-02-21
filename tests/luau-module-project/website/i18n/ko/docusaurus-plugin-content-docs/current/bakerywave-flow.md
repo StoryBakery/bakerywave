@@ -1,11 +1,11 @@
 ---
-title: Bakerywave Flow Test
-sidebar_label: Bakerywave Flow
+title: bakerywave 흐름 테스트
+sidebar_label: bakerywave 흐름
 ---
 
-# Bakerywave Flow Test
+# bakerywave 흐름 테스트
 
-This page is a quick checklist for validating bakerywave CLI commands.
+이 문서는 bakerywave CLI 기능을 빠르게 확인하기 위한 테스트용 페이지입니다.
 
 ## init
 ```
@@ -29,5 +29,5 @@ bakerywave reference watch --site-dir website
 bakerywave write-translations --site-dir website -- --locale ko
 ```
 
-## Configuration File
-- You can configure reference and i18n options in `bakerywave.toml`.
+## 설정 파일
+- `bakerywave.toml`에 reference/i18n 옵션을 둘 수 있습니다.

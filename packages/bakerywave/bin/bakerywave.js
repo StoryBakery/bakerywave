@@ -32,6 +32,31 @@ const DOCUSAURUS_COMMANDS = new Set([
 const COMMAND_ALIASES = new Map([["preview", "serve"]]);
 const NPM_EXEC_CACHE = { value: null };
 
+function readCliVersion() {
+    const candidates = [
+        path.resolve(__dirname, "..", "package.json"),
+        path.resolve(__dirname, "..", "..", "package.json"),
+    ];
+
+    for (const candidate of candidates) {
+        if (!fs.existsSync(candidate)) {
+            continue;
+        }
+        try {
+            const parsed = JSON.parse(fs.readFileSync(candidate, "utf8"));
+            if (parsed && typeof parsed.version === "string" && parsed.version.trim().length > 0) {
+                return parsed.version.trim();
+            }
+        } catch (error) {
+            // continue
+        }
+    }
+
+    return "0.0.0";
+}
+
+const CLI_VERSION = readCliVersion();
+
 function resolveNpmExec() {
     if (NPM_EXEC_CACHE.value) {
         return NPM_EXEC_CACHE.value;
@@ -332,8 +357,8 @@ function runInit(baseCwd, initArgs) {
         return;
     }
 
-    const fallbackCreateDocs = path.resolve(__dirname, "..", "..", "create-docs", "bin", "create-docs.js");
-    if (!fs.existsSync(fallbackCreateDocs)) {
+    const fallbackCreateDocs = resolveCreateDocsScript([baseCwd, workspaceRoot, __dirname]);
+    if (!fallbackCreateDocs || !fs.existsSync(fallbackCreateDocs)) {
         if (result && result.error) {
             console.error("[bakerywave] init failed: " + result.error.message);
         }
@@ -367,11 +392,56 @@ function runCommand(command, args, options) {
     process.exit(1);
 }
 
+function parsePositiveInteger(value) {
+    if (value === null || value === undefined) {
+        return null;
+    }
+    const parsed = Number(value);
+    if (!Number.isInteger(parsed) || parsed <= 0) {
+        return null;
+    }
+    return parsed;
+}
+
+function hasMaxOldSpaceSizeOption(nodeOptions) {
+    if (typeof nodeOptions !== "string" || nodeOptions.trim().length === 0) {
+        return false;
+    }
+    return /(?:^|\s)--max-old-space-size(?:=|\s+\d+)/.test(nodeOptions);
+}
+
+function appendNodeOption(nodeOptions, option) {
+    if (typeof nodeOptions !== "string" || nodeOptions.trim().length === 0) {
+        return option;
+    }
+    return `${nodeOptions.trim()} ${option}`;
+}
+
+function buildDocusaurusEnv(baseEnv) {
+    const env = { ...baseEnv };
+    if (env.BAKERYWAVE_DISABLE_MEMORY_TUNING === "1") {
+        return env;
+    }
+
+    const explicitLimit = parsePositiveInteger(env.BAKERYWAVE_MAX_OLD_SPACE_SIZE);
+    const defaultLimit = 4096;
+    const limit = explicitLimit || defaultLimit;
+    const nodeOptions = env.NODE_OPTIONS;
+
+    if (hasMaxOldSpaceSizeOption(nodeOptions)) {
+        return env;
+    }
+
+    env.NODE_OPTIONS = appendNodeOption(nodeOptions, `--max-old-space-size=${limit}`);
+    return env;
+}
+
 function runDocusaurus(command, args, siteDirAbs) {
     if (!fs.existsSync(siteDirAbs)) {
         console.error(`[bakerywave] site directory not found: ${siteDirAbs}`);
         process.exit(1);
     }
+    const docusaurusEnv = buildDocusaurusEnv(process.env);
     let npmExec = resolveNpmExec();
     const cmdArgs = sanitizeArgs([...npmExec.args, "exec", "docusaurus", "--", command, ...args]);
     try {
@@ -385,12 +455,14 @@ function runDocusaurus(command, args, siteDirAbs) {
     try {
         runCommand(npmExec.command, cmdArgs, {
             cwd: siteDirAbs,
+            env: docusaurusEnv,
         });
         return;
     } catch (error) {
         const docusaurusBin = require.resolve("@docusaurus/core/bin/docusaurus.mjs", { paths: [siteDirAbs, __dirname] });
         runCommand(process.execPath, [docusaurusBin, command, ...args], {
             cwd: siteDirAbs,
+            env: docusaurusEnv,
         });
     }
 }
@@ -400,6 +472,7 @@ function spawnDocusaurus(command, args, siteDirAbs) {
         console.error(`[bakerywave] site directory not found: ${siteDirAbs}`);
         process.exit(1);
     }
+    const docusaurusEnv = buildDocusaurusEnv(process.env);
     let npmExec = resolveNpmExec();
     const cmdArgs = sanitizeArgs([...npmExec.args, "exec", "docusaurus", "--", command, ...args]);
     try {
@@ -414,7 +487,7 @@ function spawnDocusaurus(command, args, siteDirAbs) {
         return spawn(npmExec.command, cmdArgs, {
             stdio: "inherit",
             cwd: siteDirAbs,
-            env: process.env,
+            env: docusaurusEnv,
             detached: process.platform !== "win32",
         });
     } catch (error) {
@@ -422,7 +495,7 @@ function spawnDocusaurus(command, args, siteDirAbs) {
         return spawn(process.execPath, [docusaurusBin, command, ...args], {
             stdio: "inherit",
             cwd: siteDirAbs,
-            env: process.env,
+            env: docusaurusEnv,
             detached: process.platform !== "win32",
         });
     }
@@ -634,6 +707,18 @@ function resolveDocgenScript(searchPaths) {
             return fallbackPath;
         }
         throw error;
+    }
+}
+
+function resolveCreateDocsScript(searchPaths) {
+    const fallbackPath = path.resolve(__dirname, "..", "..", "create-docs", "bin", "create-docs.js");
+    try {
+        return require.resolve("@storybakery/create-docs/bin/create-docs.js", { paths: searchPaths });
+    } catch (error) {
+        if (fs.existsSync(fallbackPath)) {
+            return fallbackPath;
+        }
+        return null;
     }
 }
 
@@ -1342,6 +1427,8 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
     let pendingRestart = false;
     let lastStartExit = 0;
     let startExitStreak = 0;
+    let rapidStartExitStreak = 0;
+    let startSpawnedAt = Date.now();
     let pendingWatchRespawn = false;
 
     const attachExitHandler = (child, role) => {
@@ -1358,6 +1445,7 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
         }
         cleanupDocusaurusCacheIfStale(siteDirAbs);
         startProcess = spawnDocusaurus("start", restartArgs, siteDirAbs);
+        startSpawnedAt = Date.now();
         children[startIndex] = startProcess;
         attachExitHandler(startProcess, "start");
     };
@@ -1404,6 +1492,7 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
                 spawnStart();
                 return;
             }
+            const runtimeMs = Date.now() - startSpawnedAt;
             const now = Date.now();
             if (now - lastStartExit < 2000) {
                 startExitStreak += 1;
@@ -1411,8 +1500,18 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
                 startExitStreak = 0;
             }
             lastStartExit = now;
-            if (startExitStreak >= 3) {
-                console.error("[bakerywave] start exited repeatedly. skipping auto-restart.");
+            if (runtimeMs < 8000) {
+                rapidStartExitStreak += 1;
+            } else {
+                rapidStartExitStreak = 0;
+            }
+            if (startExitStreak >= 3 || rapidStartExitStreak >= 3) {
+                const codeText = code === null || code === undefined ? "unknown" : String(code);
+                console.error(
+                    `[bakerywave] start exited repeatedly (code: ${codeText}, runtime: ${runtimeMs}ms). ` +
+                    "stopping auto-restart. If port 3000 is already used, run `bakerywave dev -- --port 3001`."
+                );
+                shutdown(1);
                 return;
             }
             if (restartingStart) {
@@ -1572,6 +1671,7 @@ function printHelp() {
     console.log("  --cwd <dir>          Base working directory");
     console.log("  --site-dir <dir>     Site directory (default: website or cwd)");
     console.log("  --config <path>      Docusaurus config path");
+    console.log("  --version, -v        Show bakerywave CLI version");
     console.log("\nRun 'bakerywave <command> --help' for more information on a specific command.");
 }
 
@@ -1625,6 +1725,12 @@ function main() {
     const { cwd, siteDir, configPath, rest } = parseGlobalArgs(head);
 
     const isHelp = (arg) => arg === "--help" || arg === "-h" || arg === "help";
+    const isVersion = (arg) => arg === "--version" || arg === "-v" || arg === "version";
+
+    if (rest.length === 1 && isVersion(rest[0])) {
+        console.log(CLI_VERSION);
+        return;
+    }
 
     if (rest.length === 0 || (rest.length === 1 && isHelp(rest[0]))) {
         printHelp();

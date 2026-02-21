@@ -1,13 +1,13 @@
 ---
-title: Luau Link Test
-sidebar_label: Luau Links
+title: Luau 링크 테스트
+sidebar_label: Luau 링크
 ---
 
-# Luau Link Test
+# Luau 링크 테스트
 
-The snippets below are examples for validating automatic link conversion.
+아래 코드는 링크 변환이 제대로 동작하는지 확인하기 위한 샘플입니다.
 
-## Roblox Official Links
+## Roblox 공식 링크
 
 - `Class.BasePart`
 - `Class.MarketplaceService:GetProductInfo()`
@@ -19,15 +19,15 @@ The snippets below are examples for validating automatic link conversion.
 - `Global.RobloxGlobals.tick()`
 - `Library.coroutine.create()`
 
-## Bakerywave Local Links
+## Bakerywave 로컬 링크
 
 - `AnotherCategory.Features.AnotherDocFeatureClass`
 - `AnotherCategory.Features.AnotherDocFeatureClass:Double()`
 - `AnotherCategory.Features.AnotherBaseFeature:Echo()`
-- `AnotherCategory.Features.AnotherDocFeatureClass:Double()|Double`
+- `AnotherCategory.Features.AnotherDocFeatureClass:Double()|두 배`
 - `AnotherCategory.Features.AnotherDocFeatureClass:Double()|no-link`
 
 <Alert severity="info">
-<AlertTitle>Note</AlertTitle>
-`no-link` disables linking and keeps code-style formatting only.
+<AlertTitle>참고</AlertTitle>
+`no-link`는 링크를 끄고 코드 스타일만 유지합니다.
 </Alert>

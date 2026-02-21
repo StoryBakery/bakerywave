@@ -31,10 +31,34 @@ Roblox 엔진의 공식 API로 연결할 때 사용합니다.
 
 Bakerywave 프로젝트 내의 API 문서로 연결할 때 사용합니다.
 
-| 접두어             | 설명        | 예시                                      |
-| ------------------ | ----------- | ----------------------------------------- |
-| `Classes.`         | 내부 클래스 | `` `Classes.MyClass` ``                   |
-| `AnotherCategory.` | 내부 문서   | `` `AnotherCategory.Features.Overview` `` |
+| 접두어             | 설명                 | 예시                                      |
+| ------------------ | -------------------- | ----------------------------------------- |
+| `Classes.`         | 내부 클래스 (기본)   | `` `Classes.MyClass` ``                   |
+| `AnotherCategory.` | 내부 문서 (커스텀 예시) | `` `AnotherCategory.Features.Overview` `` |
+
+`AnotherCategory.`는 기본 제공 접두어가 아니라 **사용자 설정 예시**입니다.
+아래처럼 `robloxLinks.localCategories`에 접두어를 추가하면 사용할 수 있습니다.
+
+```js
+// docusaurus.config.js
+presets: [
+  [
+    "@storybakery/docs-preset",
+    {
+      robloxLinks: {
+        localCategories: {
+          AnotherCategory: {
+            basePath: "/reference/luau",
+          },
+        },
+      },
+    },
+  ],
+];
+```
+
+그리고 실제 Luau 소스에서 해당 카테고리를 사용해야 합니다.
+예: `@category AnotherCategory/Features`
 
 
 ## 상세 연결 방법
@@ -59,6 +83,7 @@ Bakerywave 프로젝트 내의 API 문서로 연결할 때 사용합니다.
 `monospace|` 접두어나 `no-link` 옵션을 사용할 수 있습니다.
 
 - `` `monospace|Class.Part` `` → 링크 없이 `Class.Part` 텍스트만 코드 스타일로 표시
+- `` `Class.Part|no-link` `` → 링크 없이 `Class.Part` 텍스트만 코드 스타일로 표시
 
 ---
 

@@ -4,9 +4,73 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useLocation } from '@docusaurus/router';
 import './styles.css';
 
+function ensureLeadingSlash(value) {
+    if (!value) {
+        return '/';
+    }
+    return value.startsWith('/') ? value : `/${value}`;
+}
+
+function ensureTrailingSlash(value) {
+    const normalized = ensureLeadingSlash(value);
+    return normalized.endsWith('/') ? normalized : `${normalized}/`;
+}
+
+function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function stripLocaleNoise(pathname, localeBasePaths, locales) {
+    let result = ensureLeadingSlash(pathname || '/');
+    const nonRootBases = localeBasePaths
+        .filter((base) => typeof base === 'string' && base.length > 0 && base !== '/')
+        .sort((left, right) => right.length - left.length);
+
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const basePath of nonRootBases) {
+            if (result.startsWith(basePath)) {
+                const tail = result.slice(basePath.length).replace(/^\/+/, '');
+                result = tail.length > 0 ? `/${tail}` : '/';
+                changed = true;
+                break;
+            }
+        }
+    }
+
+    if (Array.isArray(locales) && locales.length > 0) {
+        const localePattern = new RegExp(
+            `^/(?:${locales.map((locale) => escapeRegExp(locale)).join('|')})(?=/|$)`
+        );
+        while (localePattern.test(result)) {
+            result = result.replace(localePattern, '');
+            result = result.length > 0 ? ensureLeadingSlash(result) : '/';
+        }
+    }
+
+    return result;
+}
+
+function getBrowserLocationFallback(location) {
+    if (typeof window !== 'undefined' && window.location) {
+        return {
+            pathname: window.location.pathname || location.pathname || '/',
+            search: window.location.search || location.search || '',
+            hash: window.location.hash || location.hash || '',
+        };
+    }
+
+    return {
+        pathname: location.pathname || '/',
+        search: location.search || '',
+        hash: location.hash || '',
+    };
+}
+
 export default function LocaleDropdown() {
     const { bakerywave } = useThemeConfig();
-    const { i18n } = useDocusaurusContext();
+    const { i18n, siteConfig } = useDocusaurusContext();
     const location = useLocation();
     const config = bakerywave || {};
     const localeConfig = config.locale || {};
@@ -17,7 +81,7 @@ export default function LocaleDropdown() {
         return null;
     }
 
-    const { currentLocale, locales } = i18n;
+    const { currentLocale, locales, localeConfigs } = i18n;
 
     // 로케일이 1개 이하면 드롭다운 표시 안 함
     if (!locales || locales.length <= 1) {
@@ -56,32 +120,35 @@ export default function LocaleDropdown() {
     };
 
     const getLocaleLabel = (locale) => {
-        return localeLabels[locale] || defaultLabels[locale] || locale;
+        const configured = localeConfigs && localeConfigs[locale];
+        return localeLabels[locale] || (configured && configured.label) || defaultLabels[locale] || locale;
     };
 
     // 로케일 변경 URL 생성
     const getLocaleUrl = (targetLocale) => {
-        const pathname = location.pathname;
-
-        // 현재 경로에서 로케일 제거
-        let pathWithoutLocale = pathname;
-        for (const locale of locales) {
-            if (pathname.startsWith(`/${locale}/`)) {
-                pathWithoutLocale = pathname.substring(locale.length + 1);
-                break;
-            } else if (pathname === `/${locale}`) {
-                pathWithoutLocale = '/';
-                break;
-            }
+        const targetConfig = localeConfigs && localeConfigs[targetLocale];
+        if (!targetConfig) {
+            return location.pathname;
         }
 
-        // 기본 로케일이면 프리픽스 없음
-        const defaultLocale = i18n.defaultLocale;
-        if (targetLocale === defaultLocale) {
-            return pathWithoutLocale;
+        const browserLocation = getBrowserLocationFallback(location);
+        const localeBasePaths = Object.values(localeConfigs || {})
+            .map((item) => item && item.baseUrl)
+            .filter(Boolean);
+        const normalizedSuffix = stripLocaleNoise(browserLocation.pathname, localeBasePaths, locales);
+        const suffixWithoutSlash = normalizedSuffix === '/' ? '' : normalizedSuffix.replace(/^\/+/, '');
+        const targetBasePath = ensureTrailingSlash(targetConfig.baseUrl || '/');
+        const targetPathRaw = suffixWithoutSlash.length > 0
+            ? `${targetBasePath}${suffixWithoutSlash}`
+            : targetBasePath;
+        const targetPath = targetPathRaw.replace(/\/{2,}/g, '/');
+
+        const fullyQualified = targetConfig.url && targetConfig.url !== siteConfig.url;
+        if (fullyQualified) {
+            return `${targetConfig.url.replace(/\/+$/, '')}${targetPath}${browserLocation.search}${browserLocation.hash}`;
         }
 
-        return `/${targetLocale}${pathWithoutLocale}`;
+        return `${targetPath}${browserLocation.search}${browserLocation.hash}`;
     };
 
     return (

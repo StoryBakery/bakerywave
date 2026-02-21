@@ -9,7 +9,15 @@
   "files": [
     "bin",
     "src",
-    "native"
+    "scripts/copy-native.js",
+    "native/README.md",
+    "native/luau.version",
+    "native/build.rs",
+    "native/Cargo.toml",
+    "native/Cargo.lock",
+    "native/CMakeLists.txt",
+    "native/cpp",
+    "native/src"
   ],
   "license": "MIT",
   "publishConfig": {

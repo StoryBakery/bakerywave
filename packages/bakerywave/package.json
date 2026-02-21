@@ -10,10 +10,15 @@
     "bin",
     "src"
   ],
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
+    "@storybakery/create-docs": "^0.1.0",
     "@storybakery/docusaurus-plugin-reference": "^0.1.0",
     "@storybakery/luau-docgen": "^0.1.0",
     "toml": "^3.0.0"

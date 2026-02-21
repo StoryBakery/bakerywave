@@ -37,7 +37,7 @@ bakerywave --version
 <AlertTitle>추천: npx 사용하기</AlertTitle>
 굳이 컴퓨터에 설치하지 않고도, 필요할 때만 최신 버전을 바로 실행하는 `npx` 방식을 가장 추천합니다.
 
-이후 가이드에서는 여러분이 전역으로 설치했다고 가정하고 `bakerywave` 명령어를 사용하지만, 설치하지 않았다면 명령어 앞에 `npx`를 붙여서 `npx @storybakery/bakerywave` (또는 줄여서 `npx bakerywave`)로 실행할 수도 있습니다.
+이후 가이드에서는 여러분이 전역으로 설치했다고 가정하고 `bakerywave` 명령어를 사용하지만, 설치하지 않았다면 명령어 앞에 `npx`를 붙여서 `npx @storybakery/bakerywave`로 실행할 수도 있습니다.
 </Alert>
 
 ## 3. VSCode 설치 (권장)

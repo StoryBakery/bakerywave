@@ -1,14 +1,21 @@
 schemaVersion = 1
 
-# Bakerywave preset defaults.
-# Keep this file minimal and add options only when needed.
-
 [site.navigation]
 autoNavigationFromDocsFolders = true
 
 [site.navigation.sectionLabels]
 guides = "Guides"
 reference = "API"
+
+[site.navbar]
+showSearch = true
+showLocaleDropdown = true
+
+[site.search]
+enabled = true
+
+[site.locale]
+enabled = true
 
 [site.footer]
 enabled = true
@@ -17,4 +24,10 @@ showCopyright = true
 showGithub = true
 showPoweredBy = true
 
-# Add [reference], [i18n], [site.search], and [site.locale] only when required.
+[i18n]
+defaultLocale = "en"
+locales = ["en", "ko"]
+referenceLocales = ["ko"]
+
+[i18n.reference]
+copy = true

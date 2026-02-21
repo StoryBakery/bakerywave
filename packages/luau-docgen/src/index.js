@@ -1494,6 +1494,13 @@ function buildLocation(relativePath, lineNumber, lineContent) {
     };
 }
 
+function resolveBindingParams(binding) {
+    if (!binding || !Array.isArray(binding.params)) {
+        return [];
+    }
+    return binding.params;
+}
+
 function buildFunctionTypes(doc, binding) {
     const structured = {
         params: [],
@@ -1502,7 +1509,7 @@ function buildFunctionTypes(doc, binding) {
         yields: doc.state.yields,
     };
 
-    const bindingParams = binding ? binding.params : [];
+    const bindingParams = resolveBindingParams(binding);
     const docParams = doc.params;
 
     if (docParams.length > 0) {
@@ -2093,7 +2100,7 @@ function generateModule(filePath, rootDir, srcDir, typesDir, moduleIdOverrides, 
 
         if (binding && (binding.kind === "function" || binding.kind === "constructor")) {
             const docParamNames = doc.params.map((param) => param.name);
-            const bindingParamNames = binding.params.map((param) => param.name);
+            const bindingParamNames = resolveBindingParams(binding).map((param) => param.name);
             const hasExplicitParamType = doc.params.some((param) => {
                 if (!param.type) {
                     return false;

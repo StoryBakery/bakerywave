@@ -8,8 +8,12 @@
     "theme",
     "index.js"
   ],
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "peerDependencies": {
     "@docusaurus/core": "^3.0.0",

@@ -22,7 +22,7 @@ bakerywave init my-docs
 Bakerywave를 설치하지 않았다면:
 
 ```bash
-npx bakerywave init my-docs
+npx @storybakery/bakerywave init my-docs
 ```
 </Alert>
 

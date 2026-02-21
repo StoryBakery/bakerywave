@@ -116,6 +116,36 @@ function listTopLevelDocsDirectories(docsDir) {
         .sort((left, right) => left.localeCompare(right));
 }
 
+function applySectionOrder(sectionDirs, sectionOrder) {
+    if (!Array.isArray(sectionOrder) || sectionOrder.length === 0) {
+        return sectionDirs;
+    }
+
+    const rank = new Map();
+    for (let i = 0; i < sectionOrder.length; i += 1) {
+        const section = sectionOrder[i];
+        if (typeof section !== "string" || section.trim().length === 0) {
+            continue;
+        }
+        if (!rank.has(section)) {
+            rank.set(section, i);
+        }
+    }
+
+    if (rank.size === 0) {
+        return sectionDirs;
+    }
+
+    return sectionDirs.slice().sort((left, right) => {
+        const leftRank = rank.has(left) ? rank.get(left) : Number.MAX_SAFE_INTEGER;
+        const rightRank = rank.has(right) ? rank.get(right) : Number.MAX_SAFE_INTEGER;
+        if (leftRank !== rightRank) {
+            return leftRank - rightRank;
+        }
+        return left.localeCompare(right);
+    });
+}
+
 function writeGeneratedSidebarFile(siteDir, sidebars) {
     const generatedDir = path.join(siteDir, ".generated");
     const sidebarPath = path.join(generatedDir, "auto-sidebars.js");
@@ -169,8 +199,8 @@ function resolveAutoNavigationOptions(siteDir, docsOptions, siteConfig) {
     }
 
     const docsDir = path.resolve(siteDir, docsOptions.path || "docs");
-    const sectionDirs = listTopLevelDocsDirectories(docsDir);
-    if (sectionDirs.length === 0) {
+    const discoveredSectionDirs = listTopLevelDocsDirectories(docsDir);
+    if (discoveredSectionDirs.length === 0) {
         return null;
     }
 
@@ -180,6 +210,12 @@ function resolveAutoNavigationOptions(siteDir, docsOptions, siteConfig) {
             : navbarConfig.sectionLabels && typeof navbarConfig.sectionLabels === "object"
                 ? navbarConfig.sectionLabels
                 : {};
+    const sectionOrder = Array.isArray(navigationConfig.sectionOrder)
+        ? navigationConfig.sectionOrder
+        : Array.isArray(navbarConfig.sectionOrder)
+            ? navbarConfig.sectionOrder
+            : null;
+    const sectionDirs = applySectionOrder(discoveredSectionDirs, sectionOrder);
     const sidebars = buildAutoSidebarItems(sectionDirs);
     const sidebarPath = writeGeneratedSidebarFile(siteDir, sidebars);
     const navbarItems = buildAutoNavbarItems(sectionDirs, sectionLabels);

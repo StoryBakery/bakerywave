@@ -207,7 +207,7 @@ end
 	@within Promise
 	@readonly
 	@tag enums
-	A table containing all members of the `Status` enum, e.g., `Promise.Status.Resolved`.
+	A table containing all members of the `Status` enum, e.g., Promise.Status.Resolved.
 ]=]
 --[=[
 	A Promise is an object that represents a value that will exist in the future, but doesn't right now.
@@ -357,7 +357,7 @@ function Promise:__tostring()
 end
 
 --[=[
-	The same as [Promise.new](/api/Promise#new), except execution begins after the next `Heartbeat` event.
+	The same as Promise.new, except execution begins after the next `Heartbeat` event.
 
 	This is a spiritual replacement for `spawn`, but it does not suffer from the same [issues](https://eryn.io/gist/3db84579866c099cdd5bb2ff37947cec) as `spawn`.
 
@@ -855,7 +855,7 @@ end
 
 	If the array of values contains a Promise, when we get to that point in the list, we wait for the Promise to resolve before calling the predicate with the value.
 
-	If a Promise in the array of values is already Rejected when `Promise.each` is called, `Promise.each` rejects with that value immediately (the predicate callback will never be called even once). If a Promise in the list is already Cancelled when `Promise.each` is called, `Promise.each` rejects with `Promise.Error(Promise.Error.Kind.AlreadyCancelled)`. If a Promise in the array of values is Started at first, but later rejects, `Promise.each` will reject with that value and iteration will not continue once iteration encounters that value.
+	If a Promise in the array of values is already Rejected when `Promise.each` is called, `Promise.each` rejects with that value immediately (the predicate callback will never be called even once). If a Promise in the list is already Cancelled when `Promise.each` is called, `Promise.each` rejects with Promise.Error(Promise.Error.Kind.AlreadyCancelled). If a Promise in the array of values is Started at first, but later rejects, `Promise.each` will reject with that value and iteration will not continue once iteration encounters that value.
 
 	Returns a Promise containing an array of the returned/resolved values from the predicate for each item in the array of values.
 
@@ -1054,7 +1054,7 @@ end
 --[=[
 	Returns a new Promise that resolves if the chained Promise resolves within `seconds` seconds, or rejects if execution time exceeds `seconds`. The chained Promise will be cancelled if the timeout is reached.
 
-	Rejects with `rejectionValue` if it is non-nil. If a `rejectionValue` is not given, it will reject with a `Promise.Error(Promise.Error.Kind.TimedOut)`. This can be checked with [[Error.isKind]].
+	Rejects with `rejectionValue` if it is non-nil. If a `rejectionValue` is not given, it will reject with a Promise.Error(Promise.Error.Kind.TimedOut). This can be checked with [[Error.isKind]].
 
 	```lua
 	getSomething():timeout(5):andThen(function(something)
@@ -1796,7 +1796,7 @@ end
 		end)
 	```
 
-	If this Promise is still running, Rejected, or Cancelled, the Promise returned from `:now()` will reject with the `rejectionValue` if passed, otherwise with a `Promise.Error(Promise.Error.Kind.NotResolvedInTime)`. This can be checked with [[Error.isKind]].
+	If this Promise is still running, Rejected, or Cancelled, the Promise returned from `:now()` will reject with the `rejectionValue` if passed, otherwise with a Promise.Error(Promise.Error.Kind.NotResolvedInTime). This can be checked with [[Error.isKind]].
 
 	@param rejectionValue? any - The value to reject with if the Promise isn't resolved
 	@return Promise

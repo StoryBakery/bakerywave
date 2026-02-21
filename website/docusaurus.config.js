@@ -9,6 +9,10 @@ module.exports = {
     tagline: "StoryBakery documentation",
     url: `https://${organizationName}.github.io`,
     baseUrl: isGitHubActions ? `/${projectName}/` : "/",
+    i18n: {
+        defaultLocale: "ko",
+        locales: ["ko", "en"],
+    },
     organizationName,
     projectName,
     onBrokenLinks: "warn",
@@ -26,6 +30,10 @@ module.exports = {
                     path: "docs",
                     routeBasePath: "/",
                     sidebarPath: path.resolve(__dirname, "sidebars.ts"),
+                },
+                i18n: {
+                    defaultLocale: "ko",
+                    locales: ["ko", "en"],
                 },
                 reference: false,
                 theme: {

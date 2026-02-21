@@ -1188,61 +1188,36 @@ code {
     color: var(--ifm-color-content) !important;
 }
 
-/* Prettier and minimal caret - Universal Override */
-.menu__caret {
-    all: unset !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 18px !important;
-    height: 18px !important;
-    margin-right: 0 !important;
-    opacity: 0.3 !important;
-    cursor: pointer !important;
-    background: none !important;
-    transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-    position: relative !important;
+/* Sidebar caret and collapse motion tuning */
+.theme-doc-sidebar-menu .menu__caret:before,
+.theme-doc-sidebar-menu .menu__link--sublist:after,
+.theme-doc-sidebar-menu .menu__link--sublist-caret:after {
+    width: 0.9rem;
+    height: 0.9rem;
+    min-width: 0.9rem;
+    background-size: 0.9rem 0.9rem !important;
+    transition: transform 0ms linear !important;
 }
 
-/* Hide ALL default icons/SVGs */
-.menu__caret svg,
-.menu__caret:after {
-    display: none !important;
-    content: none !important;
+/* collapsed = down */
+.theme-doc-sidebar-menu .menu__list-item--collapsed .menu__caret:before,
+.theme-doc-sidebar-menu .menu__list-item--collapsed .menu__link--sublist:after,
+.theme-doc-sidebar-menu .menu__list-item--collapsed .menu__link--sublist-caret:after {
+    transform: rotate(180deg) !important;
 }
 
-.menu__caret:hover {
-    opacity: 0.8 !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border-radius: 4px !important;
+/* expanded = up */
+.theme-doc-sidebar-menu .menu__list-item:not(.menu__list-item--collapsed) .menu__caret:before,
+.theme-doc-sidebar-menu .menu__list-item:not(.menu__list-item--collapsed) .menu__link--sublist:after,
+.theme-doc-sidebar-menu .menu__list-item:not(.menu__list-item--collapsed) .menu__link--sublist-caret:after,
+.theme-doc-sidebar-menu .menu__caret[aria-expanded='true']:before,
+.theme-doc-sidebar-menu [aria-expanded='true'].menu__link--sublist:after,
+.theme-doc-sidebar-menu [aria-expanded='true'].menu__link--sublist-caret:after {
+    transform: rotate(0deg) !important;
 }
 
-.menu__caret:after {
-    display: none !important;
-    content: none !important;
-}
-
-.menu__caret:before {
-    content: "" !important;
-    display: block !important;
-    width: 2.2px !important;
-    height: 2.2px !important;
-    border-top: 1.1px solid currentColor !important;
-    border-right: 1.1px solid currentColor !important;
-    transform: rotate(45deg) !important;
-    transition: transform 120ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-    margin-top: 1px !important;
-}
-
-/* Expansion rotation */
-[aria-expanded='true']>.menu__caret:before,
-.menu__list-item:not(.menu__list-item--collapsed) .menu__caret:before {
-    transform: rotate(135deg) !important;
-}
-
-/* Fast and crisp animation for sidebar expansion */
-.menu__list {
-    transition: height 120ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+.theme-doc-sidebar-menu .menu__list {
+    transition: height 120ms ease-in-out !important;
 }
 
 /* Restore Professional Dark Background */

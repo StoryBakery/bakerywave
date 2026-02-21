@@ -7,8 +7,12 @@
         "index.js",
         "remark/roblox-api-links.js"
     ],
+    "license": "MIT",
     "publishConfig": {
         "access": "public"
+    },
+    "engines": {
+        "node": ">=18.0.0"
     },
     "dependencies": {
         "@storybakery/docs-theme": "^0.1.0",

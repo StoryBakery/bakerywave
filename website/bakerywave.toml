@@ -1,16 +1,17 @@
 schemaVersion = 1
 
-# Bakerywave preset defaults.
-# Keep this file minimal and add options only when needed.
-
 [site.navigation]
-autoNavigationFromDocsFolders = false
+autoNavigationFromDocsFolders = true
+sectionOrder = ["intro", "tutorial", "guides", "luau-tags", "reference", "development"]
 
 [site.navbar]
 showSearch = true
-showLocaleDropdown = false
+showLocaleDropdown = true
 
 [site.search]
+enabled = true
+
+[site.locale]
 enabled = true
 
 [site.footer]
@@ -20,9 +21,10 @@ showCopyright = true
 showGithub = true
 showPoweredBy = true
 
-[site.locale]
-enabled = false
-current = "English"
+[i18n]
+defaultLocale = "ko"
+locales = ["ko", "en"]
+referenceLocales = ["en"]
 
-# Add [reference] / [i18n] only when required.
-# See docs for full options.
+[i18n.reference]
+copy = true

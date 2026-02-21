@@ -68,4 +68,4 @@ npm run reference:build
 ---
 
 이제 기본적인 사용법은 모두 익혔습니다! 🎉
-더 자세한 설정이나 고급 기능이 궁금하다면 [가이드 문서](../guides/configuration)를 참고하세요.
+더 자세한 설정이나 고급 기능이 궁금하다면 [가이드 문서](../guides/configuration.md)를 참고하세요.

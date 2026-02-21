@@ -16,22 +16,24 @@ sidebar_position: 1
 
 ---
 
-## 1단계: 필수 도구 설치 (Prerequisites)
+## 1단계: 개발 도구 준비 (필수/선택)
 
-Bakerywave는 웹 기술(Node.js)과 시스템 언어(Rust, C++)를 혼합하여 사용합니다.
-따라서 다음 도구들이 모두 설치되어 있어야 합니다.
+Bakerywave 개발은 두 가지 경로로 나뉩니다.
+
+- **빠른 시작(필수)**: Node.js만 설치하면 문서 사이트/CLI 개발을 바로 시작할 수 있습니다.
+- **네이티브 개발(선택)**: `luau-docgen` 네이티브(Rust/C++)를 수정하거나 네이티브 성능으로 검증하려면 Rust/CMake/C++ 도구를 추가 설치합니다.
 
 ### 🛠️ 도구 목록 및 다운로드
 
-| 도구 이름              | 설명 (이걸 왜 쓰나요?)                                                                                        | 다운로드 링크                                                                           |
-| :--------------------- | :------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------- |
-| **Node.js** (LTS 버전) | 자바스크립트 실행기입니다. 웹사이트와 CLI를 실행할 때 필요합니다.                                             | [다운로드 (nodejs.org)](https://nodejs.org/)                                            |
-| **Rust** (+ Cargo)     | 매우 빠른 시스템 프로그래밍 언어입니다. Bakerywave의 문서 분석 엔진(`luau-docgen`)이 이것으로 만들어졌습니다. | [설치 방법 (rust-lang.org)](https://www.rust-lang.org/tools/install)                    |
-| **CMake**              | C++ 코드를 빌드하기 위한 도구입니다. Luau 분석기를 컴파일할 때 필요합니다.                                    | [다운로드 (cmake.org)](https://cmake.org/download/)                                     |
-| **C++ Build Tools**    | 실제 컴파일러입니다. Windows에서는 **Visual Studio Build Tools**가 필요합니다.                                | [설치 방법 (Visual Studio)](https://visualstudio.microsoft.com/visual-cpp-build-tools/) |
+| 구분 | 도구 이름              | 설명 (이걸 왜 쓰나요?)                                                                                        | 다운로드 링크                                                                           |
+| :--- | :--------------------- | :------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------- |
+| 필수 | **Node.js** (LTS 버전) | 자바스크립트 실행기입니다. 웹사이트와 CLI를 실행할 때 필요합니다.                                             | [다운로드 (nodejs.org)](https://nodejs.org/)                                            |
+| 선택 | **Rust** (+ Cargo)     | 네이티브 문서 분석 엔진(`luau-docgen`)을 수정/빌드할 때 필요합니다.                                           | [설치 방법 (rust-lang.org)](https://www.rust-lang.org/tools/install)                    |
+| 선택 | **CMake**              | C++ 코드를 빌드하기 위한 도구입니다. 네이티브 분석기 컴파일에 필요합니다.                                     | [다운로드 (cmake.org)](https://cmake.org/download/)                                     |
+| 선택 | **C++ Build Tools**    | 실제 컴파일러입니다. Windows에서는 **Visual Studio Build Tools**가 필요합니다.                                | [설치 방법 (Visual Studio)](https://visualstudio.microsoft.com/visual-cpp-build-tools/) |
 
-### ⚠️ Windows 사용자 주의사항
-Windows에서는 **Visual Studio Build Tools** 설치 시 **"C++를 사용한 데스크톱 개발 (Desktop development with C++)"** 워크로드를 반드시 체크해야 합니다.
+### ⚠️ Windows 사용자 주의사항 (네이티브 개발 시)
+Windows에서 네이티브를 빌드한다면 **Visual Studio Build Tools** 설치 시 **"C++를 사용한 데스크톱 개발 (Desktop development with C++)"** 워크로드를 반드시 체크해야 합니다.
 
 ### 설치 확인
 터미널(PowerShell 또는 CMD)을 열고 다음 명령어를 입력하여 버전이 잘 뜨는지 확인하세요.
@@ -39,13 +41,20 @@ Windows에서는 **Visual Studio Build Tools** 설치 시 **"C++를 사용한 �
 ```bash
 node -v
 # v18.x.x 이상 권장
+```
 
+네이티브 개발까지 할 계획이라면 아래도 확인합니다.
+
+```bash
 cargo --version
 # cargo 1.x.x
 
 cmake --version
 # cmake version 3.x.x
 ```
+
+`luau-docgen` 네이티브 바이너리가 없으면 Bakerywave는 자동으로 legacy parser로 동작합니다.
+즉, 문서 작성/가이드 작업만 한다면 Node.js만으로도 개발을 시작할 수 있습니다.
 
 > **오류가 발생하나요?**  
 > 설치 후 터미널을 **껐다가 다시 켜야** 환경 변수가 적용됩니다. 그래도 안 된다면 재부팅을 해보세요.
@@ -105,7 +114,8 @@ Bakerywave는 개발 단계에서 **`file:` 의존성 기반 로컬 연동**을 
 우리는 **테스트용 가짜 프로젝트**(`tests/luau-module-project`)를 실행해서 확인합니다.
 
 ### 1. 레퍼런스 데이터 생성
-가장 먼저, Luau 소스 코드를 읽어서 문서 데이터로 변환해야 합니다. 이 작업은 Rust로 만든 엔진이 수행합니다.
+가장 먼저, Luau 소스 코드를 읽어서 문서 데이터로 변환해야 합니다.
+네이티브 바이너리가 있으면 네이티브 엔진을 우선 사용하고, 없으면 legacy parser로 자동 동작합니다.
 
 ```bash
 npm --prefix tests/luau-module-project/website run reference:build

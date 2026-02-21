@@ -264,29 +264,180 @@ outlined 스타일 알림입니다.
 - `href`, `target`, `rel`
 - `className`, `style`
 
+설명:
+- `href`가 있으면 `<a>`로 렌더링됩니다.
+- `target="_blank"`일 때 `rel`을 생략하면 `noopener noreferrer`가 자동 적용됩니다.
+- 잘못된 `variant`/`size` 값은 기본값으로 보정됩니다.
+
+예시 코드:
+```mdx
+<Button>Primary</Button>
+<Button variant="outlined" size="small">Outlined</Button>
+<Button variant="text" color="secondary">Text</Button>
+<Button href="https://github.com/storybakery/bakerywave" target="_blank">
+  External Link
+</Button>
+```
+
+실제 출력:
+<Button>Primary</Button>
+<Button variant="outlined" size="small">Outlined</Button>
+<Button variant="text" color="secondary">Text</Button>
+<Button href="https://github.com/storybakery/bakerywave" target="_blank">
+  External Link
+</Button>
+
+<details>
+<summary>열람 상세 예시</summary>
+
+```mdx
+<Button variant="contained" size="large">Large</Button>
+<Button variant="link" href="https://create.roblox.com/">Link Variant</Button>
+```
+
+<Button variant="contained" size="large">Large</Button>
+<Button variant="link" href="https://create.roblox.com/">Link Variant</Button>
+
+</details>
+
 ### `<Card>`, `<CardContent>`, `<CardActions>`
 
 카드 레이아웃 컴포넌트입니다.
 각 컴포넌트에서 `className`, `style`을 사용할 수 있습니다.
+
+예시 코드:
+```mdx
+<Card>
+  <CardContent>
+    카드 본문입니다.
+  </CardContent>
+  <CardActions>
+    <Button size="small">확인</Button>
+    <Button variant="text" size="small">취소</Button>
+  </CardActions>
+</Card>
+```
+
+실제 출력:
+<Card>
+  <CardContent>
+    카드 본문입니다.
+  </CardContent>
+  <CardActions>
+    <Button size="small">확인</Button>
+    <Button variant="text" size="small">취소</Button>
+  </CardActions>
+</Card>
+
+<details>
+<summary>열람 상세 예시</summary>
+
+```mdx
+<Card style={{ maxWidth: 420 }}>
+  <CardContent>
+    <Typography variant="h4">릴리즈 체크리스트</Typography>
+    <Typography variant="body2">빌드, 테스트, 배포 순서를 확인하세요.</Typography>
+  </CardContent>
+  <CardActions>
+    <Button variant="outlined" size="small">문서 보기</Button>
+    <Button size="small">실행</Button>
+  </CardActions>
+</Card>
+```
+
+<Card style={{ maxWidth: 420 }}>
+  <CardContent>
+    <Typography variant="h4">릴리즈 체크리스트</Typography>
+    <Typography variant="body2">빌드, 테스트, 배포 순서를 확인하세요.</Typography>
+  </CardContent>
+  <CardActions>
+    <Button variant="outlined" size="small">문서 보기</Button>
+    <Button size="small">실행</Button>
+  </CardActions>
+</Card>
+
+</details>
 
 ## 기타 컴포넌트
 
 ### `<Chip>`
 
 주요 속성:
-- `label`
-- `size`: `small` | `medium`
-- `variant`: `outlined` | `filled`
-- `color`
+- `label` (또는 `children`)
+- `size`: `small` | `medium` (기본값: `medium`)
+- `variant`: `outlined` | `filled` (기본값: `filled`)
+- `color` (기본값: `default`)
 - `className`, `style`
+
+예시 코드:
+```mdx
+<Chip label="Stable" />
+<Chip label="Beta" color="warning" />
+<Chip variant="outlined" size="small">Custom</Chip>
+```
+
+실제 출력:
+<Chip label="Stable" />
+<Chip label="Beta" color="warning" />
+<Chip variant="outlined" size="small">Custom</Chip>
+
+<details>
+<summary>열람 상세 예시</summary>
+
+```mdx
+<Chip label="Docs" color="primary" />
+<Chip label="Experimental" variant="outlined" color="danger" />
+```
+
+<Chip label="Docs" color="primary" />
+<Chip label="Experimental" variant="outlined" color="danger" />
+
+</details>
 
 ### `<BetaAlert>`
 
 주요 속성:
-- `betaName`
-- `leadIn`
-- `leadOut`
+- `betaName` (기본값: `This feature`)
+- `leadIn` (기본값: `This feature is currently in beta. Enable it through `)
+- `leadOut` (기본값: `.`)
 - `className`
+
+예시 코드:
+```mdx
+<BetaAlert betaName="Asset Pipeline" />
+<BetaAlert
+  betaName="Studio Sync"
+  leadIn="Studio에서 먼저 베타를 켜세요: "
+  leadOut=" 설정 후 다시 시도하세요."
+/>
+```
+
+실제 출력:
+<BetaAlert betaName="Asset Pipeline" />
+<BetaAlert
+  betaName="Studio Sync"
+  leadIn="Studio에서 먼저 베타를 켜세요: "
+  leadOut=" 설정 후 다시 시도하세요."
+/>
+
+<details>
+<summary>열람 상세 예시</summary>
+
+```mdx
+<BetaAlert
+  betaName="Streaming API"
+  leadIn="이 기능은 베타입니다. 먼저 "
+  leadOut=" 를 완료한 뒤 사용하세요."
+/>
+```
+
+<BetaAlert
+  betaName="Streaming API"
+  leadIn="이 기능은 베타입니다. 먼저 "
+  leadOut=" 를 완료한 뒤 사용하세요."
+/>
+
+</details>
 
 ### `<UseStudioButton>`
 
@@ -297,6 +448,33 @@ outlined 스타일 알림입니다.
 - `universeId`
 - `variant`
 - `className`
+
+동작 우선순위:
+- 라벨: `buttonText` -> `buttonTextTranslationKey` -> 기본값(`Open in Studio`)
+- 링크: `universeId` -> `placeId` -> `#`
+
+예시 코드:
+```mdx
+<UseStudioButton buttonTextTranslationKey="Action.EditInStudio" universeId="123456789" />
+<UseStudioButton buttonText="Open Place" placeId="987654321" variant="outlined" />
+```
+
+실제 출력:
+<UseStudioButton buttonTextTranslationKey="Action.EditInStudio" universeId="123456789" />
+<UseStudioButton buttonText="Open Place" placeId="987654321" variant="outlined" />
+
+<details>
+<summary>열람 상세 예시</summary>
+
+```mdx
+<UseStudioButton buttonText="Dashboard" universeId="246813579" />
+<UseStudioButton buttonText="Place Link" placeId="135792468" variant="text" />
+```
+
+<UseStudioButton buttonText="Dashboard" universeId="246813579" />
+<UseStudioButton buttonText="Place Link" placeId="135792468" variant="text" />
+
+</details>
 
 ## 기본 MDX 요소 매핑
 

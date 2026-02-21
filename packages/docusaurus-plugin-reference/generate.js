@@ -180,14 +180,38 @@ function sanitizeRouteBasePath(value, lang) {
     return base.replace(/^\/+|\/+$/g, "");
 }
 
-function rewriteLegacyApiLinks(markdown, options) {
+function toReferenceLinkPath(linkPath, options) {
+    if (!linkPath) {
+        return linkPath;
+    }
+    if (linkPath.startsWith("#")) {
+        return linkPath;
+    }
+    if (/^(?:[a-z]+:)?\/\//i.test(linkPath) || linkPath.startsWith("/")) {
+        return linkPath;
+    }
+
+    const basePath = options && options.routeBasePath ? `/${options.routeBasePath}` : "";
+    const normalized = String(linkPath).replace(/^\/+/, "");
+    if (!basePath) {
+        return `/${normalized}`;
+    }
+    return `${basePath}/${normalized}`;
+}
+
+function rewriteLegacyApiLinks(markdown, options, classLinkMap) {
     if (!markdown) {
         return markdown;
     }
 
-    const basePath = `/${options.routeBasePath}`;
     return markdown.replace(/\]\(\/api\/([A-Za-z0-9_]+)(#[^)]+)?\)/g, (_, name, hash) => {
         const suffix = hash || "";
+        const classHref = resolveClassHrefLoose(name, classLinkMap);
+        if (classHref) {
+            return `](${toReferenceLinkPath(classHref, options)}${suffix})`;
+        }
+
+        const basePath = options && options.routeBasePath ? `/${options.routeBasePath}` : "";
         return `](${basePath}/${name}${suffix})`;
     });
 }
@@ -309,7 +333,7 @@ function resolveShorthandApiLink(target, options, classLinkMap) {
 
     const classHref = resolveClassHrefLoose(parsed.className, classLinkMap);
     if (classHref) {
-        let link = classHref;
+        let link = toReferenceLinkPath(classHref, options);
         const anchor = sanitizeAnchorId(cleanMemberName(parsed.member));
         if (anchor) {
             link += `#${anchor}`;
@@ -415,6 +439,9 @@ function applyApiLinks(markdown, options, classLinkMap) {
         const parts = content.split("|");
         const target = parts.shift().trim();
         const label = parts.length > 0 ? parts.join("|").trim() : null;
+        if (target === "monospace" && label && label.length > 0) {
+            return "`" + label + "`";
+        }
         if (label === "no-link") {
             return "`" + target + "`";
         }
@@ -1593,7 +1620,7 @@ function renderSymbol(symbol, options, usedAnchorIds, anchorOverride = null, hea
     const descriptionRaw = symbol.docs && symbol.docs.descriptionMarkdown;
     const normalized = applyDefaultFenceLanguage(descriptionRaw, options.lang || "luau");
     const withApiLinks = applyApiLinks(normalized, options, classLinkMap);
-    const description = rewriteLegacyApiLinks(withApiLinks, options);
+    const description = rewriteLegacyApiLinks(withApiLinks, options, classLinkMap);
     const summary = symbol.docs && symbol.docs.summary;
     if (description && description.trim().length > 0) {
         lines.push("", description);
@@ -1661,7 +1688,7 @@ function renderSymbolBody(symbol, options, classLinkMap) {
     const descriptionRaw = symbol.docs && symbol.docs.descriptionMarkdown;
     const normalized = applyDefaultFenceLanguage(descriptionRaw, options.lang || "luau");
     const withApiLinks = applyApiLinks(normalized, options, classLinkMap);
-    const description = rewriteLegacyApiLinks(withApiLinks, options);
+    const description = rewriteLegacyApiLinks(withApiLinks, options, classLinkMap);
     const summary = symbol.docs && symbol.docs.summary;
     if (description && description.trim().length > 0) {
         lines.push("", description);
@@ -2650,7 +2677,9 @@ function buildOutputs(referenceJson, options) {
         if (folderSet.has(path)) return;
         folderSet.add(path);
 
+        const categoryKey = `ref-${path.replace(/[\\/]+/g, "-").toLowerCase()}`;
         const meta = {
+            key: categoryKey,
             label: label,
             collapsible: collapsible,
             collapsed: collapsed,

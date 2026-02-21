@@ -203,7 +203,7 @@ end
     @return number - 갱신된 클릭 횟수
 
     이 함수는 내부 상태를 갱신하고,
-    `Classes.DocWidget.Changed` 이벤트를 발생시켜야 합니다.
+    Classes.DocWidget.Changed 이벤트를 발생시켜야 합니다.
 ]=]
 function DocWidget:IncrementClicks(increment: number): number
 	self.State.Clicks += increment

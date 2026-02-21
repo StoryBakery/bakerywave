@@ -66,14 +66,25 @@ CI는 다음 작업을 수행합니다:
 
 릴리즈가 완료되면 사용자는 다음 파일을 다운로드할 수 있게 됩니다.
 
-- **bakerywave-win64.zip**: Windows용 실행 파일
-- **bakerywave-linux.zip**: Linux용 실행 파일
-- **bakerywave-macos.zip**: macOS용 실행 파일
+- **bakerywave-windows-x64.zip**: Windows용 실행 파일
+- **bakerywave-linux-x64.zip**: Linux용 실행 파일
+- **bakerywave-macos-x64.zip**: macOS용 실행 파일
 - **Source code**: 해당 버전의 소스 코드 스냅샷
 
 ---
 
-## 4. npm 배포 (Optional)
+## 4. npm 패키지 배포
 
-현재는 GitHub Releases를 통한 바이너리 배포를 주력으로 하고 있습니다.
-npm 배포가 필요한 경우, 별도의 `npm publish` 워크플로우를 따라야 합니다. (추후 업데이트 예정)
+태그 릴리즈 시 `NPM_TOKEN`이 설정되어 있으면 npm 패키지도 함께 배포됩니다.
+
+- 배포 대상:
+  - `@storybakery/luau-docgen`
+  - `@storybakery/docusaurus-plugin-reference`
+  - `@storybakery/docusaurus-plugin-search-index`
+  - `@storybakery/docs-theme`
+  - `@storybakery/docs-preset`
+  - `@storybakery/create-docs`
+  - `@storybakery/bakerywave`
+- 조건:
+  - GitHub Actions Secrets에 `NPM_TOKEN`이 설정되어 있어야 합니다.
+  - 각 패키지 버전(`package.json`)이 새 버전이어야 합니다.

@@ -24,13 +24,11 @@ copy = true
 [site.locale]
 enabled = true
 
-[site.locale.labels]
-en = "English"
-ko = "한국어"
-
 [site.navbar]
 showLocaleDropdown = true
 ```
+
+`[site.locale.labels]`는 선택 사항입니다. 지정하지 않으면 기본 locale 라벨을 사용합니다.
 
 핵심 항목:
 

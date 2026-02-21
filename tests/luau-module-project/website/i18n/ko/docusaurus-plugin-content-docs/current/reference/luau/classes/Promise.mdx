@@ -92,7 +92,7 @@ An enum value used to represent the Promise's status.
 Status
 ```
 
-A table containing all members of the `Status` enum, e.g., [Promise.Status.Resolved](Classes/Promise#StatusResolved).
+A table containing all members of the `Status` enum, e.g., Promise.Status.Resolved.
 
 <div class="sb-ref-detail-tags"><span class="sb-ref-badge sb-ref-badge-tag">enums</span></div>
 
@@ -118,7 +118,7 @@ Calling `andThen` on a cancelled Promise returns a cancelled Promise.
 :::tip
 If the Promise returned by `andThen` is cancelled, `successHandler` and `failureHandler` will not run.
 
-To run code no matter what, use [Promise:finally](Classes/Promise#finally).
+To run code no matter what, use [Promise:finally](/reference/luau/Classes/Promise#finally).
 :::
 
 #### Parameters
@@ -275,7 +275,7 @@ promise:cancel()
 (failureHandler: (...: any) -> ...any) -> Promise<...any>
 ```
 
-Shorthand for [Promise:andThen(nil, failureHandler)](Classes/Promise#andThen).
+Shorthand for [Promise:andThen(nil, failureHandler)](/reference/luau/Classes/Promise#andThen).
 
 Returns a Promise that resolves if the `failureHandler` worked without encountering an additional error.
 
@@ -288,7 +288,7 @@ Calling `catch` on a cancelled Promise returns a cancelled Promise.
 :::tip
 If the Promise returned by `catch` is cancelled,  `failureHandler` will not run.
 
-To run code no matter what, use [Promise:finally](Classes/Promise#finally).
+To run code no matter what, use [Promise:finally](/reference/luau/Classes/Promise#finally).
 :::
 
 #### Parameters
@@ -366,7 +366,7 @@ If the value you return from the handler is a Promise:
 Otherwise, the return value from the `finally` handler is entirely discarded.
 
 :::note Cancellation
-As of Promise v4, [Promise:finally](Classes/Promise#finally) does not count as a consumer of the parent Promise for cancellation purposes.
+As of Promise v4, [Promise:finally](/reference/luau/Classes/Promise#finally) does not count as a consumer of the parent Promise for cancellation purposes.
 This means that if all of a Promise's consumers are cancelled and the only remaining callbacks are finally handlers,
 the Promise is cancelled and the finally callbacks run then and there.
 
@@ -494,7 +494,7 @@ doSomething()
 	end)
 ```
 
-If this Promise is still running, Rejected, or Cancelled, the Promise returned from `:now()` will reject with the `rejectionValue` if passed, otherwise with a [Promise.Error(Promise.Error.Kind.NotResolvedInTime)](Classes/Promise#Error). This can be checked with [[Error.isKind]].
+If this Promise is still running, Rejected, or Cancelled, the Promise returned from `:now()` will reject with the `rejectionValue` if passed, otherwise with a Promise.Error(Promise.Error.Kind.NotResolvedInTime). This can be checked with [[Error.isKind]].
 
 #### Parameters
 
@@ -548,7 +548,7 @@ If you return a Promise from the tap handler callback, its value will be discard
 
 Returns a new Promise that resolves if the chained Promise resolves within `seconds` seconds, or rejects if execution time exceeds `seconds`. The chained Promise will be cancelled if the timeout is reached.
 
-Rejects with `rejectionValue` if it is non-nil. If a `rejectionValue` is not given, it will reject with a [Promise.Error(Promise.Error.Kind.TimedOut)](Classes/Promise#Error). This can be checked with [[Error.isKind]].
+Rejects with `rejectionValue` if it is non-nil. If a `rejectionValue` is not given, it will reject with a Promise.Error(Promise.Error.Kind.TimedOut). This can be checked with [[Error.isKind]].
 
 ```lua
 getSomething():timeout(5):andThen(function(something)
@@ -640,7 +640,7 @@ return Promise.all(promises)
 (promises: {Promise<T>}) -> Promise<{Status}>
 ```
 
-Accepts an array of Promises and returns a new Promise that resolves with an array of in-place Statuses when all input Promises have settled. This is equivalent to mapping [promise:finally](Classes/Promise#finally) over the array of Promises.
+Accepts an array of Promises and returns a new Promise that resolves with an array of in-place Statuses when all input Promises have settled. This is equivalent to mapping [promise:finally](/reference/luau/Classes/Promise#finally) over the array of Promises.
 
 ```lua
 local promises = {
@@ -704,7 +704,7 @@ return Promise.any(promises) -- Resolves with first value to resolve (only rejec
 (executor: (resolve: (...: any) -> (), reject: (...: any) -> (), onCancel: (abortHandler?: () -> ()) -> boolean) -> ()) -> Promise
 ```
 
-The same as [Promise.new](/reference/luau/Promise#new), except execution begins after the next `Heartbeat` event.
+The same as Promise.new, except execution begins after the next `Heartbeat` event.
 
 This is a spiritual replacement for `spawn`, but it does not suffer from the same [issues](https://eryn.io/gist/3db84579866c099cdd5bb2ff37947cec) as `spawn`.
 
@@ -774,7 +774,7 @@ If the predicate returns a Promise, we wait for that Promise to resolve before m
 in the array.
 
 :::info
-[Promise.each](Classes/Promise#each) is similar to [Promise.all](Classes/Promise#all), except the Promises are ran in order instead of all at once.
+[Promise.each](/reference/luau/Classes/Promise#each) is similar to [Promise.all](/reference/luau/Classes/Promise#all), except the Promises are ran in order instead of all at once.
 
 But because Promises are eager, by the time they are created, they're already running. Thus, we need a way to defer creation of each Promise until a later time.
 
@@ -805,15 +805,15 @@ end)
 ]]
 ```
 
-If the Promise a predicate returns rejects, the Promise from [Promise.each](Classes/Promise#each) is also rejected with the same value.
+If the Promise a predicate returns rejects, the Promise from [Promise.each](/reference/luau/Classes/Promise#each) is also rejected with the same value.
 
 If the array of values contains a Promise, when we get to that point in the list, we wait for the Promise to resolve before calling the predicate with the value.
 
-If a Promise in the array of values is already Rejected when [Promise.each](Classes/Promise#each) is called, [Promise.each](Classes/Promise#each) rejects with that value immediately (the predicate callback will never be called even once). If a Promise in the list is already Cancelled when [Promise.each](Classes/Promise#each) is called, [Promise.each](Classes/Promise#each) rejects with [Promise.Error(Promise.Error.Kind.AlreadyCancelled)](Classes/Promise#Error). If a Promise in the array of values is Started at first, but later rejects, [Promise.each](Classes/Promise#each) will reject with that value and iteration will not continue once iteration encounters that value.
+If a Promise in the array of values is already Rejected when [Promise.each](/reference/luau/Classes/Promise#each) is called, [Promise.each](/reference/luau/Classes/Promise#each) rejects with that value immediately (the predicate callback will never be called even once). If a Promise in the list is already Cancelled when [Promise.each](/reference/luau/Classes/Promise#each) is called, [Promise.each](/reference/luau/Classes/Promise#each) rejects with Promise.Error(Promise.Error.Kind.AlreadyCancelled). If a Promise in the array of values is Started at first, but later rejects, [Promise.each](/reference/luau/Classes/Promise#each) will reject with that value and iteration will not continue once iteration encounters that value.
 
 Returns a Promise containing an array of the returned/resolved values from the predicate for each item in the array of values.
 
-If this Promise returned from [Promise.each](Classes/Promise#each) rejects or is cancelled for any reason, the following are true:
+If this Promise returned from [Promise.each](/reference/luau/Classes/Promise#each) rejects or is cancelled for any reason, the following are true:
 - Iteration will not continue.
 - Any Promises within the array of values will now be cancelled if they have no other consumers.
 - The Promise returned from the currently active predicate will be cancelled if it hasn't resolved yet.
@@ -968,7 +968,7 @@ Wraps a function that yields into one that returns a Promise.
 Any errors that occur while executing the function will be turned into rejections.
 
 :::info
-[Promise.promisify](Classes/Promise#promisify) is similar to [Promise.try](#try), except the callback is returned as a callable function instead of being invoked immediately.
+[Promise.promisify](/reference/luau/Classes/Promise#promisify) is similar to [Promise.try](#try), except the callback is returned as a callable function instead of being invoked immediately.
 :::
 
 ```lua
@@ -1215,7 +1215,7 @@ return Promise.some(promises, 2) -- Only resolves with first 2 promises to resol
 Begins a Promise chain, calling a function and returning a Promise resolving with its return value. If the function errors, the returned Promise will be rejected with the error. You can safely yield within the Promise.try callback.
 
 :::info
-[Promise.try](Classes/Promise#try) is similar to [Promise.promisify](#promisify), except the callback is invoked immediately instead of returning a new function.
+[Promise.try](/reference/luau/Classes/Promise#try) is similar to [Promise.promisify](#promisify), except the callback is invoked immediately instead of returning a new function.
 :::
 
 ```lua

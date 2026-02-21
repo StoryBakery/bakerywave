@@ -20,6 +20,7 @@ schemaVersion = 1
 
 [site.navigation]
 autoNavigationFromDocsFolders = true
+sectionOrder = ["intro", "tutorial", "guides", "luau-tags", "reference", "development"]
 
 [site.navigation.sectionLabels]
 guides = "Guides"
@@ -31,18 +32,6 @@ showLocaleDropdown = false
 
 [site.search]
 enabled = true
-placeholder = "검색..."
-shortcut = "Ctrl K"
-minChars = 2
-
-[site.search.hints]
-minChars = "2글자 이상 입력하세요"
-noResults = "결과가 없습니다"
-
-[site.search.filters]
-all = "전체"
-guides = "Guides"
-reference = "API"
 
 [site.footer]
 enabled = true
@@ -53,7 +42,6 @@ showPoweredBy = true
 
 [site.locale]
 enabled = false
-current = "한국어"
 
 [reference]
 lang = "luau"
@@ -69,51 +57,59 @@ locales = ["ko", "en"]
 ## [site.navigation] 섹션
 문서 폴더 구조를 기반으로 네비게이션을 자동 생성하는 옵션입니다.
 
-| 옵션명 | 타입 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `autoNavigationFromDocsFolders` | boolean | false | `docs/`의 1단 폴더를 기준으로 navbar 탭 + sidebar를 자동 생성합니다. |
-| `sectionLabels` | table | - | 섹션 라벨 매핑입니다. 예: `reference = "API"` |
+| 옵션명                          | 타입    | 기본값 | 설명                                                                 |
+| ------------------------------- | ------- | ------ | -------------------------------------------------------------------- |
+| `autoNavigationFromDocsFolders` | boolean | false  | `docs/`의 1단 폴더를 기준으로 navbar 탭 + sidebar를 자동 생성합니다. |
+| `sectionOrder`                  | array   | -      | 자동 생성되는 섹션 순서를 명시합니다. 예: `["intro", "tutorial"]`    |
+| `sectionLabels`                 | table   | -      | 섹션 라벨 매핑입니다. 예: `reference = "API"`                        |
+
+- 일반적으로 `reference` 기본 라벨은 `API`를 권장합니다.
+- 여러 프로그래밍 언어 API를 한 섹션에 혼합하거나, API 외 레퍼런스(CLI/설정/스펙)가 함께 들어가면 `Reference`를 고려합니다.
 
 ## [site.navbar] 섹션
 Navbar 보조 UI 노출 옵션입니다.
 
-| 옵션명 | 타입 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `showSearch` | boolean | false | 검색 버튼 표시 여부입니다. |
-| `showLocaleDropdown` | boolean | false | 언어 드롭다운 표시 여부입니다. |
+| 옵션명               | 타입    | 기본값 | 설명                           |
+| -------------------- | ------- | ------ | ------------------------------ |
+| `showSearch`         | boolean | false  | 검색 버튼 표시 여부입니다.     |
+| `showLocaleDropdown` | boolean | false  | 언어 드롭다운 표시 여부입니다. |
 
 ## [site.search] 섹션
 검색 기능 옵션입니다.
 
-| 옵션명 | 타입 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `enabled` | boolean | false | true일 때 검색 인덱스를 생성하고 검색 UI를 표시합니다. |
-| `placeholder` | string | "검색..." | 검색창 placeholder |
-| `shortcut` | string | "Ctrl K" | 단축키 표시 텍스트 |
-| `minChars` | number | 2 | 최소 검색 글자 수 |
-| `hints.minChars` | string | - | 최소 글자수 안내 문구 |
-| `hints.noResults` | string | - | 검색 결과 없음 안내 문구 |
-| `filters.*` | string | - | 섹션 필터 라벨 매핑 |
+| 옵션명            | 타입    | 기본값    | 설명                                                   |
+| ----------------- | ------- | --------- | ------------------------------------------------------ |
+| `enabled`         | boolean | false     | true일 때 검색 인덱스를 생성하고 검색 UI를 표시합니다. |
+| `placeholder`     | string  | "Search..." | 검색창 placeholder                                   |
+| `shortcut`        | string  | "Ctrl K"  | 단축키 표시 텍스트                                     |
+| `minChars`        | number  | 2         | 최소 검색 글자 수                                      |
+| `hints.minChars`  | string  | -         | 최소 글자수 안내 문구                                  |
+| `hints.noResults` | string  | -         | 검색 결과 없음 안내 문구                               |
+| `filters.*`       | string  | -         | 섹션 필터 라벨 매핑                                    |
+
+- 문자열 관련 키(`placeholder`, `hints.*`, `filters.*`)는 모두 선택 사항입니다.
+- 지정하지 않으면 docs-theme 패키지 기본값을 사용합니다.
 
 ## [site.footer] 섹션
 Footer 표시 옵션입니다.
 
-| 옵션명 | 타입 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `enabled` | boolean | false | true일 때 Footer를 렌더링합니다. |
-| `showLicense` | boolean | true | 라이선스 표시 여부 |
-| `showCopyright` | boolean | true | 저작권 표시 여부 |
-| `showGithub` | boolean | true | GitHub 링크 표시 여부 |
-| `showPoweredBy` | boolean | true | Powered by 문구 표시 여부 |
+| 옵션명          | 타입    | 기본값 | 설명                             |
+| --------------- | ------- | ------ | -------------------------------- |
+| `enabled`       | boolean | false  | true일 때 Footer를 렌더링합니다. |
+| `showLicense`   | boolean | true   | 라이선스 표시 여부               |
+| `showCopyright` | boolean | true   | 저작권 표시 여부                 |
+| `showGithub`    | boolean | true   | GitHub 링크 표시 여부            |
+| `showPoweredBy` | boolean | true   | Powered by 문구 표시 여부        |
 
 ## [site.locale] 섹션
 Locale UI 옵션입니다.
 
-| 옵션명 | 타입 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `enabled` | boolean | false | true일 때 locale 기능 UI를 사용합니다. |
-| `current` | string | - | 현재 locale 표시 문자열(선택) |
-| `labels.<locale>` | string | - | locale 코드별 표시 라벨 |
+| 옵션명            | 타입    | 기본값 | 설명                                   |
+| ----------------- | ------- | ------ | -------------------------------------- |
+| `enabled`         | boolean | false  | true일 때 locale 기능 UI를 사용합니다. |
+| `labels.<locale>` | string  | -      | locale 코드별 표시 라벨                |
+
+- `labels.<locale>`를 지정하지 않으면 Docusaurus locale 라벨(또는 코드명)을 사용합니다.
 
 ## [reference] 섹션
 Luau API 문서 생성과 관련된 설정입니다.

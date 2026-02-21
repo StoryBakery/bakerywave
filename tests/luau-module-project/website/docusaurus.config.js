@@ -4,12 +4,17 @@ module.exports = {
     title: "StoryBakery Docs Template Test",
     url: "https://example.invalid",
     baseUrl: "/",
+    i18n: {
+        defaultLocale: "en",
+        locales: ["en", "ko"],
+    },
     organizationName: "storybakery",
     projectName: "docs-template",
-    onBrokenLinks: "warn",
+    onBrokenLinks: "throw",
+    onBrokenAnchors: "throw",
     markdown: {
         hooks: {
-            onBrokenMarkdownLinks: "warn",
+            onBrokenMarkdownLinks: "throw",
         },
     },
     presets: [
@@ -20,6 +25,17 @@ module.exports = {
                     path: "docs",
                     routeBasePath: "/",
                     sidebarPath: path.resolve(__dirname, "sidebars.js"),
+                },
+                i18n: {
+                    defaultLocale: "en",
+                    locales: ["en", "ko"],
+                },
+                robloxLinks: {
+                    localCategories: {
+                        AnotherCategory: {
+                            basePath: "/reference/luau",
+                        },
+                    },
                 },
                 theme: {
                     customCss: path.resolve(__dirname, "src/css/custom.css"),

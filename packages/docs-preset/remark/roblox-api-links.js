@@ -142,10 +142,17 @@ function loadManifestIndex(options) {
     if (entry === "index.mdx") {
       continue;
     }
-    if (!entry.endsWith("/index.mdx")) {
+    let trimmed = null;
+    if (entry.endsWith("/index.mdx")) {
+      trimmed = entry.replace(/\/index\.mdx$/, "");
+    } else if (entry.endsWith(".mdx")) {
+      trimmed = entry.replace(/\.mdx$/, "");
+    } else if (entry.endsWith(".md")) {
+      trimmed = entry.replace(/\.md$/, "");
+    }
+    if (!trimmed) {
       continue;
     }
-    const trimmed = entry.replace(/\/index\.mdx$/, "");
     if (!trimmed || trimmed === "index") {
       continue;
     }
@@ -187,7 +194,8 @@ function resolveLocalLink(prefix, rest, options) {
   }
 
   const classKey = sanitizeModulePath(className);
-  const prefixSegment = sanitizeModulePath(prefix);
+  const prefixAlias = entry.categoryPrefix || prefix;
+  const prefixSegment = sanitizeModulePath(prefixAlias);
   const categorySegments = categories.map((segment) => sanitizeModulePath(segment)).filter(Boolean);
   const matchSegments = [prefixSegment, ...categorySegments].filter(Boolean);
 
@@ -319,8 +327,17 @@ function resolveApiLink(target, options) {
 
 function transformInlineCode(node, options) {
   const { rawTarget, label } = parseTarget(node.value);
+  if (rawTarget === "monospace" && label && label.length > 0) {
+    return {
+      type: "inlineCode",
+      value: label,
+    };
+  }
   if (label === "no-link") {
-    return null;
+    return {
+      type: "inlineCode",
+      value: rawTarget,
+    };
   }
   const link = resolveApiLink(rawTarget, options);
   if (!link) {

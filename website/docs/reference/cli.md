@@ -19,6 +19,7 @@ bakerywave <command> [siteDir] [-- ...docusaurus-args]
   - 기본값: **현재 디렉터리에 docusaurus.config.*가 있으면 `.`**, 아니면 `website`
 - `--config <path>`: Docusaurus 설정 파일 경로
   - reference 옵션/ i18n 옵션 로딩 시 **해당 경로를 우선 사용**
+- `--version`, `-v`: CLI 버전 출력
 - `--no-restart`: dev 모드 자동 재시작 비활성화
 - `--dev-watch-cli`: **bakerywave 코드 변경 감지**(개발용)
 

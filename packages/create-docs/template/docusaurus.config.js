@@ -4,6 +4,10 @@ module.exports = {
   title: "Project Docs",
   url: "https://example.invalid",
   baseUrl: "/",
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "ko"],
+  },
   onBrokenLinks: "throw",
   markdown: {
     hooks: {
@@ -26,6 +30,10 @@ module.exports = {
           manifestPath: "./.generated/reference/manifest.json",
           renderMode: "mdx",
           clean: true,
+        },
+        i18n: {
+          defaultLocale: "en",
+          locales: ["en", "ko"],
         },
         theme: {
           customCss: path.resolve(__dirname, "src/css/custom.css"),
