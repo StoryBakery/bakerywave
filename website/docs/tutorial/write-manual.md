@@ -55,6 +55,7 @@ sidebar_position: 1
 
 이제 기초를 익혔으니, 더 멋진 문서를 만들기 위한 가이드를 확인해보세요.
 
-- [**Markdown 문법 가이드**](../guides/writing/markdown.md): 텍스트 스타일, 목록, 표 등을 만드는 방법
-- [**MDX 확장 문법**](../guides/writing/mdx.md): React 컴포넌트, 탭, 경고 박스 사용법
-- [**API 링크 (백틱)**](../guides/writing/api-links.md): `Class.Part` 같은 링크를 쉽게 거는 방법
+- [**Markdown 문법 가이드**](../writing/markdown.md): 텍스트 스타일, 목록, 표 등을 만드는 방법
+- [**MDX 확장 문법**](../writing/mdx.md): React 컴포넌트, 탭, 경고 박스 사용법
+- [**React 컴포넌트 가이드**](../writing/react-components.md): 컴포넌트 계열별 속성과 예시
+- [**API 링크 (백틱)**](../writing/api-links.md): `Class.Part` 같은 링크를 쉽게 거는 방법

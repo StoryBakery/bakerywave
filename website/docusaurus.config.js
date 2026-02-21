@@ -51,6 +51,7 @@ module.exports = {
             title: "Bakerywave",
             items: [
                 { type: "docSidebar", sidebarId: "guides", label: "Docs" },
+                { type: "docSidebar", sidebarId: "writing", label: "Writing" },
                 { type: "docSidebar", sidebarId: "reference", label: "Reference" },
             ],
         },

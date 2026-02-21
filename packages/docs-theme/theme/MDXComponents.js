@@ -453,6 +453,231 @@ function Tabs({ children, ...rest }) {
     return <DefaultTabsComponent {...rest}>{normalizedChildren}</DefaultTabsComponent>;
 }
 
+function isEnabled(value) {
+    return value === true || value === 'true' || value === 1 || value === '1';
+}
+
+function normalizeReferenceKind(value) {
+    const kind = typeof value === 'string' ? value.toLowerCase() : '';
+    if (kind === 'property' || kind === 'method' || kind === 'event') {
+        return kind;
+    }
+    if (kind === 'function') {
+        return 'method';
+    }
+    return null;
+}
+
+function normalizeReferenceBadgeType(value) {
+    const type = typeof value === 'string' ? value.toLowerCase() : '';
+    if (
+        type === 'deprecated' ||
+        type === 'readonly' ||
+        type === 'yields' ||
+        type === 'server' ||
+        type === 'client' ||
+        type === 'plugin' ||
+        type === 'unreleased' ||
+        type === 'since' ||
+        type === 'tag'
+    ) {
+        return type;
+    }
+    return 'custom';
+}
+
+function ReferenceIcon({ kind, className, ...rest }) {
+    const normalizedKind = normalizeReferenceKind(kind);
+
+    if (normalizedKind === 'property') {
+        return (
+            <svg
+                width="14"
+                height="14"
+                className={classNames('sb-ref-icon', className)}
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                {...rest}
+            >
+                <path d="M8 1L14.5 4.5V11.5L8 15L1.5 11.5V4.5L8 1Z" fill="#00A2FF" stroke="#00A2FF" strokeWidth="1" />
+                <path d="M1.5 4.5L8 8L14.5 4.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                <path d="M8 8V15" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+            </svg>
+        );
+    }
+
+    if (normalizedKind === 'method') {
+        return (
+            <svg
+                width="14"
+                height="14"
+                className={classNames('sb-ref-icon', className)}
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                {...rest}
+            >
+                <path d="M9 3.5L13.5 6V11L9 13.5L4.5 11V6L9 3.5Z" fill="#9F70EA" />
+                <path d="M1 6H3" stroke="#9F70EA" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M0.5 8.5H3" stroke="#9F70EA" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M1 11H3" stroke="#9F70EA" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+        );
+    }
+
+    if (normalizedKind === 'event') {
+        return (
+            <svg
+                width="14"
+                height="14"
+                className={classNames('sb-ref-icon', className)}
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                {...rest}
+            >
+                <path d="M9 1L4 8H8L6 15L13 7H9L9 1Z" fill="#F2C94C" stroke="#F2994A" strokeWidth="0.5" />
+            </svg>
+        );
+    }
+
+    return null;
+}
+
+function ReferenceList({ children, className, style, ...rest }) {
+    return (
+        <div className={classNames('sb-ref-list', className)} style={style} {...rest}>
+            {children}
+        </div>
+    );
+}
+
+function ReferenceRow({ children, deprecated, className, style, ...rest }) {
+    return (
+        <div
+            className={classNames('sb-ref-row', isEnabled(deprecated) && 'sb-ref-row-deprecated', className)}
+            style={style}
+            {...rest}
+        >
+            {children}
+        </div>
+    );
+}
+
+function ReferenceCellIcon({ children, kind, className, style, ...rest }) {
+    return (
+        <span className={classNames('sb-ref-cell-icon', className)} style={style} {...rest}>
+            {children || <ReferenceIcon kind={kind} />}
+        </span>
+    );
+}
+
+function ReferenceCellContent({ children, className, style, ...rest }) {
+    return (
+        <span className={classNames('sb-ref-cell-content', className)} style={style} {...rest}>
+            {children}
+        </span>
+    );
+}
+
+function ReferenceName({ children, href, className, style, ...rest }) {
+    if (href) {
+        return (
+            <a href={href} className={classNames('sb-ref-name', className)} style={style} {...rest}>
+                {children}
+            </a>
+        );
+    }
+
+    return (
+        <span className={classNames('sb-ref-name', className)} style={style} {...rest}>
+            {children}
+        </span>
+    );
+}
+
+function ReferenceType({ children, className, style, ...rest }) {
+    return (
+        <span className={classNames('sb-ref-type', className)} style={style} {...rest}>
+            {children}
+        </span>
+    );
+}
+
+function ReferenceSeparator({ children = ':', className, style, ...rest }) {
+    return (
+        <span className={classNames('sb-ref-separator', className)} style={style} {...rest}>
+            {children}
+        </span>
+    );
+}
+
+function ReferenceBadge({ children, label, type = 'tag', className, style, ...rest }) {
+    const resolvedType = normalizeReferenceBadgeType(type);
+    const content = label || children;
+
+    return (
+        <span
+            className={classNames('sb-ref-badge', `sb-ref-badge-${resolvedType}`, className)}
+            style={style}
+            {...rest}
+        >
+            {content}
+        </span>
+    );
+}
+
+function ReferenceClassBadges({ children, className, style, ...rest }) {
+    return (
+        <div className={classNames('sb-ref-class-badges', className)} style={style} {...rest}>
+            {children}
+        </div>
+    );
+}
+
+function ReferenceSourceIcon({ className, ...rest }) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+            className={classNames('sb-ref-source-icon', className)}
+            {...rest}
+        >
+            <path fill="currentColor" d="M7.4 16.6 3 12l4.4-4.6L6 6l-6 6 6 6 1.4-1.4zM16.6 16.6 21 12l-4.4-4.6L18 6l6 6-6 6-1.4-1.4zM9.5 19l4-14h1.9l-4 14z" />
+        </svg>
+    );
+}
+
+function ReferenceSourceLink({ children, href, className, style, ...rest }) {
+    if (!href) {
+        return null;
+    }
+
+    return (
+        <a href={href} className={classNames('sb-ref-source', className)} style={style} {...rest}>
+            {children || <ReferenceSourceIcon />}
+        </a>
+    );
+}
+
+function ReferenceHeadingRow({ children, className, style, ...rest }) {
+    return (
+        <span className={classNames('sb-ref-heading-row', className)} style={style} {...rest}>
+            {children}
+        </span>
+    );
+}
+
+function ReferenceHeadingText({ children, className, style, ...rest }) {
+    return (
+        <span className={classNames('sb-ref-heading-text', className)} style={style} {...rest}>
+            {children}
+        </span>
+    );
+}
+
 const baseComponents = {
     Head,
     details: MDXDetails,
@@ -492,4 +717,32 @@ export default {
     UseStudioButton,
     Tabs,
     TabItem,
+    ReferenceIcon,
+    ReferenceList,
+    ReferenceRow,
+    ReferenceCellIcon,
+    ReferenceCellContent,
+    ReferenceName,
+    ReferenceType,
+    ReferenceSeparator,
+    ReferenceBadge,
+    ReferenceClassBadges,
+    ReferenceSourceIcon,
+    ReferenceSourceLink,
+    ReferenceHeadingRow,
+    ReferenceHeadingText,
+    RefIcon: ReferenceIcon,
+    RefList: ReferenceList,
+    RefRow: ReferenceRow,
+    RefCellIcon: ReferenceCellIcon,
+    RefCellContent: ReferenceCellContent,
+    RefName: ReferenceName,
+    RefType: ReferenceType,
+    RefSeparator: ReferenceSeparator,
+    RefBadge: ReferenceBadge,
+    RefClassBadges: ReferenceClassBadges,
+    RefSourceIcon: ReferenceSourceIcon,
+    RefSourceLink: ReferenceSourceLink,
+    RefHeadingRow: ReferenceHeadingRow,
+    RefHeadingText: ReferenceHeadingText,
 };

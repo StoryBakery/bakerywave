@@ -20,6 +20,7 @@ MDX는 **M**ark**d**own + JS**X**의 약자입니다.
 ## React 컴포넌트 사용하기
 
 문서 중간에 버튼, 알림 박스, 탭 등을 넣고 싶다면 React 컴포넌트를 사용할 수 있습니다.
+Bakerywave는 자주 쓰는 컴포넌트를 **전역 등록**하므로, 대부분은 `import` 없이 바로 사용하면 됩니다.
 
 ### Alert 컴포넌트 (알림 박스)
 
@@ -48,10 +49,7 @@ Bakerywave는 Roblox 문서 스타일에 맞춰 `<Alert>` 컴포넌트를 사용
 
 여러 언어의 코드 예제를 보여줄 때 유용합니다.
 
-````jsx
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
+````mdx
 <Tabs>
   <TabItem value="lua" label="Luau">
     ```lua
@@ -65,6 +63,35 @@ import TabItem from '@theme/TabItem';
   </TabItem>
 </Tabs>
 ````
+
+### Reference 스타일 컴포넌트
+
+Reference UI에서 쓰는 `sb-ref-*` 스타일도 문서에서 바로 재사용할 수 있습니다.
+
+```mdx
+<ReferenceList>
+  <ReferenceRow>
+    <ReferenceCellIcon kind="property" />
+    <ReferenceCellContent>
+      <ReferenceName href="#enabled">Enabled</ReferenceName>
+      <ReferenceSeparator />
+      <ReferenceType>boolean</ReferenceType>
+      <ReferenceBadge type="readonly">ReadOnly</ReferenceBadge>
+    </ReferenceCellContent>
+  </ReferenceRow>
+  <ReferenceRow deprecated>
+    <ReferenceCellIcon kind="method" />
+    <ReferenceCellContent>
+      <ReferenceName href="#destroy">Destroy</ReferenceName>
+      <ReferenceSeparator />
+      <ReferenceType>() -&gt; ()</ReferenceType>
+      <ReferenceBadge type="deprecated">Deprecated</ReferenceBadge>
+    </ReferenceCellContent>
+  </ReferenceRow>
+</ReferenceList>
+```
+
+짧은 별칭(`RefList`, `RefRow`, `RefBadge` 등)도 동일하게 사용할 수 있습니다.
 
 ## HTML 사용하기
 

@@ -2,7 +2,7 @@ schemaVersion = 1
 
 [site.navigation]
 autoNavigationFromDocsFolders = true
-sectionOrder = ["intro", "tutorial", "guides", "luau-tags", "reference", "development"]
+sectionOrder = ["intro", "tutorial", "guides", "writing", "luau-tags", "reference", "development"]
 
 [site.navbar]
 showSearch = true

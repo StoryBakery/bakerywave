@@ -25,8 +25,9 @@ Bakerywave 문서는 **가독성**과 **일관성**을 중요하게 생각합니
    - 문서를 더 예쁘고 동적으로 만들고 싶다면 확인하세요.
 
 3. [**지원 React 컴포넌트**](./react-components.md)
-   - 현재 Bakerywave 문서에서 바로 사용할 수 있는 컴포넌트와 속성을 정리합니다.
-   - 실제 구현 기준으로 확인하고 싶을 때 먼저 참고하세요.
+   - React 컴포넌트 문서를 **계열별 하위 페이지**로 나누어 제공합니다.
+   - 먼저 개요를 읽고, 사이드바에서 필요한 계열 문서로 이동하세요.
+   - 상세 문서: [Alert](./react-components/alerts.md), [Accordion/Tabs](./react-components/accordion-tabs.md), [Layout/Text](./react-components/layout-text.md), [Button/Card](./react-components/button-card.md), [기타](./react-components/misc.md), [Reference UI](./react-components/reference-ui.md)
 
 4. [**API 링크 (백틱 문법)**](./api-links.md)
    - `Class.Part` 처럼 코드를 작성하면 자동으로 링크가 걸리는 마법 같은 기능을 소개합니다.

@@ -39,20 +39,6 @@ export default {
                     ],
                 },
                 "guides/cli",
-                {
-                    type: "category",
-                    label: "문서 작성 가이드",
-                    link: {
-                        type: "doc",
-                        id: "guides/writing/index",
-                    },
-                    items: [
-                        "guides/writing/markdown",
-                        "guides/writing/mdx",
-                        "guides/writing/react-components",
-                        "guides/writing/api-links",
-                    ],
-                },
                 "guides/customization",
                 {
                     type: "category",
@@ -105,6 +91,28 @@ export default {
                 "development/release",
             ],
         },
+    ],
+    writing: [
+        "writing/index",
+        "writing/markdown",
+        "writing/mdx",
+        {
+            type: "category",
+            label: "React 컴포넌트",
+            link: {
+                type: "doc",
+                id: "writing/react-components",
+            },
+            items: [
+                "writing/react-components/alerts",
+                "writing/react-components/accordion-tabs",
+                "writing/react-components/layout-text",
+                "writing/react-components/button-card",
+                "writing/react-components/misc",
+                "writing/react-components/reference-ui",
+            ],
+        },
+        "writing/api-links",
     ],
     reference: [
         "reference/index",

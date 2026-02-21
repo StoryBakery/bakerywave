@@ -236,6 +236,7 @@ function parseDevArgs(argv) {
     const args = [];
     let restart = true;
     let watchCli = false;
+    let clearCache = false;
 
     for (let i = 0; i < argv.length; i += 1) {
         const arg = argv[i];
@@ -251,6 +252,10 @@ function parseDevArgs(argv) {
             watchCli = true;
             continue;
         }
+        if (arg === "--clear-cache") {
+            clearCache = true;
+            continue;
+        }
         args.push(arg);
     }
 
@@ -258,6 +263,7 @@ function parseDevArgs(argv) {
         args,
         restart,
         watchCli,
+        clearCache,
     };
 }
 
@@ -419,13 +425,11 @@ function appendNodeOption(nodeOptions, option) {
 
 function buildDocusaurusEnv(baseEnv) {
     const env = { ...baseEnv };
-    if (env.BAKERYWAVE_DISABLE_MEMORY_TUNING === "1") {
+    const explicitLimit = parsePositiveInteger(env.BAKERYWAVE_MAX_OLD_SPACE_SIZE);
+    if (!explicitLimit) {
         return env;
     }
-
-    const explicitLimit = parsePositiveInteger(env.BAKERYWAVE_MAX_OLD_SPACE_SIZE);
-    const defaultLimit = 4096;
-    const limit = explicitLimit || defaultLimit;
+    const limit = explicitLimit;
     const nodeOptions = env.NODE_OPTIONS;
 
     if (hasMaxOldSpaceSizeOption(nodeOptions)) {
@@ -1175,6 +1179,26 @@ function cleanupDocusaurusCacheIfStale(siteDirAbs) {
     }
 }
 
+function clearDocusaurusCaches(siteDirAbs) {
+    const targets = [
+        path.join(siteDirAbs, ".docusaurus"),
+        path.join(siteDirAbs, "node_modules", ".cache"),
+    ];
+    const cleared = [];
+    for (const target of targets) {
+        if (!fs.existsSync(target)) {
+            continue;
+        }
+        try {
+            fs.rmSync(target, { recursive: true, force: true });
+            cleared.push(target);
+        } catch (error) {
+            console.warn(`[bakerywave] failed to clear cache: ${target}`);
+        }
+    }
+    return cleared;
+}
+
 function killProcessTree(child, signal) {
     if (!child || !child.pid || child.exitCode !== null) {
         return;
@@ -1374,6 +1398,12 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
     const restartNoOpen = process.env.BAKERYWAVE_DEV_NO_OPEN === "1";
     const startArgs = restartNoOpen ? appendNoOpenArg(docusaurusArgs) : docusaurusArgs.slice();
     const restartArgs = appendNoOpenArg(docusaurusArgs);
+    if (devOptions && devOptions.clearCache) {
+        const cleared = clearDocusaurusCaches(siteDirAbs);
+        if (cleared.length > 0) {
+            console.warn(`[bakerywave] cleared caches before start:\n- ${cleared.join("\n- ")}`);
+        }
+    }
     cleanupDocusaurusCacheIfStale(siteDirAbs);
     let startProcess = spawnDocusaurus("start", startArgs, siteDirAbs);
     const children = watchProcess ? [watchProcess, startProcess] : [startProcess];
@@ -1428,6 +1458,8 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
     let lastStartExit = 0;
     let startExitStreak = 0;
     let rapidStartExitStreak = 0;
+    let abnormalStartExitStreak = 0;
+    let crashCacheRecoveryTried = false;
     let startSpawnedAt = Date.now();
     let pendingWatchRespawn = false;
 
@@ -1436,7 +1468,7 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
             return;
         }
         child.__bwRole = role;
-        child.on("exit", (nextCode) => handleChildExit(child, nextCode));
+        child.on("exit", (nextCode, signal) => handleChildExit(child, nextCode, signal));
     };
 
     const spawnStart = () => {
@@ -1474,7 +1506,7 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
         }, 250);
     };
 
-    const handleChildExit = (child, code) => {
+    const handleChildExit = (child, code, signal) => {
         if (exiting) {
             return;
         }
@@ -1505,11 +1537,55 @@ function runDev(baseCwd, siteDirAbs, configPath, docusaurusArgs, devOptions) {
             } else {
                 rapidStartExitStreak = 0;
             }
-            if (startExitStreak >= 3 || rapidStartExitStreak >= 3) {
+            const exitedAbnormally = code !== 0 || (signal && signal.length > 0);
+            if (exitedAbnormally) {
+                abnormalStartExitStreak += 1;
+            } else {
+                abnormalStartExitStreak = 0;
+            }
+            if (exitedAbnormally && abnormalStartExitStreak >= 2 && !crashCacheRecoveryTried) {
+                crashCacheRecoveryTried = true;
+                const cleared = clearDocusaurusCaches(siteDirAbs);
+                if (cleared.length > 0) {
+                    console.warn(
+                        "[bakerywave] detected repeated abnormal exits. " +
+                        "cleared docusaurus/webpack caches and retrying once:\n- " +
+                        cleared.join("\n- ")
+                    );
+                } else {
+                    console.warn(
+                        "[bakerywave] detected repeated abnormal exits. " +
+                        "no cache directory found, retrying once."
+                    );
+                }
+                startExitStreak = 0;
+                rapidStartExitStreak = 0;
+                abnormalStartExitStreak = 0;
+                if (restartingStart) {
+                    return;
+                }
+                restartingStart = true;
+                setTimeout(() => {
+                    restartingStart = false;
+                    if (exiting) {
+                        return;
+                    }
+                    spawnStart();
+                }, 500);
+                return;
+            }
+            if (startExitStreak >= 3 || rapidStartExitStreak >= 3 || abnormalStartExitStreak >= 3) {
                 const codeText = code === null || code === undefined ? "unknown" : String(code);
+                const signalText = signal ? String(signal) : "none";
+                const likelyPortConflict = code === 0 && !signal && runtimeMs < 5000;
+                const hint = likelyPortConflict
+                    ? "If port 3000 is already used, run `bakerywave dev -- --port 3001`."
+                    : "This often indicates an OOM or runtime/environment issue. " +
+                        "Try: 1) use Node.js 22 LTS, 2) set BAKERYWAVE_MAX_OLD_SPACE_SIZE=4096, " +
+                        "3) retry with `bakerywave dev --no-restart` to inspect the first crash.";
                 console.error(
-                    `[bakerywave] start exited repeatedly (code: ${codeText}, runtime: ${runtimeMs}ms). ` +
-                    "stopping auto-restart. If port 3000 is already used, run `bakerywave dev -- --port 3001`."
+                    `[bakerywave] start exited repeatedly (code: ${codeText}, signal: ${signalText}, runtime: ${runtimeMs}ms). ` +
+                    `stopping auto-restart. ${hint}`
                 );
                 shutdown(1);
                 return;
@@ -1696,6 +1772,7 @@ function printDevHelp() {
     console.log("\nOptions:");
     console.log("  --no-restart             Disable auto-restart when configuration or plugins change");
     console.log("  --dev-watch-cli          Watch bakerywave's own source code for changes");
+    console.log("  --clear-cache            Clear .docusaurus and node_modules/.cache before start");
     console.log("\nNote: Any additional arguments after '--' are passed directly to 'docusaurus start'.");
 }
 
@@ -1780,8 +1857,8 @@ function main() {
     const siteDirAbs = resolveSiteDir(cwd, siteDirOverride || siteDir);
 
     if (command === "dev") {
-        const { args: devArgs, restart, watchCli } = parseDevArgs([...commandArgs, ...tail]);
-        runDev(cwd, siteDirAbs, configPath, devArgs, { restart, watchCli });
+        const { args: devArgs, restart, watchCli, clearCache } = parseDevArgs([...commandArgs, ...tail]);
+        runDev(cwd, siteDirAbs, configPath, devArgs, { restart, watchCli, clearCache });
         return;
     }
 
